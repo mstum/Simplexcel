@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>simplexcel</id>
-        <version>1.0.0</version>
+        <version>1.0.2</version>
         <title>Simplexcel .xlsx library</title>
         <authors>Michael Stum &lt;opensource@stum.de&gt;</authors>
         <owners>Michael Stum &lt;opensource@stum.de&gt;</owners>

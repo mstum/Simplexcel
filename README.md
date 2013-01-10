@@ -47,9 +47,9 @@ For more information on NuGet see http://www.nuget.org
 
 Changelog
 =========
-1.0.0
+1.0.2
 -----
-* Initial Release
+* Initial Public Release
 
 License
 =======
