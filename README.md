@@ -41,7 +41,7 @@ For a full documentation with examples, please go to http://mstum.github.com/Sim
 
 The Library is available on NuGet and can be installed by searching for Simplexcel or using the NuGet command prompt:
 
-    Install-Package Simplexcel
+    Install-Package simplexcel
 
 For more information on NuGet see http://www.nuget.org
 
