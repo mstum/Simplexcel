@@ -1,1 +1,288 @@
-"Coming Soon" 
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link rel="stylesheet" type="text/css" href="prettify/prettify.css"/>
+<script type="text/javascript" src="prettify/prettify.js"></script>
+   <title>Simplexcel</title><link rel="stylesheet" type="text/css" href="style.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1-RC2"></head><body onload="prettyPrint()" bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="book" title="Simplexcel"><div class="titlepage"><div><div><h1 class="title"><a name="d5e1"></a>Simplexcel</h1></div><div><h2 class="subtitle">Excel .xlsx generation library for .net 4</h2></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#d5e5">1. Overview</a></span></dt><dd><dl><dt><span class="sect1"><a href="#d5e7">1.1. About</a></span></dt></dl></dd><dt><span class="chapter"><a href="#d5e12">2. Examples</a></span></dt><dd><dl><dt><span class="sect1"><a href="#d5e14">2.1. Creating a Workbook</a></span></dt><dt><span class="sect1"><a href="#d5e18">2.2. Cell creation</a></span></dt><dt><span class="sect1"><a href="#d5e22">2.3. Cell formatting</a></span></dt><dt><span class="sect1"><a href="#d5e30">2.4. Page Setup</a></span></dt><dt><span class="sect1"><a href="#d5e38">2.5. Polish &amp; Misc.</a></span></dt><dt><span class="sect1"><a href="#d5e54">2.6. Caveats and Exceptions</a></span></dt></dl></dd><dt><span class="chapter"><a href="#d5e58">3. ActionResult for ASP.net MVC</a></span></dt><dt><span class="chapter"><a href="#d5e62">4. Version History</a></span></dt><dt><span class="chapter"><a href="#d5e69">5. License</a></span></dt></dl></div>
+	
+   
+	
+   <div class="chapter" title="Chapter&nbsp;1.&nbsp;Overview"><div class="titlepage"><div><div><h2 class="title"><a name="d5e5"></a>Chapter&nbsp;1.&nbsp;Overview</h2></div></div></div>
+		
+      
+		
+      <div class="sect1" title="1.1.&nbsp;About"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d5e7"></a>1.1.&nbsp;About</h2></div></div></div>
+			
+         
+			
+         <p>Simplexcel is a simple library to generate Excel 2007+ workbooks in their native .xlsx format without relying on COM interop or other mechanisms unsuitable for server use.</p>
+			
+         <p class="nuget-badge">
+				
+            <code class="code">PM&gt; Install-Package simplexcel</code>
+			
+         </p>
+		
+      </div>
+	
+   </div>
+	
+   <div class="chapter" title="Chapter&nbsp;2.&nbsp;Examples"><div class="titlepage"><div><div><h2 class="title"><a name="d5e12"></a>Chapter&nbsp;2.&nbsp;Examples</h2></div></div></div>
+		
+      
+		
+      <div class="sect1" title="2.1.&nbsp;Creating a Workbook"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d5e14"></a>2.1.&nbsp;Creating a Workbook</h2></div></div></div>
+			
+         
+			
+         <p>The simple example of creating a workbook only requires you to create a few Worksheets, populate their Cells, and add them to a new Workbook.</p>
+			
+         <pre class="programlisting">
+// using Simplexcel;
+var sheet = new Worksheet("Hello, world!");
+sheet.Cells[0, 0] = "Hello,";
+sheet.Cells["B1"] = "World!";
+
+var workbook = new Workbook();
+workbook.Add(sheet);
+workbook.Save(@"d:\test.xlsx");
+		</pre>
+		
+      </div>
+		
+      <div class="sect1" title="2.2.&nbsp;Cell creation"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d5e18"></a>2.2.&nbsp;Cell creation</h2></div></div></div>
+			
+         
+			
+         <p>Cells can be created implicitly from strings, int64's, double and decimal (and anything that's implicitly convertible to those, e.g. int32), or explicitly through the Cell constructor.</p>
+			
+         <pre class="programlisting">
+Cell textCell = "fromString";
+Cell intCell = 4; // will be formatted as number without decimal places "0"
+Cell doubleCell = 123.456; // will be formatted with 2 decimal places, "0.00"
+Cell decimalCell = 987.654321m; // will be formatted with 2 decimal places, "0.00"
+decimalCell.Format = "0.000"; // override the cell format with an Excel Formatting string
+
+// Explicit constructor, specifying the type, value and format (Excel will display this as 88.75%)
+Cell decimalWithFormat = new Cell(CellType.Number, 0.8875m, BuiltInCellFormat.PercentTwoDecimalPlaces);
+			</pre>
+		
+      </div>
+		
+      <div class="sect1" title="2.3.&nbsp;Cell formatting"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d5e22"></a>2.3.&nbsp;Cell formatting</h2></div></div></div>
+			
+         
+			
+         <p>After you've added a cell, you can set formatting like Bold or Font Size or Border on it.</p>
+			
+         <pre class="programlisting">
+// Addressing cells via zero-based row and column index...
+sheet.Cells[0, 0] = "Hello,";
+sheet.Cells[0, 0].Bold = true;
+// ...or Excel-style references, B1 = [0,1]
+sheet.Cells["B1"] = "World!";
+sheet.Cells["B1"].Border = CellBorder.Bottom | CellBorder.Right;
+
+Cell myCell = "Test Cell";
+myCell.FontName = "Comic Sans MS";
+myCell.FontSize = 18;
+myCell.TextColor = System.Drawing.Color.Violet;
+myCell.Bold = true;
+myCell.Italic = true;
+myCell.Underline = true;
+myCell.Border = CellBorder.All; // Left | Right | Top | Bottom
+sheet.Cells[0, 2] = myCell;
+
+// To change the width of a column, specify a value. Specifying NULL will use the default
+sheet.ColumnWidths[2] = 30;
+			</pre>
+			
+         <p>In Excel, this will create a beautiful sheet:</p>
+			
+         <div class="mediaobject"><img src="images/formatting.png"></div>
+		
+      </div>
+		
+      <div class="sect1" title="2.4.&nbsp;Page Setup"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d5e30"></a>2.4.&nbsp;Page Setup</h2></div></div></div>
+			
+         
+			
+         <p>A Worksheet has a PageSetup property that contains the orientation (portrait or landscape) and a setting to repeat a number of rows or columns (starting from the top and left respectively) on every page when printing.</p>
+			
+         <pre class="programlisting">
+var sheet = new Worksheet("Hello, world!");
+sheet.PageSetup.PrintRepeatRows = 2; // How many rows (starting with the top one)
+sheet.PageSetup.PrintRepeatColumns = 0; // How many columns (starting with the left one, 0 is default)
+sheet.PageSetup.Orientation = Orientation.Landscape;
+
+
+sheet.Cells["A1"] = "Title!";
+sheet.Cells["A1"].Bold = true;
+sheet.Cells["A2"] = "Subtitle!";
+sheet.Cells["A2"].Bold = true;
+sheet.Cells["A2"].TextColor = System.Drawing.Color.Magenta;
+for (int i = 0; i &lt; 100; i++)
+{
+    sheet.Cells[i + 2, 0] = "Entry Number " + (i + 1);
+}
+			</pre>
+			
+         <p>This looks like this when printing:</p>
+			
+         <div class="mediaobject"><img src="images/repeatrows.png"></div>
+		
+      </div>
+		
+      <div class="sect1" title="2.5.&nbsp;Polish &amp; Misc."><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d5e38"></a>2.5.&nbsp;Polish &amp; Misc.</h2></div></div></div>
+			
+         
+			
+         <p>You can specify a Compression level. By default, a balance between size and performance is chosen.</p>
+			
+         <pre class="programlisting">
+workbook.Save(@"d:\testNoComp.xlsx", CompressionLevel.NoCompression);
+workbook.Save(@"d:\testDefault.xlsx", CompressionLevel.Balanced); // default for Save(string)
+workbook.Save(@"d:\testMaxComp.xlsx", CompressionLevel.Maximum);
+			</pre>
+			
+         <p>You can also save to a Stream. The Stream must be writable.</p>
+			
+         <pre class="programlisting">
+workbook.Save(HttpContext.Current.Response.OutputStream, CompressionLevel.Maximum);
+			</pre>
+			
+         <p>The workbook class allows you to add an Author and Title, which will show up in the Properties pane.</p>
+			
+         <pre class="programlisting">
+var workbook = new Workbook();
+workbook.Title = "Hello, World!";
+workbook.Author = "My Application Version 1.0.0.5";
+			</pre>
+			
+         <div class="mediaobject"><img src="images/titleauthor.png"></div>
+			
+         <p>To help troubleshooting issues with generated xlsx files, they contain a file called simplexcel.xml which contains version information and the date the document was generated.</p>
+			
+         <div class="mediaobject"><img src="images/simplexcelxml.png"></div>
+			
+         <pre class="programlisting">
+&lt;docInfo xmlns="http://stum.de/simplexcel/v1"&gt;
+	&lt;version major="1" minor="0" build="2" revision="0"&gt;&lt;/version&gt;
+	&lt;created&gt;2012-09-07T21:04:18.5220876Z&lt;/created&gt;
+&lt;/docInfo&gt;				
+			</pre>
+		
+      </div>
+		
+      <div class="sect1" title="2.6.&nbsp;Caveats and Exceptions"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d5e54"></a>2.6.&nbsp;Caveats and Exceptions</h2></div></div></div>
+			
+         
+			
+         <p>Here's a list of things to be aware of when working with Simplexcel</p>
+
+         <pre class="programlisting">
+// Sheet names cannot be NULL or empty
+new Worksheet(null); // ArgumentException
+new Worksheet(""); // ArgumentException
+
+// Sheet names cannot be longer than 31 chars
+new Worksheet(new string('a', 32));  // ArgumentException
+
+// Sheet names cannot contain these chars: \ / ? * [ ]
+new Worksheet("Data for 09/22/2012"); // ArgumentException
+
+// There are static properties on the Worksheet class to help you create valid names
+int maxLength = Worksheet.MaxSheetNameLength;
+char[] invalidChars = Worksheet.InvalidSheetNameChars;
+
+// Within a workbook, sheet names must be unique
+var wb = new Workbook();
+var sheet1 = new Worksheet("Hello!");
+var sheet2 = new Worksheet("Hello!");
+wb.Add(sheet1);
+wb.Add(sheet2); // ArgumentException
+
+// Accessing a cell before it's been assigned returns NULL
+sheet1.Cells["A1"].Bold = true; // NullReferenceException	
+</pre>
+		
+      </div>
+	
+   </div>
+	
+   <div class="chapter" title="Chapter&nbsp;3.&nbsp;ActionResult for ASP.net MVC"><div class="titlepage"><div><div><h2 class="title"><a name="d5e58"></a>Chapter&nbsp;3.&nbsp;ActionResult for ASP.net MVC</h2></div></div></div>
+		
+      
+		
+      <p>If you want to generate Excel Sheets as part of an ASP.net MVC action, you can use this abstract class as an ActionResult. A derived class would simply override GenerateWorkbook. This assumes that the controller merely creates a model, and that the actual workbook generation happens after the action is executed and ActionResult.ExecuteResult is called. Alternatively, you can change it to take a Workbook in the constructor and create the Workbook in the MVC Controller Action.</p>
+		
+      <pre class="programlisting">
+public abstract class ExcelResultBase : ActionResult
+{
+	private readonly string _filename;
+
+	protected ExcelResultBase(string filename)
+	{
+		_filename = filename;
+	}
+
+	protected abstract Workbook GenerateWorkbook();
+
+	public override void ExecuteResult(ControllerContext context)
+	{
+		if (context == null)
+		{
+			throw new ArgumentNullException("context");
+		}
+
+		var workbook = GenerateWorkbook();
+		if (workbook == null)
+		{
+			context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
+			return;
+		}
+
+		context.HttpContext.Response.ContentType = "application/octet-stream";
+		context.HttpContext.Response.StatusCode = (int)HttpStatusCode.OK;
+		context.HttpContext.Response.AppendHeader("content-disposition", "attachment; filename=\"" + _filename + "\"");
+		workbook.Save(context.HttpContext.Response.OutputStream, CompressionLevel.NoCompression);
+	}
+}
+		</pre>
+	
+   </div>
+  
+   <div class="chapter" title="Chapter&nbsp;4.&nbsp;Version History"><div class="titlepage"><div><div><h2 class="title"><a name="d5e62"></a>Chapter&nbsp;4.&nbsp;Version History</h2></div></div></div>
+      
+      
+      
+      <p>
+        
+         <span class="bold"><strong>Version 1.0.2 (2013-01-10)</strong></span>
+      
+      </p>
+      
+      <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+          
+            <p>Initial public release.</p>
+        
+         </li></ul></div>
+  
+   </div>
+  
+   <div class="chapter" title="Chapter&nbsp;5.&nbsp;License"><div class="titlepage"><div><div><h2 class="title"><a name="d5e69"></a>Chapter&nbsp;5.&nbsp;License</h2></div></div></div>
+    
+      
+    
+      <p>The MIT License (MIT)</p>
+    
+      <p>Copyright (c) 2013 Michael Stum, http://www.Stum.de opensource@stum.de</p>
+    
+      <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+    
+      <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+    
+      <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+  
+   </div>
+
+</div></body></html>
