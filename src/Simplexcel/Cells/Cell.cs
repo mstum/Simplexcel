@@ -110,6 +110,7 @@ namespace Simplexcel
         /// <summary>
         /// The Type of the cell.
         /// </summary>
+        // TODO: This is immutable because XlsxWriter.GetXlsxRows casts Value from object to whatever. This logic needs to change.
         public CellType CellType { get; private set; }
 
         /// <summary>

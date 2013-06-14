@@ -9,8 +9,6 @@ namespace Simplexcel
     {
         private readonly Dictionary<CellAddress, Cell> _cells = new Dictionary<CellAddress, Cell>();
 
-        // Todo: Ideally, this shouldn't return NULL but an Empty Cell, so that I can set formatting on an "empty" cell without a NullReferenceException.
-
         /// <summary>
         /// Get the cell with the given cell reference, e.g. Get the cell "A1". May return NULL.
         /// </summary>
@@ -18,16 +16,8 @@ namespace Simplexcel
         /// <returns>The Cell, or NULL of the Cell hasn't been created yet.</returns>
         public Cell this[string address]
         {
-            get
-            {
-                var ca = new CellAddress(address);
-                return this[ca.Row, ca.Column];
-            }
-            set
-            {
-                var ca = new CellAddress(address);
-                this[ca.Row, ca.Column] = value;
-            }
+            get { return this[new CellAddress(address)]; }
+            set { this[new CellAddress(address)] = value; }
         }
 
         /// <summary>
@@ -38,17 +28,20 @@ namespace Simplexcel
         /// <returns>The Cell, or NULL of the Cell hasn't been created yet.</returns>
         public Cell this[int row, int column]
         {
+            get { return this[new CellAddress(row, column)]; }
+            set { this[new CellAddress(row, column)] = value; }
+        }
+
+        private Cell this[CellAddress key]
+        {
             get
             {
-                var key = new CellAddress(row, column);
-                if (_cells.ContainsKey(key)) return _cells[key];
-                return null;
+                if (!_cells.ContainsKey(key))
+                    _cells[key] = string.Empty;
+
+                return _cells[key];
             }
-            set
-            {
-                var key = new CellAddress(row, column);
-                _cells[key] = value;
-            }
+            set { _cells[key] = value; }
         }
 
         /// <summary>
