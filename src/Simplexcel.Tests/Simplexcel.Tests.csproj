@@ -59,8 +59,10 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CellAddressTests.cs" />
+    <Compile Include="CellCollectionTests.cs" />
     <Compile Include="CellTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorksheetTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
