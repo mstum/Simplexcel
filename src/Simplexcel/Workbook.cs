@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using Simplexcel.XlsxInternal;
 
 namespace Simplexcel
@@ -9,8 +10,10 @@ namespace Simplexcel
     /// <summary>
     /// An Excel Workbook
     /// </summary>
+    [DataContract]
     public sealed class Workbook
     {
+        [DataMember]
         private readonly List<Worksheet> _sheets = new List<Worksheet>();
 
         /// <summary>
@@ -21,11 +24,13 @@ namespace Simplexcel
         /// <summary>
         /// The title of the Workbook
         /// </summary>
+        [DataMember]
         public string Title { get; set; }
 
         /// <summary>
         /// The author of the Workbook
         /// </summary>
+        [DataMember]
         public string Author { get; set; }
 
         /// <summary>
