@@ -2,7 +2,9 @@
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" type="text/css" href="prettify/prettify.css"/>
 <script type="text/javascript" src="prettify/prettify.js"></script>
-   <title>Simplexcel</title><link rel="stylesheet" type="text/css" href="style.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1-RC2"></head><body onload="prettyPrint()" bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="book" title="Simplexcel"><div class="titlepage"><div><div><h1 class="title"><a name="d5e1"></a>Simplexcel</h1></div><div><h2 class="subtitle">Excel .xlsx generation library for .net 4</h2></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#d5e5">1. Overview</a></span></dt><dd><dl><dt><span class="sect1"><a href="#d5e7">1.1. About</a></span></dt></dl></dd><dt><span class="chapter"><a href="#d5e12">2. Examples</a></span></dt><dd><dl><dt><span class="sect1"><a href="#d5e14">2.1. Creating a Workbook</a></span></dt><dt><span class="sect1"><a href="#d5e18">2.2. Cell creation</a></span></dt><dt><span class="sect1"><a href="#d5e22">2.3. Cell formatting</a></span></dt><dt><span class="sect1"><a href="#d5e30">2.4. Page Setup</a></span></dt><dt><span class="sect1"><a href="#d5e38">2.5. Polish &amp; Misc.</a></span></dt><dt><span class="sect1"><a href="#d5e54">2.6. Caveats and Exceptions</a></span></dt></dl></dd><dt><span class="chapter"><a href="#d5e58">3. ActionResult for ASP.net MVC</a></span></dt><dt><span class="chapter"><a href="#d5e62">4. Version History</a></span></dt><dt><span class="chapter"><a href="#d5e69">5. License</a></span></dt></dl></div>
+   <title>Simplexcel</title><link rel="stylesheet" type="text/css" href="style.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1-RC2"></head><body onload="prettyPrint()" bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="book" title="Simplexcel"><div class="titlepage"><div><div><h1 class="title"><a name="d5e1"></a>Simplexcel</h1></div><div><h2 class="subtitle">Excel .xlsx generation library for .net 4</h2></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#d5e5">1. Overview</a></span></dt><dd><dl><dt><span class="sect1"><a href="#d5e7">1.1. About</a></span></dt></dl></dd><dt><span class="chapter"><a href="#d5e12">2. Examples</a></span></dt><dd><dl><dt><span class="sect1"><a href="#d5e14">2.1. Creating a Workbook</a></span></dt><dt><span class="sect1"><a href="#d5e18">2.2. Cell creation</a></span></dt><dt><span class="sect1"><a href="#d5e22">2.3. Cell formatting</a></span></dt><dt><span class="sect1"><a href="#d5e30">2.4. Page Setup</a></span></dt>
+<dt><span class="sect1"><a href="#d5e34">2.5. Hyperlinks</a></span></dt>   
+    <dt><span class="sect1"><a href="#d5e38">2.6. Polish &amp; Misc.</a></span></dt><dt><span class="sect1"><a href="#d5e54">2.7. Caveats and Exceptions</a></span></dt></dl></dd><dt><span class="chapter"><a href="#d5e58">3. ActionResult for ASP.net MVC</a></span></dt><dt><span class="chapter"><a href="#d5e62">4. Version History</a></span></dt><dt><span class="chapter"><a href="#d5e69">5. License</a></span></dt></dl></div>
 	
    
 	
@@ -131,8 +133,17 @@ for (int i = 0; i &lt; 100; i++)
          <div class="mediaobject"><img src="images/repeatrows.png"></div>
 		
       </div>
+      
+      <div class="sect1" title="2.5.&nbsp;Hyperlinks"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d5e34"></a>2.5.&nbsp;Hyperlinks</h2></div></div></div>
+      
+      <p>You can create Hyperlinks for a cell.</p>
+      <pre class="programlisting">
+ sheet.Cells["A1"] = "Click me now!";  
+ sheet.Cells["A1"].Hyperlink = "http://mstum.github.io/Simplexcel/";  
+      </pre>
+      <p>This will NOT automatically format it as a Hyperlink (blue/underlined) to give you freedom to format as desired.</p>
 		
-      <div class="sect1" title="2.5.&nbsp;Polish &amp; Misc."><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d5e38"></a>2.5.&nbsp;Polish &amp; Misc.</h2></div></div></div>
+      <div class="sect1" title="2.6.&nbsp;Polish &amp; Misc."><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d5e38"></a>2.6.&nbsp;Polish &amp; Misc.</h2></div></div></div>
 			
          
 			
@@ -173,7 +184,7 @@ workbook.Author = "My Application Version 1.0.0.5";
 		
       </div>
 		
-      <div class="sect1" title="2.6.&nbsp;Caveats and Exceptions"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d5e54"></a>2.6.&nbsp;Caveats and Exceptions</h2></div></div></div>
+      <div class="sect1" title="2.7.&nbsp;Caveats and Exceptions"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d5e54"></a>2.7.&nbsp;Caveats and Exceptions</h2></div></div></div>
 			
          
 			
@@ -252,7 +263,22 @@ public abstract class ExcelResultBase : ActionResult
    </div>
   
    <div class="chapter" title="Chapter&nbsp;4.&nbsp;Version History"><div class="titlepage"><div><div><h2 class="title"><a name="d5e62"></a>Chapter&nbsp;4.&nbsp;Version History</h2></div></div></div>
+           <p>
+        
+         <span class="bold"><strong>Version 1.0.3 (2013-08-20)</strong></span>
       
+      </p>
+      
+      <div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+          
+            <p>Added support for external hyperlinks</p>
+        
+         </li>
+         <li class="listitem">
+          
+            <p>Made Workbooks serializable using the .net DataContractSerializer</p>
+        
+         </li></ul></div> 
       
       
       <p>
