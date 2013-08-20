@@ -104,6 +104,15 @@ for (int i = 0; i &lt; 100; i++)
 			</mediaobject>
 		</sect1>
 		<sect1>
+			<title>Hyperlinks</title>
+			<para>You can create Hyperlinks for a cell.</para>
+			<programlisting role="lang-cs">
+sheet.Cells["A1"] = "Click me now!";
+sheet.Cells["A1"].Hyperlink = "http://mstum.github.io/Simplexcel/";
+			</programlisting>
+			<para>This will NOT automatically format it as a Hyperlink (blue/underlined) to give you freedom to format as desired.</para>
+		</sect1>
+		<sect1>
 			<title>Polish &amp; Misc.</title>
 			<para>You can specify a Compression level. By default, a balance between size and performance is chosen.</para>
 			<programlisting role="lang-cs">
@@ -208,6 +217,17 @@ public abstract class ExcelResultBase : ActionResult
 	</chapter>
   <chapter>
       <title>Version History</title>
+  	<para>
+  		<emphasis role="bold">Version 1.0.3 (2013-08-20)</emphasis>
+  	</para>
+  	<itemizedlist>
+  		<listitem>
+  			<para>Added support for external hyperlinks</para>
+  		</listitem>
+  		<listitem>
+  			<para>Made Workbooks serializable using the .net DataContractSerializer</para>
+  		</listitem>
+  	</itemizedlist>
       <para>
         <emphasis role="bold">Version 1.0.2 (2013-01-10)</emphasis>
       </para>
