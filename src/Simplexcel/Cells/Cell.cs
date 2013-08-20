@@ -124,6 +124,12 @@ namespace Simplexcel
         public object Value { get; set; }
 
         /// <summary>
+        /// Should this cell be a Hyperlink to something?
+        /// </summary>
+        [DataMember]
+        public string Hyperlink { get; set; }
+
+        /// <summary>
         /// Create a new <see cref="Cell"/> with a <see cref="CellType"/> of Text from a string.
         /// </summary>
         /// <param name="value"></param>

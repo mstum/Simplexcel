@@ -35,6 +35,7 @@ namespace Simplexcel.TestApp
             cell.Italic = true;
             cell.TextColor = Color.Blue;
             cell.FontSize = 18;
+            cell.Hyperlink = "https://github.com/mstum/Simplexcel";
             sheet.Cells[0, 3] = cell;
             sheet.ColumnWidths[3] = 40;
 

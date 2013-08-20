@@ -83,7 +83,13 @@ namespace Simplexcel.XlsxInternal
                 foreach (var sheet in _workbook.Sheets)
                 {
                     i++;
-                    var rel = CreateSheetFile(sheet, i);
+                    XmlFile sheetRels;
+                    var rel = CreateSheetFile(sheet, i, out sheetRels);
+                    if (sheetRels != null)
+                    {
+                        _package.XmlFiles.Add(sheetRels);
+                    }
+
                     _package.XmlFiles.Add(rel.Target);
                     _package.WorkbookRelationships.Add(rel);
 
@@ -258,8 +264,9 @@ namespace Simplexcel.XlsxInternal
             /// </summary>
             /// <param name="sheet"></param>
             /// <param name="sheetIndex"></param>
+            /// <param name="sheetRels">If this worksheet needs an xl/worksheets/_rels/sheetX.xml.rels file</param>
             /// <returns></returns>
-            private Relationship CreateSheetFile(Worksheet sheet, int sheetIndex)
+            private Relationship CreateSheetFile(Worksheet sheet, int sheetIndex, out XmlFile sheetRels)
             {
                 var rows = GetXlsxRows(sheet);
 
@@ -272,6 +279,7 @@ namespace Simplexcel.XlsxInternal
                     new XAttribute(XNamespace.Xmlns + "r", Namespaces.relationship),
                     new XAttribute(XNamespace.Xmlns + "mc", Namespaces.mc),
                     new XAttribute(XNamespace.Xmlns + "x14ac", Namespaces.x14ac),
+                    new XAttribute(XNamespace.Xmlns + "or", Namespaces.officeRelationships),
                     new XAttribute(Namespaces.mc + "Ignorable", "x14ac")
                 ));
 
@@ -313,11 +321,46 @@ namespace Simplexcel.XlsxInternal
                 }
                 doc.Root.Add(sheetData);
 
+                var hyperlinks = sheet.Cells.Where(c => c.Value != null && !string.IsNullOrEmpty(c.Value.Hyperlink)).ToList();
+                if (hyperlinks.Count > 0)
+                {
+                    sheetRels = new XmlFile();
+                    sheetRels.Path = "xl/worksheets/_rels/sheet" + sheetIndex + ".xml.rels";
+                    sheetRels.ContentType = "application/vnd.openxmlformats-package.relationships+xml";
+
+                    var hlRelsElem = new XElement(Namespaces.relationship + "Relationships");
+
+                    var hlElem = new XElement(Namespaces.workbook + "hyperlinks");
+                    for (int i = 0; i <= hyperlinks.Count - 1; i++)
+                    {
+                        string hyperLinkRelId = "rId" + (i + 1);
+
+                        var link = hyperlinks[i];
+                        var linkElem = new XElement(Namespaces.workbook + "hyperlink",
+                                                    new XAttribute("ref", link.Key.ToString()),
+                                                    new XAttribute(Namespaces.officeRelationships + "id", hyperLinkRelId)
+                                );
+                        hlElem.Add(linkElem);
+
+                        hlRelsElem.Add(new XElement(Namespaces.relationship + "Relationship",
+                            new XAttribute("Id", hyperLinkRelId),
+                            new XAttribute("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink"),
+                            new XAttribute("Target", link.Value.Hyperlink),
+                            new XAttribute("TargetMode", "External")));
+                    }
+                    doc.Root.Add(hlElem);
+                    sheetRels.Content = new XDocument();
+                    sheetRels.Content.Add(hlRelsElem);
+                }
+                else
+                {
+                    sheetRels = null;
+                }
+
                 var pageSetup = new XElement(Namespaces.workbook + "pageSetup");
                 pageSetup.Add(new XAttribute("orientation", sheet.PageSetup.Orientation == Orientation.Portrait ? "portrait" : "landscape"));
                 doc.Root.Add(pageSetup);
 
-      
                 file.Content = doc;
                 var rel = new Relationship(_relationshipCounter)
                 {

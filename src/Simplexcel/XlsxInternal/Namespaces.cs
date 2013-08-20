@@ -15,6 +15,7 @@ namespace Simplexcel.XlsxInternal
         internal static readonly XNamespace dcterms = "http://purl.org/dc/terms/";
         internal static readonly XNamespace extendedProperties = "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties";
         internal static readonly XNamespace mc = "http://schemas.openxmlformats.org/markup-compatibility/2006";
+        internal static readonly XNamespace officeRelationships = "http://schemas.openxmlformats.org/officeDocument/2006/relationships";
         internal static readonly XNamespace relationship = "http://schemas.openxmlformats.org/package/2006/relationships";
         internal static readonly XNamespace vt = "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes";
         internal static readonly XNamespace workbook = "http://schemas.openxmlformats.org/spreadsheetml/2006/main";
