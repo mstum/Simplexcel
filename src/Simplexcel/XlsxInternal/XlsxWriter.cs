@@ -12,9 +12,15 @@ namespace Simplexcel.XlsxInternal
         /// <summary>
         /// Save a workbook to a MemoryStream
         /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown if there are no <see cref="Worksheet">sheets</see> in the workbook.</exception>
         /// <returns></returns>
         internal static MemoryStream Save(Workbook workbook, CompressionLevel compressionLevel)
         {
+            if (workbook.SheetCount == 0)
+            {
+                throw new InvalidOperationException("You are trying to save a Workbook that does not contain any Worksheets.");
+            }
+
             CompressionOption option;
             switch (compressionLevel)
             {

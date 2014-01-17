@@ -34,6 +34,14 @@ namespace Simplexcel
         public string Author { get; set; }
 
         /// <summary>
+        /// How many <see cref="Worksheet">sheets</see> are in the Workbook currently?
+        /// </summary>
+        public int SheetCount
+        {
+            get { return _sheets.Count; }
+        }
+
+        /// <summary>
         /// Add a worksheet to this workbook. Sheet names must be unique.
         /// </summary>
         /// <exception cref="ArgumentException">Thrown if a sheet with the same Name already exists</exception>
@@ -52,6 +60,7 @@ namespace Simplexcel
         /// <summary>
         /// Save this workbook to a file, overwriting the file if it exists
         /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown if there are no <see cref="Worksheet">sheets</see> in the workbook.</exception>
         public void Save(string filename)
         {
             Save(filename, CompressionLevel.Balanced);
@@ -62,6 +71,7 @@ namespace Simplexcel
         /// </summary>
         /// <param name="filename"></param>
         /// <param name="compressionLevel">How much should content in a workbook be compressed? (Higher CPU Usage)</param>
+        /// <exception cref="InvalidOperationException">Thrown if there are no <see cref="Worksheet">sheets</see> in the workbook.</exception>
         public void Save(string filename, CompressionLevel compressionLevel)
         {
             using (var fs = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
@@ -75,6 +85,7 @@ namespace Simplexcel
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="compressionLevel">How much should content in a workbook be compressed? (Higher CPU Usage)</param>
+        /// <exception cref="InvalidOperationException">Thrown if there are no <see cref="Worksheet">sheets</see> in the workbook.</exception>
         public void Save(Stream stream, CompressionLevel compressionLevel)
         {
             using (var ms = XlsxWriter.Save(this, compressionLevel))
