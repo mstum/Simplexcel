@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace Simplexcel
@@ -11,6 +12,22 @@ namespace Simplexcel
     {
         [DataMember]
         private readonly Dictionary<CellAddress, Cell> _cells = new Dictionary<CellAddress, Cell>();
+
+        /// <summary>
+        /// How many Rows are in the sheet? (This counts the maximum row index, so empty rows are counted if they are followed by another row)
+        /// </summary>
+        public int RowCount
+        {
+            get { return _cells.Count > 0 ? _cells.Keys.Max(k => k.Row) + 1 : 0; }
+        }
+
+        /// <summary>
+        /// How many Columns are in the sheet? (This counts the rightmost column, so empty columns are counted if they are followed by another column)
+        /// </summary>
+        public int ColumnCount
+        {
+            get { return _cells.Count > 0 ? _cells.Keys.Max(k => k.Column) + 1 : 0; }
+        }
 
         /// <summary>
         /// Get the cell with the given cell reference, e.g. Get the cell "A1". May return NULL.
