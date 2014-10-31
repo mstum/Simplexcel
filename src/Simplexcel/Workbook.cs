@@ -88,10 +88,7 @@ namespace Simplexcel
         /// <exception cref="InvalidOperationException">Thrown if there are no <see cref="Worksheet">sheets</see> in the workbook.</exception>
         public void Save(Stream stream, CompressionLevel compressionLevel)
         {
-            using (var ms = XlsxWriter.Save(this, compressionLevel))
-            {
-                ms.CopyTo(stream);
-            }
+            XlsxWriter.Save(this, compressionLevel, stream);
         }
     }
 }

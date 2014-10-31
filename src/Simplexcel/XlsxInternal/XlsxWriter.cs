@@ -14,7 +14,7 @@ namespace Simplexcel.XlsxInternal
         /// </summary>
         /// <exception cref="InvalidOperationException">Thrown if there are no <see cref="Worksheet">sheets</see> in the workbook.</exception>
         /// <returns></returns>
-        internal static MemoryStream Save(Workbook workbook, CompressionLevel compressionLevel)
+        internal static void Save(Workbook workbook, CompressionLevel compressionLevel, Stream outputStream)
         {
             if (workbook.SheetCount == 0)
             {
@@ -37,7 +37,7 @@ namespace Simplexcel.XlsxInternal
             }
 
             var writer = new XlsxWriterInternal(workbook, option);
-            return writer.Save();
+            writer.Save(outputStream);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Simplexcel.XlsxInternal
                 _styles = GetXlsxStyles();
             }
 
-            internal MemoryStream Save()
+            internal void Save(Stream outputStream)
             {
                 // docProps/core.xml
                 var cp = CreateCoreFileProperties();
@@ -131,7 +131,7 @@ namespace Simplexcel.XlsxInternal
                 _package.Relationships.Add(wb);
 
                 // xl/_rels/workbook.xml.rels
-                return _package.SaveToStream();
+                _package.SaveToStream(outputStream);
             }
 
             /// <summary>

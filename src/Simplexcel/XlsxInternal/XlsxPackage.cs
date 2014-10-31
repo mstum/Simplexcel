@@ -45,10 +45,9 @@ namespace Simplexcel.XlsxInternal
         /// Save the Xlsx Package to a new Stream (that the caller owns and has to dispose)
         /// </summary>
         /// <returns></returns>
-        internal MemoryStream SaveToStream()
+        internal void SaveToStream(Stream outputStream)
         {
-            var ms = new MemoryStream();
-            var pkg = Package.Open(ms, FileMode.Create, FileAccess.ReadWrite);
+            var pkg = Package.Open(outputStream, FileMode.Create, FileAccess.ReadWrite);
             WriteInfoXmlFile(pkg);
 
             foreach (var file in XmlFiles)
@@ -71,8 +70,7 @@ namespace Simplexcel.XlsxInternal
 
             pkg.Flush();
             pkg.Close();
-            ms.Seek(0, SeekOrigin.Begin);
-            return ms;
+            outputStream.Seek(0, SeekOrigin.Begin);
         }
 
         private void WriteInfoXmlFile(Package pkg)
