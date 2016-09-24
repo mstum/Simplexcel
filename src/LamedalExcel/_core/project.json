@@ -1,0 +1,48 @@
+{
+    "title": "LamedalExcel",
+    "copyright": "The MIT License (MIT) Copyright (c) 2016 Perez Lamed van Niekerk.",
+    "description": "Excel lib based on Michael Stum open source project, http://www.Stum.de; https://github.com/mstum/Simplexcel",
+    "version": "0.0.2-alfa",
+    "iconUrl": "https://sites.google.com/site/lamedalwiki/Project-News/lamedalporttonetcore10/Lamedal15.png",
+    "licenseUrl": "https://sites.google.com/site/lamedalwiki/copyright",
+    "projectUrl": "https://sites.google.com/site/lamedalwiki/",
+    "summary": "Simple methods to create Excel file",
+    "releaseNotes": "Simple Excel lib to create excel files.",
+
+  "dependencies": {
+    "NETStandard.Library": "1.6.0",
+    "System.Runtime.Serialization.Primitives": "*",
+    "System.IO.Packaging": "*"
+  },
+  "frameworks": 
+  {
+    "netcoreapp1.0": 
+    {
+      "dependencies": 
+      {
+        "CoreCompat.System.Drawing": "1.0.0-beta006",
+        "Microsoft.NETCore.App": 
+        {
+          "type": "platform",
+          "version": "1.0.0"
+        }
+      },
+      "imports": "dnxcore50"
+    },
+    "net461": {"frameworkAssemblies": 
+      { 
+          "System.Xml.Linq": "4.0.0.0",
+          "System.Drawing" : "*"
+      }
+    },
+    "netstandard1.6": 
+    {
+        "imports": "dnxcore50",
+        "dependencies": 
+        {
+            "CoreCompat.System.Drawing": "1.0.0-beta006"
+        }
+    }
+  },
+  "tooling": {"defaultNamespace": "Simplexcel" }
+}
