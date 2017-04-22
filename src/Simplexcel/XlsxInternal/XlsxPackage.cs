@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Packaging;
 using System.Linq;
-using System.Text;
+using System.Reflection;
 using System.Xml.Linq;
 
 namespace Simplexcel.XlsxInternal
@@ -28,54 +27,46 @@ namespace Simplexcel.XlsxInternal
         /// </summary>
         internal IList<Relationship> WorkbookRelationships { get; private set; }
 
-        /// <summary>
-        /// The compression level, higher compression = more CPU usage and smaller file size
-        /// </summary>
-        internal CompressionOption CompressionOption { get; set; }
 
         internal XlsxPackage()
         {
             Relationships = new List<Relationship>();
             WorkbookRelationships = new List<Relationship>();
             XmlFiles = new List<XmlFile>();
-            CompressionOption = CompressionOption.Normal;
         }
 
         /// <summary>
         /// Save the Xlsx Package to a new Stream (that the caller owns and has to dispose)
         /// </summary>
         /// <returns></returns>
-        internal void SaveToStream(Stream outputStream)
+        internal void SaveToStream(Stream outputStream, bool compress)
         {
-            var pkg = Package.Open(outputStream, FileMode.Create, FileAccess.ReadWrite);
-            WriteInfoXmlFile(pkg);
-
-            foreach (var file in XmlFiles)
+            using (var pkg = new ZipPackage(outputStream, compress))
             {
-                WriteXmlFile(pkg, file);
+                WriteInfoXmlFile(pkg);
 
-// ReSharper disable AccessToForEachVariableInClosure
-                var relations = Relationships.Where(r => r.Target == file);
-// ReSharper restore AccessToForEachVariableInClosure
-                foreach (var rel in relations)
+                foreach (var file in XmlFiles)
                 {
-                    pkg.CreateRelationship(new Uri("/"+file.Path, UriKind.Relative), TargetMode.Internal, rel.Type, rel.Id);
+                    pkg.WriteXmlFile(file);
+
+                    var relations = Relationships.Where(r => r.Target == file);
+                    foreach (var rel in relations)
+                    {
+                        pkg.AddRelationship(rel);
+                    }
+                }
+
+                if (WorkbookRelationships.Count > 0)
+                {
+                    pkg.WriteXmlFile(WorkbookRelsXml());
                 }
             }
-
-            if (WorkbookRelationships.Count > 0)
-            {
-                WriteXmlFile(pkg, WorkbookRelsXml());
-            }
-
-            pkg.Flush();
-            pkg.Close();
             outputStream.Seek(0, SeekOrigin.Begin);
         }
 
-        private void WriteInfoXmlFile(Package pkg)
+        private void WriteInfoXmlFile(ZipPackage pkg)
         {
-            var version = GetType().Assembly.GetName().Version;
+            var version = typeof(Workbook).GetTypeInfo().Assembly.GetName().Version;
 
             var infoXml = new XmlFile();
             infoXml.Path = "simplexcel.xml";
@@ -90,22 +81,7 @@ namespace Simplexcel.XlsxInternal
 
             infoXml.Content.Root.Add(new XElement(Namespaces.simplexcel + "created", DateTime.UtcNow));
 
-            WriteXmlFile(pkg, infoXml);
-        }
-
-        /// <summary>
-        /// Write an Xml File to the package
-        /// </summary>
-        /// <param name="pkg"></param>
-        /// <param name="file"></param>
-        private void WriteXmlFile(Package pkg, XmlFile file)
-        {
-            var part = pkg.CreatePart(new Uri("/" + file.Path, UriKind.Relative), file.ContentType, CompressionOption);
-            byte[] content = Encoding.UTF8.GetBytes(file.Content.ToString());
-            using (var s = part.GetStream(FileMode.Create, FileAccess.ReadWrite))
-            {
-                s.Write(content, 0, content.Length);
-            }
+            pkg.WriteXmlFile(infoXml);
         }
 
         /// <summary>

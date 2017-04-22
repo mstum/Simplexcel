@@ -1,21 +1,16 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace Simplexcel
 {
     /// <summary>
     /// A single Worksheet in an Excel Document
     /// </summary>
-    [DataContract]
     public sealed class Worksheet
     {
-        [DataMember]
         private readonly CellCollection _cells = new CellCollection();
 
-        [DataMember]
         private readonly ColumnWidthCollection _columnWidth = new ColumnWidthCollection();
 
-        [DataMember]
         private readonly PageSetup _pageSetup = new PageSetup();
 
         /// <summary>
@@ -62,7 +57,6 @@ namespace Simplexcel
         /// <summary>
         /// Gets or sets the Name of the Worksheet
         /// </summary>
-        [DataMember]
         public string Name { get; private set; }
 
         /// <summary>

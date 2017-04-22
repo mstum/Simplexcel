@@ -1,16 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 
 namespace Simplexcel
 {
     /// <summary>
     /// A Collection of <see cref="Cell">Cells</see>
     /// </summary>
-    [DataContract]
     public sealed class CellCollection : IEnumerable<KeyValuePair<CellAddress, Cell>>
     {
-        [DataMember]
         private readonly Dictionary<CellAddress, Cell> _cells = new Dictionary<CellAddress, Cell>();
 
         /// <summary>

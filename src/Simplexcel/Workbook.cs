@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
 using Simplexcel.XlsxInternal;
 
 namespace Simplexcel
@@ -10,10 +9,8 @@ namespace Simplexcel
     /// <summary>
     /// An Excel Workbook
     /// </summary>
-    [DataContract]
     public sealed class Workbook
     {
-        [DataMember]
         private readonly List<Worksheet> _sheets = new List<Worksheet>();
 
         /// <summary>
@@ -24,13 +21,11 @@ namespace Simplexcel
         /// <summary>
         /// The title of the Workbook
         /// </summary>
-        [DataMember]
         public string Title { get; set; }
 
         /// <summary>
         /// The author of the Workbook
         /// </summary>
-        [DataMember]
         public string Author { get; set; }
 
         /// <summary>
@@ -60,23 +55,14 @@ namespace Simplexcel
         /// <summary>
         /// Save this workbook to a file, overwriting the file if it exists
         /// </summary>
-        /// <exception cref="InvalidOperationException">Thrown if there are no <see cref="Worksheet">sheets</see> in the workbook.</exception>
-        public void Save(string filename)
-        {
-            Save(filename, CompressionLevel.Balanced);
-        }
-
-        /// <summary>
-        /// Save this workbook to a file, overwriting the file if it exists
-        /// </summary>
         /// <param name="filename"></param>
-        /// <param name="compressionLevel">How much should content in a workbook be compressed? (Higher CPU Usage)</param>
+        /// <param name="compress">Use compression? (Smaller files/higher CPU Usage)</param>
         /// <exception cref="InvalidOperationException">Thrown if there are no <see cref="Worksheet">sheets</see> in the workbook.</exception>
-        public void Save(string filename, CompressionLevel compressionLevel)
+        public void Save(string filename, bool compress = true)
         {
             using (var fs = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
             {
-                Save(fs, compressionLevel);
+                Save(fs, compress);
             }
         }
 
@@ -84,11 +70,11 @@ namespace Simplexcel
         /// Save this workbook to the given stream
         /// </summary>
         /// <param name="stream"></param>
-        /// <param name="compressionLevel">How much should content in a workbook be compressed? (Higher CPU Usage)</param>
+        /// <param name="compress">Use compression? (Smaller files/higher CPU Usage)</param>
         /// <exception cref="InvalidOperationException">Thrown if there are no <see cref="Worksheet">sheets</see> in the workbook.</exception>
-        public void Save(Stream stream, CompressionLevel compressionLevel)
+        public void Save(Stream stream, bool compress = true)
         {
-            XlsxWriter.Save(this, compressionLevel, stream);
+            XlsxWriter.Save(this, stream, compress);
         }
     }
 }

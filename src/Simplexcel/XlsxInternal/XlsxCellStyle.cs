@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace Simplexcel.XlsxInternal
 {
     /// <summary>
     /// The Style Information about a cell. Isolated from the Cell object because we need to compare styles when building the styles.xml file
     /// </summary>
-    [DataContract]
     internal class XlsxCellStyle : IEquatable<XlsxCellStyle>
     {
         internal XlsxCellStyle()
@@ -14,13 +12,10 @@ namespace Simplexcel.XlsxInternal
             Font = new XlsxFont();
         }
 
-        [DataMember]
         internal XlsxFont Font { get; set; }
         
-        [DataMember]
         internal CellBorder Border { get; set; }
         
-        [DataMember]
         internal string Format { get; set; }
 
         public override bool Equals(object obj)

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using System.IO.Packaging;
 
 namespace Simplexcel.XlsxInternal
 {
@@ -14,30 +13,15 @@ namespace Simplexcel.XlsxInternal
         /// </summary>
         /// <exception cref="InvalidOperationException">Thrown if there are no <see cref="Worksheet">sheets</see> in the workbook.</exception>
         /// <returns></returns>
-        internal static void Save(Workbook workbook, CompressionLevel compressionLevel, Stream outputStream)
+        internal static void Save(Workbook workbook, Stream outputStream, bool compress)
         {
             if (workbook.SheetCount == 0)
             {
                 throw new InvalidOperationException("You are trying to save a Workbook that does not contain any Worksheets.");
             }
 
-            CompressionOption option;
-            switch (compressionLevel)
-            {
-                case CompressionLevel.Balanced:
-                    option = CompressionOption.Normal;
-                    break;
-                case CompressionLevel.Maximum:
-                    option = CompressionOption.Maximum;
-                    break;
-                case CompressionLevel.NoCompression:
-                default:
-                    option = CompressionOption.NotCompressed;
-                    break;
-            }
-
-            var writer = new XlsxWriterInternal(workbook, option);
-            writer.Save(outputStream);
+            var writer = new XlsxWriterInternal(workbook);
+            writer.Save(outputStream, compress);
         }
 
         /// <summary>
@@ -57,16 +41,16 @@ namespace Simplexcel.XlsxInternal
             // For some reason, Excel interprets column widths as the width minus this factor
             private const decimal ExcelColumnWidthDifference = 0.7109375m;
 
-            public XlsxWriterInternal(Workbook workbook, CompressionOption compressionOption)
+            public XlsxWriterInternal(Workbook workbook)
             {
                 _workbook = workbook;
                 _relationshipCounter = new RelationshipCounter();
                 _sharedStrings = new SharedStrings();
-                _package = new XlsxPackage { CompressionOption = compressionOption };
+                _package = new XlsxPackage();
                 _styles = GetXlsxStyles();
             }
 
-            internal void Save(Stream outputStream)
+            internal void Save(Stream outputStream, bool compress)
             {
                 // docProps/core.xml
                 var cp = CreateCoreFileProperties();
@@ -131,7 +115,7 @@ namespace Simplexcel.XlsxInternal
                 _package.Relationships.Add(wb);
 
                 // xl/_rels/workbook.xml.rels
-                _package.SaveToStream(outputStream);
+                _package.SaveToStream(outputStream, compress);
             }
 
             /// <summary>

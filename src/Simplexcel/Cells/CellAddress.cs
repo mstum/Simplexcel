@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace Simplexcel
+﻿namespace Simplexcel
 {
     /// <summary>
     /// The zero-based Address of a cell
@@ -8,19 +6,16 @@ namespace Simplexcel
     /// <remarks>
     /// This is zero-based, so cell A1 is Row,Column [0,0]
     /// </remarks>
-    [DataContract]
     public struct CellAddress
     {
         /// <summary>
         /// The zero-based row
         /// </summary>
-        [DataMember]
         public readonly int Row;
 
         /// <summary>
         /// The zero-based column
         /// </summary>
-        [DataMember]
         public readonly int Column;
 
         /// <summary>
