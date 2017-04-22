@@ -21,5 +21,6 @@ namespace Simplexcel.XlsxInternal
         internal static readonly XNamespace x = "http://schemas.openxmlformats.org/spreadsheetml/2006/main";
         internal static readonly XNamespace x14ac = "http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac";
         internal static readonly XNamespace xsi = "http://www.w3.org/2001/XMLSchema-instance";
+        internal static readonly XNamespace contenttypes = "http://schemas.openxmlformats.org/package/2006/content-types";
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Reflection;
 using System.Xml.Linq;
 
 namespace Simplexcel.XlsxInternal
@@ -41,33 +41,32 @@ namespace Simplexcel.XlsxInternal
         /// <returns></returns>
         internal void SaveToStream(Stream outputStream)
         {
-            var pkg = new ZipPackage(outputStream); // Package.Open(outputStream, FileMode.Create, FileAccess.ReadWrite);
-            WriteInfoXmlFile(pkg);
-
-            foreach (var file in XmlFiles)
+            using (var pkg = new ZipPackage(outputStream))
             {
-                WriteXmlFile(pkg, file);
+                WriteInfoXmlFile(pkg);
 
-                var relations = Relationships.Where(r => r.Target == file);
-                foreach (var rel in relations)
+                foreach (var file in XmlFiles)
                 {
-                    pkg.CreateInternalRelationship(file.Path, rel.Type, rel.Id);
+                    pkg.WriteXmlFile(file);
+
+                    var relations = Relationships.Where(r => r.Target == file);
+                    foreach (var rel in relations)
+                    {
+                        pkg.AddRelationship(rel);
+                    }
+                }
+
+                if (WorkbookRelationships.Count > 0)
+                {
+                    pkg.WriteXmlFile(WorkbookRelsXml());
                 }
             }
-
-            if (WorkbookRelationships.Count > 0)
-            {
-                WriteXmlFile(pkg, WorkbookRelsXml());
-            }
-
-            pkg.Flush();
-            pkg.Close();
             outputStream.Seek(0, SeekOrigin.Begin);
         }
 
         private void WriteInfoXmlFile(ZipPackage pkg)
         {
-            var version = new Version(2,0,0,0);
+            var version = typeof(Workbook).GetTypeInfo().Assembly.GetName().Version;
 
             var infoXml = new XmlFile();
             infoXml.Path = "simplexcel.xml";
@@ -82,22 +81,7 @@ namespace Simplexcel.XlsxInternal
 
             infoXml.Content.Root.Add(new XElement(Namespaces.simplexcel + "created", DateTime.UtcNow));
 
-            WriteXmlFile(pkg, infoXml);
-        }
-
-        /// <summary>
-        /// Write an Xml File to the package
-        /// </summary>
-        /// <param name="pkg"></param>
-        /// <param name="file"></param>
-        private void WriteXmlFile(ZipPackage pkg, XmlFile file)
-        {
-            var part = pkg.CreatePart(file.Path, file.ContentType);
-            byte[] content = Encoding.UTF8.GetBytes(file.Content.ToString());
-            using (var s = part.GetStream(FileMode.Create, FileAccess.ReadWrite))
-            {
-                s.Write(content, 0, content.Length);
-            }
+            pkg.WriteXmlFile(infoXml);
         }
 
         /// <summary>
