@@ -216,7 +216,7 @@ public abstract class ExcelResultBase : ActionResult
         context.HttpContext.Response.ContentType = "application/octet-stream";
         context.HttpContext.Response.StatusCode = (int)HttpStatusCode.OK;
         context.HttpContext.Response.AppendHeader("content-disposition", "attachment; filename=\"" + _filename + "\"");
-        workbook.Save(context.HttpContext.Response.OutputStream, CompressionLevel.NoCompression);
+        workbook.Save(context.HttpContext.Response.OutputStream);
     }
 }
 ```
