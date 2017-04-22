@@ -190,34 +190,34 @@ If you want to generate Excel Sheets as part of an ASP.net MVC action, you can u
 ```cs
 public abstract class ExcelResultBase : ActionResult
 {
-	private readonly string _filename;
+    private readonly string _filename;
 
-	protected ExcelResultBase(string filename)
-	{
-		_filename = filename;
-	}
+    protected ExcelResultBase(string filename)
+    {
+        _filename = filename;
+    }
 
-	protected abstract Workbook GenerateWorkbook();
+    protected abstract Workbook GenerateWorkbook();
 
-	public override void ExecuteResult(ControllerContext context)
-	{
-		if (context == null)
-		{
-			throw new ArgumentNullException("context");
-		}
+    public override void ExecuteResult(ControllerContext context)
+    {
+        if (context == null)
+        {
+            throw new ArgumentNullException("context");
+        }
 
-		var workbook = GenerateWorkbook();
-		if (workbook == null)
-		{
-			context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
-			return;
-		}
+        var workbook = GenerateWorkbook();
+        if (workbook == null)
+        {
+            context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
+            return;
+        }
 
-		context.HttpContext.Response.ContentType = "application/octet-stream";
-		context.HttpContext.Response.StatusCode = (int)HttpStatusCode.OK;
-		context.HttpContext.Response.AppendHeader("content-disposition", "attachment; filename=\"" + _filename + "\"");
-		workbook.Save(context.HttpContext.Response.OutputStream, CompressionLevel.NoCompression);
-	}
+        context.HttpContext.Response.ContentType = "application/octet-stream";
+        context.HttpContext.Response.StatusCode = (int)HttpStatusCode.OK;
+        context.HttpContext.Response.AppendHeader("content-disposition", "attachment; filename=\"" + _filename + "\"");
+        workbook.Save(context.HttpContext.Response.OutputStream, CompressionLevel.NoCompression);
+    }
 }
 ```
 
