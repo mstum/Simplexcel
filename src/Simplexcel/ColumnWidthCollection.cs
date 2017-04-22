@@ -1,16 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 
 namespace Simplexcel
 {
     /// <summary>
     /// Custom Column Widths within a worksheet
     /// </summary>
-    [DataContract]
     public sealed class ColumnWidthCollection : IEnumerable<KeyValuePair<int, double>>
     {
-        [DataMember]
         private readonly Dictionary<int, double> _columnWidths = new Dictionary<int, double>();
 
         /// <summary>

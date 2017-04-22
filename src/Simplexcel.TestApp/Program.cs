@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 
 namespace Simplexcel.TestApp
 {
@@ -58,8 +57,7 @@ namespace Simplexcel.TestApp
 
             wb.Add(sheet);
 
-            wb.Save(@"testCompressed.xlsx", CompressionLevel.Maximum);
-            wb.Save(@"testUncompressed.xlsx", CompressionLevel.NoCompression);
+            wb.Save("test.xlsx");
         }
     }
 }

@@ -1,23 +1,14 @@
 ﻿using System;
-using System.Drawing;
-using System.Runtime.Serialization;
 
 namespace Simplexcel.XlsxInternal
 {
-    [DataContract]
     internal class XlsxFont : IEquatable<XlsxFont>
     {
-        [DataMember]
         internal string Name { get; set; }
-        [DataMember]
         internal int Size { get; set; }
-        [DataMember]
         internal bool Bold { get; set; }
-        [DataMember]
         internal bool Italic { get; set; }
-        [DataMember]
         internal bool Underline { get; set; }
-        [DataMember]
         internal Color TextColor { get; set; }
 
         internal XlsxFont()

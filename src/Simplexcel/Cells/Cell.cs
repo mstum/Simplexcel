@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Drawing;
-using System.Runtime.Serialization;
 using Simplexcel.XlsxInternal;
 
 namespace Simplexcel
@@ -8,10 +6,8 @@ namespace Simplexcel
     /// <summary>
     /// A cell inside a Worksheet
     /// </summary>
-    [DataContract]
     public sealed class Cell
     {
-        [DataMember]
         private readonly XlsxCellStyle _xlsxCellStyle;
         internal XlsxCellStyle XlsxCellStyle { get { return _xlsxCellStyle; } }
 
@@ -113,20 +109,16 @@ namespace Simplexcel
         /// <summary>
         /// The Type of the cell.
         /// </summary>
-        // TODO: This is immutable because XlsxWriter.GetXlsxRows casts Value from object to whatever. This logic needs to change.
-        [DataMember]
         public CellType CellType { get; private set; }
 
         /// <summary>
         /// The Content of the cell.
         /// </summary>
-        [DataMember]
         public object Value { get; set; }
 
         /// <summary>
         /// Should this cell be a Hyperlink to something?
         /// </summary>
-        [DataMember]
         public string Hyperlink { get; set; }
 
         /// <summary>

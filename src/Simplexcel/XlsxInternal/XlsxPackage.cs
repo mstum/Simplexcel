@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Packaging;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
@@ -28,17 +27,12 @@ namespace Simplexcel.XlsxInternal
         /// </summary>
         internal IList<Relationship> WorkbookRelationships { get; private set; }
 
-        /// <summary>
-        /// The compression level, higher compression = more CPU usage and smaller file size
-        /// </summary>
-        internal CompressionOption CompressionOption { get; set; }
 
         internal XlsxPackage()
         {
             Relationships = new List<Relationship>();
             WorkbookRelationships = new List<Relationship>();
             XmlFiles = new List<XmlFile>();
-            CompressionOption = CompressionOption.Normal;
         }
 
         /// <summary>
@@ -47,7 +41,7 @@ namespace Simplexcel.XlsxInternal
         /// <returns></returns>
         internal void SaveToStream(Stream outputStream)
         {
-            var pkg = Package.Open(outputStream, FileMode.Create, FileAccess.ReadWrite);
+            /*var pkg = Package.Open(outputStream, FileMode.Create, FileAccess.ReadWrite);
             WriteInfoXmlFile(pkg);
 
             foreach (var file in XmlFiles)
@@ -70,10 +64,10 @@ namespace Simplexcel.XlsxInternal
 
             pkg.Flush();
             pkg.Close();
-            outputStream.Seek(0, SeekOrigin.Begin);
+            outputStream.Seek(0, SeekOrigin.Begin);*/
         }
 
-        private void WriteInfoXmlFile(Package pkg)
+        /*private void WriteInfoXmlFile(Package pkg)
         {
             var version = GetType().Assembly.GetName().Version;
 
@@ -106,7 +100,7 @@ namespace Simplexcel.XlsxInternal
             {
                 s.Write(content, 0, content.Length);
             }
-        }
+        }*/
 
         /// <summary>
         /// Create the xl/_rels/workbook.xml.rels file
