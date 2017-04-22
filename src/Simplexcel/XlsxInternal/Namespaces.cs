@@ -7,9 +7,7 @@ namespace Simplexcel.XlsxInternal
     /// </summary>
     internal static class Namespaces
     {
-        // ReSharper disable InconsistentNaming
         internal static readonly XNamespace simplexcel = "http://stum.de/simplexcel/v1";
-
         internal static readonly XNamespace coreProperties = "http://schemas.openxmlformats.org/package/2006/metadata/core-properties";
         internal static readonly XNamespace dc = "http://purl.org/dc/elements/1.1/";
         internal static readonly XNamespace dcterms = "http://purl.org/dc/terms/";
@@ -23,6 +21,5 @@ namespace Simplexcel.XlsxInternal
         internal static readonly XNamespace x = "http://schemas.openxmlformats.org/spreadsheetml/2006/main";
         internal static readonly XNamespace x14ac = "http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac";
         internal static readonly XNamespace xsi = "http://www.w3.org/2001/XMLSchema-instance";
-        // ReSharper restore InconsistentNaming
     }
 }

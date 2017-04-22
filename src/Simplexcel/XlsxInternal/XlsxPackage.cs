@@ -41,19 +41,17 @@ namespace Simplexcel.XlsxInternal
         /// <returns></returns>
         internal void SaveToStream(Stream outputStream)
         {
-            /*var pkg = Package.Open(outputStream, FileMode.Create, FileAccess.ReadWrite);
+            var pkg = new ZipPackage(outputStream); // Package.Open(outputStream, FileMode.Create, FileAccess.ReadWrite);
             WriteInfoXmlFile(pkg);
 
             foreach (var file in XmlFiles)
             {
                 WriteXmlFile(pkg, file);
 
-// ReSharper disable AccessToForEachVariableInClosure
                 var relations = Relationships.Where(r => r.Target == file);
-// ReSharper restore AccessToForEachVariableInClosure
                 foreach (var rel in relations)
                 {
-                    pkg.CreateRelationship(new Uri("/"+file.Path, UriKind.Relative), TargetMode.Internal, rel.Type, rel.Id);
+                    pkg.CreateInternalRelationship(file.Path, rel.Type, rel.Id);
                 }
             }
 
@@ -64,12 +62,12 @@ namespace Simplexcel.XlsxInternal
 
             pkg.Flush();
             pkg.Close();
-            outputStream.Seek(0, SeekOrigin.Begin);*/
+            outputStream.Seek(0, SeekOrigin.Begin);
         }
 
-        /*private void WriteInfoXmlFile(Package pkg)
+        private void WriteInfoXmlFile(ZipPackage pkg)
         {
-            var version = GetType().Assembly.GetName().Version;
+            var version = new Version(2,0,0,0);
 
             var infoXml = new XmlFile();
             infoXml.Path = "simplexcel.xml";
@@ -92,15 +90,15 @@ namespace Simplexcel.XlsxInternal
         /// </summary>
         /// <param name="pkg"></param>
         /// <param name="file"></param>
-        private void WriteXmlFile(Package pkg, XmlFile file)
+        private void WriteXmlFile(ZipPackage pkg, XmlFile file)
         {
-            var part = pkg.CreatePart(new Uri("/" + file.Path, UriKind.Relative), file.ContentType, CompressionOption);
+            var part = pkg.CreatePart(file.Path, file.ContentType);
             byte[] content = Encoding.UTF8.GetBytes(file.Content.ToString());
             using (var s = part.GetStream(FileMode.Create, FileAccess.ReadWrite))
             {
                 s.Write(content, 0, content.Length);
             }
-        }*/
+        }
 
         /// <summary>
         /// Create the xl/_rels/workbook.xml.rels file
