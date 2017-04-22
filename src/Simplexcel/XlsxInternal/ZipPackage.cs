@@ -13,8 +13,9 @@ namespace Simplexcel.XlsxInternal
         private readonly IDictionary<string, string> _contentTypes;
         private readonly IList<Relationship> _relationships;
         private bool _closed;
+        private readonly bool _compress;
 
-        internal ZipPackage(Stream underlyingStream)
+        internal ZipPackage(Stream underlyingStream, bool useCompression)
         {
             if (underlyingStream == null)
             {
@@ -24,6 +25,7 @@ namespace Simplexcel.XlsxInternal
             _archive = new ZipArchive(underlyingStream, ZipArchiveMode.Create, true);
             _contentTypes = new Dictionary<string, string>();
             _relationships = new List<Relationship>();
+            _compress = useCompression;
         }
 
         internal void AddRelationship(Relationship rel)
@@ -90,7 +92,7 @@ namespace Simplexcel.XlsxInternal
                 throw new ArgumentNullException(nameof(content));
             }
 
-            var entry = _archive.CreateEntry(relativeFileName, CompressionLevel.Optimal);
+            var entry = _archive.CreateEntry(relativeFileName, _compress ? CompressionLevel.Optimal : CompressionLevel.NoCompression);
 
             using (var stream = entry.Open())
             {

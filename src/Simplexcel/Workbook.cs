@@ -56,12 +56,13 @@ namespace Simplexcel
         /// Save this workbook to a file, overwriting the file if it exists
         /// </summary>
         /// <param name="filename"></param>
+        /// <param name="compress">Use compression? (Smaller files/higher CPU Usage)</param>
         /// <exception cref="InvalidOperationException">Thrown if there are no <see cref="Worksheet">sheets</see> in the workbook.</exception>
-        public void Save(string filename)
+        public void Save(string filename, bool compress = true)
         {
             using (var fs = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
             {
-                Save(fs);
+                Save(fs, compress);
             }
         }
 
@@ -69,10 +70,11 @@ namespace Simplexcel
         /// Save this workbook to the given stream
         /// </summary>
         /// <param name="stream"></param>
+        /// <param name="compress">Use compression? (Smaller files/higher CPU Usage)</param>
         /// <exception cref="InvalidOperationException">Thrown if there are no <see cref="Worksheet">sheets</see> in the workbook.</exception>
-        public void Save(Stream stream)
+        public void Save(Stream stream, bool compress = true)
         {
-            XlsxWriter.Save(this, stream);
+            XlsxWriter.Save(this, stream, compress);
         }
     }
 }

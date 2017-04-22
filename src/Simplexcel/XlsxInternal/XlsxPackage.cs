@@ -39,9 +39,9 @@ namespace Simplexcel.XlsxInternal
         /// Save the Xlsx Package to a new Stream (that the caller owns and has to dispose)
         /// </summary>
         /// <returns></returns>
-        internal void SaveToStream(Stream outputStream)
+        internal void SaveToStream(Stream outputStream, bool compress)
         {
-            using (var pkg = new ZipPackage(outputStream))
+            using (var pkg = new ZipPackage(outputStream, compress))
             {
                 WriteInfoXmlFile(pkg);
 

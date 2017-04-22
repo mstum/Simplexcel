@@ -62,7 +62,8 @@ namespace Simplexcel.TestApp
             sheet2[0, 0].Bold = true;
             wb.Add(sheet2);
 
-            wb.Save("test.xlsx");
+            wb.Save("compressed.xlsx", compress: true);
+            wb.Save("uncompressed.xlsx", compress: false);
         }
     }
 }
