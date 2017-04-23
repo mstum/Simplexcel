@@ -74,7 +74,7 @@ sheet.Cells["B1"].Border = CellBorder.Bottom | CellBorder.Right;
 Cell myCell = "Test Cell";
 myCell.FontName = "Comic Sans MS";
 myCell.FontSize = 18;
-myCell.TextColor = System.Drawing.Color.Violet;
+myCell.TextColor = Color.Violet;
 myCell.Bold = true;
 myCell.Italic = true;
 myCell.Underline = true;
@@ -102,7 +102,7 @@ sheet.Cells["A1"] = "Title!";
 sheet.Cells["A1"].Bold = true;
 sheet.Cells["A2"] = "Subtitle!";
 sheet.Cells["A2"].Bold = true;
-sheet.Cells["A2"].TextColor = System.Drawing.Color.Magenta;
+sheet.Cells["A2"].TextColor = Color.Magenta;
 for (int i = 0; i < 100; i++)
 {
     sheet.Cells[i + 2, 0] = "Entry Number " + (i + 1);
