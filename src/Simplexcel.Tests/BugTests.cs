@@ -9,7 +9,7 @@ namespace Simplexcel.Tests
         /// <summary>
         /// https://github.com/mstum/Simplexcel/issues/12
         /// 
-        /// SharedStrings _sanitizeRegex makes "&" in CellStrings impossible
+        /// SharedStrings _sanitizeRegex makes "&amp;" in CellStrings impossible
         /// </summary>
         [Fact]
         public void Issue12_AmpersandInCellValues()
