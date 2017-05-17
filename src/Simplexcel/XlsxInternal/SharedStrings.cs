@@ -13,7 +13,6 @@ namespace Simplexcel.XlsxInternal
     internal class SharedStrings
     {
         private readonly Dictionary<string, int> _sharedStrings = new Dictionary<string, int>(StringComparer.Ordinal);
-        private static Regex _sanitizeRegex = new Regex("[\x00-\x08\x0B\x0C\x0E-\x1F\x26]", RegexOptions.Compiled);
 
         /// <summary>
         /// The number of Unique Strings
@@ -63,9 +62,11 @@ namespace Simplexcel.XlsxInternal
 
             foreach (var kvp in _sharedStrings.OrderBy(k => k.Value))
             {
-                var str = _sanitizeRegex.Replace(kvp.Key, string.Empty);
-                var se = new XElement(Namespaces.x + "si", new XElement(Namespaces.x + "t", str));
-                sst.Root.Add(se);
+                var tElem = new XElement(Namespaces.x + "t");
+                tElem.Value = kvp.Key;
+
+                var siElem = new XElement(Namespaces.x + "si", tElem);
+                sst.Root.Add(siElem);
             }
 
             file.Content = sst;

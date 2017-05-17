@@ -28,7 +28,7 @@ namespace Simplexcel.TestApp
             sheet.Cells[0, 2].Bold = true;
             sheet.Cells[0, 2].TextColor = Color.Red;
 
-            Cell cell = "BIU Big Blue";
+            Cell cell = "BIU & Big & Blue";
             cell.Bold = true;
             cell.Underline = true;
             cell.Italic = true;
@@ -54,6 +54,9 @@ namespace Simplexcel.TestApp
             cell2.TextColor = Color.Orange;
             cell2.FontSize = 18;
             sheet.Cells[0, 2] = cell2;
+
+            sheet.Cells[0, 6] = "👪";
+            sheet.Cells[0, 7] = "👨‍👩‍👧‍👦";
 
             wb.Add(sheet);
 
