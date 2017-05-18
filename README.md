@@ -222,6 +222,9 @@ public abstract class ExcelResultBase : ActionResult
 ```
 
 # Changelog
+## 2.0.1 (2017-05-18)
+* Fix [Issue #12](https://github.com/mstum/Simplexcel/issues/12): Sanitizing Regex stripped out too many characters (like the Ampersand or Emojis). Note that certain Unicode characters only work on newer versions of Excel (e.g., Emojis work in Excel 2013 but not 2007 or 2010)
+
 ## 2.0.0 (2017-04-22)
 * Re-target to .net Framework 4.5 and .NET Standard 1.3
 * No longer use `System.Drawing.Color` but new type `Simplexcel.Color` should work

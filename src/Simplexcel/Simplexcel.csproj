@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard13;net45</TargetFrameworks>
-    <Version>2.0</Version>
+    <Version>2.0.1</Version>
     <Product>Simplexcel</Product>
     <Authors>Michael Stum &lt;opensource@stum.de&gt;</Authors>
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
