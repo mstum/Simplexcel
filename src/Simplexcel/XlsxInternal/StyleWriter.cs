@@ -16,12 +16,31 @@ namespace Simplexcel.XlsxInternal
         /// <returns></returns>
         internal static XmlFile CreateStyleXml(IList<XlsxCellStyle> styles)
         {
-            var uniqueBorders = styles.Select(s => s.Border).Where(s => s != CellBorder.None).Distinct().ToList();
-            uniqueBorders.Insert(0, CellBorder.None);
+            var numberFormats = new List<string>();
 
-            var numberFormats = styles.Select(s => s.Format).Distinct().ToList();
-            var uniqueFonts = styles.Select(s => s.Font).Distinct().ToList();
-            uniqueFonts.Insert(0, new XlsxFont());
+            var uniqueBorders = new List<CellBorder>();
+            uniqueBorders.Add(CellBorder.None);
+
+            var uniqueFonts = new List<XlsxFont>();
+            uniqueFonts.Add(new XlsxFont());
+
+            foreach (var style in styles)
+            {
+                if (style.Border != CellBorder.None && !uniqueBorders.Contains(style.Border))
+                {
+                    uniqueBorders.Add(style.Border);
+                }
+
+                if (!numberFormats.Contains(style.Format))
+                {
+                    numberFormats.Add(style.Format);
+                }
+
+                if (style.Font != null && !uniqueFonts.Contains(style.Font))
+                {
+                    uniqueFonts.Add(style.Font);
+                }
+            }
 
             var file = new XmlFile
             {
