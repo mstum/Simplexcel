@@ -10,8 +10,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simplexcel.Tests", "Simplex
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simplexcel.MvcTestApp", "Simplexcel.MvcTestApp\Simplexcel.MvcTestApp.csproj", "{26E384B1-4991-4B7B-B68C-4DDB500AE37C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simplexcel.Benchmark", "Simplexcel.Benchmark\Simplexcel.Benchmark.csproj", "{EFC9D2D7-9771-41B4-8095-3A10531C5BAD}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,10 +32,6 @@ Global
 		{26E384B1-4991-4B7B-B68C-4DDB500AE37C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26E384B1-4991-4B7B-B68C-4DDB500AE37C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26E384B1-4991-4B7B-B68C-4DDB500AE37C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EFC9D2D7-9771-41B4-8095-3A10531C5BAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EFC9D2D7-9771-41B4-8095-3A10531C5BAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EFC9D2D7-9771-41B4-8095-3A10531C5BAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EFC9D2D7-9771-41B4-8095-3A10531C5BAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
