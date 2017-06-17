@@ -24,3 +24,4 @@ nuget/
 .DS_Store
 Thumbs.db
 Desktop.ini
+BenchmarkDotNet.Artifacts
