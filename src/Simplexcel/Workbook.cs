@@ -60,6 +60,11 @@ namespace Simplexcel
         /// <exception cref="InvalidOperationException">Thrown if there are no <see cref="Worksheet">sheets</see> in the workbook.</exception>
         public void Save(string filename, bool compress = true)
         {
+            if(string.IsNullOrEmpty(filename))
+            {
+                throw new ArgumentException("Invalid Filename.", nameof(filename));
+            }
+
             using (var fs = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
             {
                 Save(fs, compress);
@@ -74,6 +79,11 @@ namespace Simplexcel
         /// <exception cref="InvalidOperationException">Thrown if there are no <see cref="Worksheet">sheets</see> in the workbook.</exception>
         public void Save(Stream stream, bool compress = true)
         {
+            if (stream == null || !stream.CanWrite || !stream.CanSeek)
+            {
+                throw new InvalidOperationException("Stream to save to must be writeable and seekable.");
+            }
+
             XlsxWriter.Save(this, stream, compress);
         }
     }

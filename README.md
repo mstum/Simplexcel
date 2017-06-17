@@ -216,12 +216,21 @@ public abstract class ExcelResultBase : ActionResult
         context.HttpContext.Response.ContentType = "application/octet-stream";
         context.HttpContext.Response.StatusCode = (int)HttpStatusCode.OK;
         context.HttpContext.Response.AppendHeader("content-disposition", "attachment; filename=\"" + _filename + "\"");
-        workbook.Save(context.HttpContext.Response.OutputStream);
+
+		// Do NOT try to write to the context.HttpContext.Response.OutputStream directly - it is not seekable
+        using(var ms = new MemoryStream())
+        {
+            workbook.Save(ms);
+            ms.CopyTo(context.HttpContext.Response.OutputStream);
+        }
     }
 }
 ```
 
 # Changelog
+## 2.0.2 (2017-06-17)
+* Add additional validation when saving to a Stream. The stream must be seekable (and of course writeable), otherwise an Exception is thrown.
+
 ## 2.0.1 (2017-05-18)
 * Fix [Issue #12](https://github.com/mstum/Simplexcel/issues/12): Sanitizing Regex stripped out too many characters (like the Ampersand or Emojis). Note that certain Unicode characters only work on newer versions of Excel (e.g., Emojis work in Excel 2013 but not 2007 or 2010)
 

@@ -41,6 +41,11 @@ namespace Simplexcel.XlsxInternal
         /// <returns></returns>
         internal void SaveToStream(Stream outputStream, bool compress)
         {
+            if(outputStream == null || !outputStream.CanWrite || !outputStream.CanSeek)
+            {
+                throw new InvalidOperationException("Stream to save to must be writeable and seekable.");
+            }
+
             using (var pkg = new ZipPackage(outputStream, compress))
             {
                 WriteInfoXmlFile(pkg);

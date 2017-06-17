@@ -51,7 +51,6 @@ namespace Simplexcel.XlsxInternal
             }
         }
 
-
         private void CheckClosed()
         {
             if (_closed)
