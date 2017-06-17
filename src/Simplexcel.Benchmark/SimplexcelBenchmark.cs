@@ -7,7 +7,6 @@ namespace Simplexcel.Benchmark
 {
     [MemoryDiagnoser]
     [RyuJitX64Job]
-    [CoreJob]
     public class SimplexcelBenchmark
     {
         [Benchmark]
@@ -24,15 +23,33 @@ namespace Simplexcel.Benchmark
         }
 
         [Benchmark]
-        public void MinimalUncompressed()
+        public void WithAttributes()
         {
             var wb = new Workbook();
-            var ws = new Worksheet("Test");
-            ws.Cells[0, 0] = "Test";
-            wb.Add(ws);
+
+            var sheet = new Worksheet("Test");
+            sheet.PageSetup.PrintRepeatRows = 2;
+            sheet.PageSetup.PrintRepeatColumns = 2;
+            sheet.ColumnWidths[0] = 24.6;
+            sheet.Cells["A1"] = "Test";
+            sheet.Cells["A1"].FontName = "Arial Black";
+
+            Cell cell = "BIU & Big & Blue";
+            cell.Bold = true;
+            cell.Underline = true;
+            cell.Italic = true;
+            cell.TextColor = Color.Blue;
+            cell.FontSize = 18;
+            cell.Hyperlink = "https://github.com/mstum/Simplexcel";
+            sheet.Cells[0, 3] = cell;
+            sheet.ColumnWidths[3] = 40;
+
+            sheet.Cells[0, 7] = "👨‍👩‍👧‍👦";
+
+            wb.Add(sheet);
             using (var ms = new MemoryStream())
             {
-                wb.Save(ms, compress: false);
+                wb.Save(ms, compress: true);
             }
         }
 
