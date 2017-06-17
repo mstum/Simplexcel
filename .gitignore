@@ -18,6 +18,7 @@ TestResults/
 _Debug
 *.swp
 .vs
+.vscode
 .idea
 packages/
 nuget/
