@@ -40,10 +40,10 @@ namespace Simplexcel
         /// <summary>
         /// Convert an Excel Cell Reference to a zero-based column/row representation (e.g., A1 => [0,0])
         /// </summary>
-        /// <param name="reference"></param>
-        /// <returns>A Tuple where Item1 is the Column and Item2 is the Row</returns>
-        internal static Tuple<int, int> ReferenceToColRow(string reference)
+        internal static void ReferenceToColRow(string reference, out int row, out int column)
         {
+            row = column = 0;
+
             var parts = _cellAddressRegex.Match(reference);
             if (parts.Success)
             {
@@ -51,7 +51,7 @@ namespace Simplexcel
                 var colMatch = parts.Groups["Column"];
                 if (rowMatch.Success && colMatch.Success)
                 {
-                    int row = Convert.ToInt32(rowMatch.Value) - 1;
+                    row = Convert.ToInt32(rowMatch.Value) - 1;
 
                     string colString = colMatch.Value.ToLower();
                     int col = 0;
@@ -68,13 +68,13 @@ namespace Simplexcel
                         var multiplier = Math.Pow(26, i);
                         col += (int)(ixo * multiplier);
                     }
-                    int column = col - 1;
-
-                    return Tuple.Create(column, row);
+                    column = col - 1;
                 }
             }
-
-            throw new ArgumentException("Cell Reference needs to be in Excel format, e.g. A1 or BA321. Invalid: " + reference, "reference");
+            else
+            {
+                throw new ArgumentException("Cell Reference needs to be in Excel format, e.g. A1 or BA321. Invalid: " + reference, "reference");
+            }
         }
     }
 }

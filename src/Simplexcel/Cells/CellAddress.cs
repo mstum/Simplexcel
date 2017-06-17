@@ -35,9 +35,7 @@
         /// <param name="cellAddress"></param>
         public CellAddress(string cellAddress)
         {
-            var cr = CellAddressHelper.ReferenceToColRow(cellAddress);
-            Column = cr.Item1;
-            Row = cr.Item2;
+            CellAddressHelper.ReferenceToColRow(cellAddress, out Row, out Column);
         }
 
         /// <summary>
