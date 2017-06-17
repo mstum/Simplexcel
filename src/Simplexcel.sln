@@ -1,7 +1,6 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+VisualStudioVersion = 15.0.26430.13
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simplexcel", "Simplexcel\Simplexcel.csproj", "{39AFAE0E-34D0-43AD-ACD7-39FBE03A57F5}"
 EndProject
@@ -9,10 +8,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simplexcel.TestApp", "Simpl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simplexcel.Tests", "Simplexcel.Tests\Simplexcel.Tests.csproj", "{1A651F47-91E3-40EC-93EF-DAD0326BD995}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simplexcel.MvcTestApp", "Simplexcel.MvcTestApp\Simplexcel.MvcTestApp.csproj", "{26E384B1-4991-4B7B-B68C-4DDB500AE37C}"
+EndProject
 Global
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -30,5 +28,12 @@ Global
 		{1A651F47-91E3-40EC-93EF-DAD0326BD995}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A651F47-91E3-40EC-93EF-DAD0326BD995}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A651F47-91E3-40EC-93EF-DAD0326BD995}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26E384B1-4991-4B7B-B68C-4DDB500AE37C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26E384B1-4991-4B7B-B68C-4DDB500AE37C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26E384B1-4991-4B7B-B68C-4DDB500AE37C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26E384B1-4991-4B7B-B68C-4DDB500AE37C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
