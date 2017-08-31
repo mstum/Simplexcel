@@ -159,6 +159,10 @@ namespace Simplexcel
                     {
                         cell = new Cell(CellType.Number, Convert.ToDecimal(val), BuiltInCellFormat.General);
                     }
+                    else if (val is DateTime)
+                    {
+                        cell = new Cell(CellType.Date, val, BuiltInCellFormat.DateAndTime);
+                    }
                     else
                     {
                         cell = new Cell(CellType.Text, (val ?? String.Empty).ToString(), BuiltInCellFormat.Text);

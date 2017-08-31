@@ -34,5 +34,15 @@
         /// @
         /// </summary>
         public const string Text = "@";
+
+        /// <summary>
+        /// m/d/yyyy h:mm
+        /// </summary>
+        public const string DateAndTime = "m/d/yyyy h:mm";
+
+        /// <summary>
+        /// m/d/yyyy
+        /// </summary>
+        public const string DateOnly = "m/d/yyyy";
     }
 }
