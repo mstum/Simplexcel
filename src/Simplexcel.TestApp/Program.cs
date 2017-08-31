@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Simplexcel.TestApp
 {
@@ -65,8 +66,41 @@ namespace Simplexcel.TestApp
             sheet2[0, 0].Bold = true;
             wb.Add(sheet2);
 
+            var populatedSheet = new Worksheet("Populate");
+            populatedSheet.Populate(EnumeratePopulateTestData());
+            wb.Add(populatedSheet);
+
             wb.Save("compressed.xlsx", compress: true);
             wb.Save("uncompressed.xlsx", compress: false);
+        }
+
+        private static IEnumerable<PopulateTestData> EnumeratePopulateTestData()
+        {
+            var r = new Random();
+
+            for(int i = 0; i < 500; i++)
+            {
+                yield return new PopulateTestData
+                {
+                    Id = i,
+                    CreatedUtc = new DateTime(2015, 1, 1, 1, 1, 1).AddHours(r.Next(1, 852)),
+                    Name = "Item Number " + i,
+                    Value = int.MaxValue - i,
+                    Price = r.Next(800, 9400) * 0.52m,
+                    Quantity = r.Next(4, 75) * 0.5m
+                };
+            }
+        }
+
+        private class PopulateTestData
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public long Value { get; set; }
+            public decimal Price { get; set; }
+            public decimal Quantity { get; set; }
+            public decimal TotalPrice { get { return Price * Quantity; } }
+            public DateTime CreatedUtc { get; set; }
         }
     }
 }

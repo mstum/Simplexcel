@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Simplexcel
 {
@@ -104,6 +107,73 @@ namespace Simplexcel
         {
             get { return Cells[row, column]; }
             set { Cells[row, column] = value; }
+        }
+
+        /// <summary>
+        /// Populate Worksheet with the provided data.
+        /// 
+        /// Will use the Object Property Names as Column Headers (First Row) and then populate the cells with data.
+        /// 
+        /// Caveats:
+        /// * Does not look at inherited members from a Base Class
+        /// * Only looks at strings and value types.
+        /// * No way to specify the order of properties
+        /// </summary>
+        /// <param name="data"></param>
+        public void Populate<T>(IEnumerable<T> data) where T : class
+        {
+            if(data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
+            int row = 0;
+            int col = 0;
+
+            var props = typeof(T).GetTypeInfo().DeclaredProperties
+                .Where(p => p.GetIndexParameters().Length == 0)
+                .Where(p => p.PropertyType.GetTypeInfo().IsValueType || p.PropertyType == typeof(string))
+                .ToList();
+
+            foreach (var prop in props)
+            {
+                Cells[row, col++] = prop.Name;
+            }
+
+            foreach (var item in data)
+            {
+                row++;
+                col = 0;
+
+                foreach (var prop in props)
+                {
+                    Cell cell;
+
+                    object val = prop.GetValue(item);
+
+                    if (val is sbyte || val is short || val is int || val is long || val is byte || val is uint || val is ushort || val is ulong)
+                    {
+                        cell = new Cell(CellType.Number, Convert.ToDecimal(val), BuiltInCellFormat.NumberNoDecimalPlaces);
+                    }
+                    else if (val is float || val is double || val is decimal)
+                    {
+                        cell = new Cell(CellType.Number, Convert.ToDecimal(val), BuiltInCellFormat.General);
+                    }
+                    else
+                    {
+                        cell = new Cell(CellType.Text, (val ?? String.Empty).ToString(), BuiltInCellFormat.Text);
+                    }
+
+                    Cells[row, col++] = cell;
+                }
+            }
+        }
+
+        public static Worksheet FromData<T>(string sheetName, IEnumerable<T> data) where T : class
+        {
+            var sheet = new Worksheet(sheetName);
+            sheet.Populate(data);
+            return sheet;
         }
     }
 }
