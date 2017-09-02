@@ -1,1 +1,0 @@
-dotnet pack src --configuration release -o ..\..\nuget
