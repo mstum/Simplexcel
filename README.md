@@ -228,6 +228,10 @@ public abstract class ExcelResultBase : ActionResult
 ```
 
 # Changelog
+## 2.0.3 (2017-09-08)
+* Add `Worksheet.Populate<T>` method to fill a sheet with data. Caveats: Does not loot at inherited members, doesn't look at complex types.
+* Also add static `Worksheet.FromData<T>` method to create and populate the sheet in one.
+
 ## 2.0.2 (2017-06-17)
 * Add additional validation when saving to a Stream. The stream must be seekable (and of course writeable), otherwise an Exception is thrown.
 
