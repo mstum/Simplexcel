@@ -79,12 +79,30 @@ namespace Simplexcel
         /// <exception cref="InvalidOperationException">Thrown if there are no <see cref="Worksheet">sheets</see> in the workbook.</exception>
         public void Save(Stream stream, bool compress = true)
         {
-            if (stream == null || !stream.CanWrite || !stream.CanSeek)
+            if(stream == null)
             {
-                throw new InvalidOperationException("Stream to save to must be writeable and seekable.");
+                throw new ArgumentNullException(nameof(stream));
             }
 
-            XlsxWriter.Save(this, stream, compress);
+            if(!stream.CanWrite)
+            {
+                throw new InvalidOperationException("Stream to save to is not writeable.");
+            }
+
+            if (stream.CanSeek)
+            {
+                XlsxWriter.Save(this, stream, compress);
+            }
+            else
+            {
+                // ZipArchive needs a seekable stream. If a stream is not seekable (e.g., HttpContext.Response.OutputStream), wrap it in a MemoryStream instead.
+                // TODO: Can we guess the required capacity?
+                using(var ms = new MemoryStream())
+                {
+                    XlsxWriter.Save(this, ms, compress);
+                    ms.CopyTo(stream);
+                }
+            }
         }
     }
 }

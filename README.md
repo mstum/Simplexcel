@@ -217,12 +217,7 @@ public abstract class ExcelResultBase : ActionResult
         context.HttpContext.Response.StatusCode = (int)HttpStatusCode.OK;
         context.HttpContext.Response.AppendHeader("content-disposition", "attachment; filename=\"" + _filename + "\"");
 
-		// Do NOT try to write to the context.HttpContext.Response.OutputStream directly - it is not seekable
-        using(var ms = new MemoryStream())
-        {
-            workbook.Save(ms);
-            ms.CopyTo(context.HttpContext.Response.OutputStream);
-        }
+        workbook.Save(context.HttpContext.Response.OutputStream);
     }
 }
 ```
@@ -230,6 +225,7 @@ public abstract class ExcelResultBase : ActionResult
 # Changelog
 ## 2.0.4 (In Development)
 * Support for [freezing panes](https://support.office.com/en-us/article/Freeze-panes-to-lock-rows-and-columns-dab2ffc9-020d-4026-8121-67dd25f2508f). Right now, this is being kept simple: call either `Worksheet.FreezeTopRow` or `Worksheet.FreezeLeftColumn` to freeze either the first row (1) or the leftmost column (A).
+* If a Stream is not seekable (e.g., HttpContext.Response.OutputStream), Simplexcel automatically creates a temporary MemoryStream as an intermediate.
 
 ## 2.0.3 (2017-09-08)
 * Add `Worksheet.Populate<T>` method to fill a sheet with data. Caveats: Does not loot at inherited members, doesn't look at complex types.

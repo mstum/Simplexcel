@@ -33,14 +33,8 @@ namespace Simplexcel.MvcTestApp
             context.HttpContext.Response.ContentType = "application/octet-stream";
             context.HttpContext.Response.StatusCode = (int)HttpStatusCode.OK;
             context.HttpContext.Response.AppendHeader("content-disposition", "attachment; filename=\"" + _filename + "\"");
-            
-            // You can NOT do this, as the OutputStream is not seekable
-            // workbook.Save(context.HttpContext.Response.OutputStream);
-            using(var ms = new MemoryStream())
-            {
-                workbook.Save(ms);
-                ms.CopyTo(context.HttpContext.Response.OutputStream);
-            }
+
+            workbook.Save(context.HttpContext.Response.OutputStream);
         }
     }
 }
