@@ -456,6 +456,15 @@ namespace Simplexcel.XlsxInternal
                             xc.CellType = XlsxCellTypes.Number;
                             xc.Value = ((Decimal)cell.Value.Value).ToString(System.Globalization.CultureInfo.InvariantCulture);
                             break;
+                        case CellType.Date:
+                            xc.CellType = XlsxCellTypes.Number;
+                            if (cell.Value.Value != null)
+#if NETSTANDARD1_3
+                                xc.Value = TicksToOADate(((DateTime)cell.Value.Value).Ticks);
+#else
+                                xc.Value = ((DateTime)cell.Value.Value).ToOADate();
+#endif
+                            break;
                         default:
                             throw new ArgumentException("Unknown Cell Type: " + cell.Value.CellType + " in cell " + cell.Key.ToString() + " of " + sheet.Name);
                     }
@@ -463,6 +472,44 @@ namespace Simplexcel.XlsxInternal
                     rows[cell.Key.Row].Cells.Add(xc);
                 }
                 return rows;
+            }
+
+            private double TicksToOADate(long value)
+            {
+                const long TicksPerMillisecond = 10000;
+                const long TicksPerSecond = TicksPerMillisecond * 1000;
+                const long TicksPerMinute = TicksPerSecond * 60;
+                const long TicksPerHour = TicksPerMinute * 60;
+                const long TicksPerDay = TicksPerHour * 24;
+
+                const int MillisPerSecond = 1000;
+                const int MillisPerMinute = MillisPerSecond * 60;
+                const int MillisPerHour = MillisPerMinute * 60;
+                const int MillisPerDay = MillisPerHour * 24;
+
+                const int DaysPerYear = 365;
+                const int DaysPer4Years = DaysPerYear * 4 + 1;
+                const int DaysPer100Years = DaysPer4Years * 25 - 1;
+                const int DaysPer400Years = DaysPer100Years * 4 + 1;
+                const int DaysTo1899 = DaysPer400Years * 4 + DaysPer100Years * 3 - 367;
+
+                const long DoubleDateOffset = DaysTo1899 * TicksPerDay;
+                const long OADateMinAsTicks = (DaysPer100Years - DaysPerYear) * TicksPerDay;
+
+                if (value == 0)
+                    return 0.0;
+                if (value < TicksPerDay)
+                    value += DoubleDateOffset;
+                if (value < OADateMinAsTicks)
+                    throw new OverflowException("Not a legal OleAut date.");
+
+                long millis = (value - DoubleDateOffset) / TicksPerMillisecond;
+                if (millis < 0)
+                {
+                    long frac = millis % MillisPerDay;
+                    if (frac != 0) millis -= (MillisPerDay + frac) * 2;
+                }
+                return (double)millis / MillisPerDay;
             }
         }
     }
