@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Simplexcel.TestApp
 {
@@ -70,7 +71,33 @@ namespace Simplexcel.TestApp
             populatedSheet.Populate(EnumeratePopulateTestData());
             wb.Add(populatedSheet);
 
-            wb.Save("compressed.xlsx", compress: true);
+            var frozenTopRowSheet = new Worksheet("Frozen Top Row");
+            frozenTopRowSheet.Cells[0, 0] = "Header 1";
+            frozenTopRowSheet.Cells[0, 1] = "Header 2";
+            frozenTopRowSheet.Cells[0, 2] = "Header 3";
+            foreach (var i in Enumerable.Range(1, 100))
+            {
+                frozenTopRowSheet.Cells[i, 0] = "Value 1-" + i;
+                frozenTopRowSheet.Cells[i, 1] = "Value 2-" + i;
+                frozenTopRowSheet.Cells[i, 2] = "Value 3-" + i;
+            }
+            frozenTopRowSheet.FreezeTopRow();
+            wb.Add(frozenTopRowSheet);
+
+            var frozenLeftColumnSheet = new Worksheet("Frozen Left Column");
+            frozenLeftColumnSheet.Cells[0, 0] = "Header 1";
+			frozenLeftColumnSheet.Cells[1, 0] = "Header 2";
+			frozenLeftColumnSheet.Cells[2, 0] = "Header 3";
+			foreach (var i in Enumerable.Range(1, 100))
+			{
+				frozenLeftColumnSheet.Cells[0, i] = "Value 1-" + i;
+				frozenLeftColumnSheet.Cells[1, i] = "Value 2-" + i;
+				frozenLeftColumnSheet.Cells[2, i] = "Value 3-" + i;
+			}
+            frozenLeftColumnSheet.FreezeLeftColumn();
+            wb.Add(frozenLeftColumnSheet);
+
+			wb.Save("compressed.xlsx", compress: true);
             wb.Save("uncompressed.xlsx", compress: false);
         }
 

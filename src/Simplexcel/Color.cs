@@ -163,7 +163,5 @@ namespace Simplexcel {
         public static readonly Color WhiteSmoke = Color.FromArgb(255, 245, 245, 245);
         public static readonly Color Yellow = Color.FromArgb(255, 255, 255, 0);
         public static readonly Color YellowGreen = Color.FromArgb(255, 154, 205, 50);
-
-
     }
 }

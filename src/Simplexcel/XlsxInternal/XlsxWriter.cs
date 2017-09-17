@@ -91,7 +91,7 @@ namespace Simplexcel.XlsxInternal
                     };
                     if (sheet.PageSetup.PrintRepeatColumns > 0)
                     {
-                        sheetinfo.RepeatCols = "'" + sheet.Name + "'!$A:$" + CellAddressHelper.ColToReference(sheet.PageSetup.PrintRepeatColumns-1);
+                        sheetinfo.RepeatCols = "'" + sheet.Name + "'!$A:$" + CellAddressHelper.ColToReference(sheet.PageSetup.PrintRepeatColumns - 1);
                     }
                     if (sheet.PageSetup.PrintRepeatRows > 0)
                     {
@@ -249,6 +249,69 @@ namespace Simplexcel.XlsxInternal
                 return rel;
             }
 
+            private void WriteSheetViews(Worksheet sheet, XDocument doc)
+            {
+                var sviews = sheet.GetSheetViews();
+                if (sviews == null || sviews.Count == 0) { return; }
+
+                var sheetViews = new XElement(Namespaces.workbook + "sheetViews");
+                foreach (var sv in sviews)
+                {
+                    var sheetView = new XElement(Namespaces.workbook + "sheetView");
+                    if (sv.ShowRuler.HasValue)
+                    {
+                        sheetView.Add(new XAttribute("showRuler", sv.ShowRuler.Value ? "1" : "0"));
+                    }
+                    if (sv.TabSelected.HasValue)
+                    {
+                        sheetView.Add(new XAttribute("tabSelected", sv.TabSelected.Value ? "1" : "0"));
+                    }
+                    // TODO: Consider adding a <bookViews> element to the workbook
+                    sheetView.Add(new XAttribute("workbookViewId", sv.WorkbookViewId));
+
+                    if (sv.Pane != null)
+                    {
+                        var p = sv.Pane;
+                        var paneElem = new XElement(Namespaces.workbook + "pane");
+                        if (p.XSplit.HasValue && p.XSplit.Value != Pane.DefaultXSplit)
+                        {
+                            paneElem.Add(new XAttribute("xSplit", p.XSplit.Value));
+                        }
+                        if (p.YSplit.HasValue && p.YSplit.Value != Pane.DefaultYSplit)
+                        {
+                            paneElem.Add(new XAttribute("ySplit", p.YSplit.Value));
+                        }
+                        if (p.ActivePane.HasValue)
+                        {
+                            paneElem.Add(new XAttribute("activePane", p.ActivePane.Value.GetXmlValue()));
+                        }
+                        if (!string.IsNullOrEmpty(p.TopLeftCell))
+                        {
+                            paneElem.Add(new XAttribute("topLeftCell", p.TopLeftCell));
+                        }
+                        if (p.State.HasValue)
+                        {
+                            paneElem.Add(new XAttribute("state", p.State.Value.GetXmlValue()));
+                        }
+                        sheetView.Add(paneElem);
+                    }
+
+                    foreach (var sel in sv.Selections ?? Enumerable.Empty<Selection>())
+                    {
+                        var selElem = new XElement(Namespaces.workbook + "selection");
+                        if (!string.IsNullOrEmpty(sel.ActiveCell))
+                        {
+                            selElem.Add(new XAttribute("activeCell", sel.ActiveCell));
+                        }
+                        selElem.Add(new XAttribute("pane", sel.ActivePane.GetXmlValue()));
+                        sheetView.Add(selElem);
+                    }
+                    sheetViews.Add(sheetView);
+                }
+
+                doc.Root.Add(sheetViews);
+            }
+
             /// <summary>
             /// Create the xl/worksheets/sheetX.xml file
             /// </summary>
@@ -272,6 +335,8 @@ namespace Simplexcel.XlsxInternal
                     new XAttribute(XNamespace.Xmlns + "or", Namespaces.officeRelationships),
                     new XAttribute(Namespaces.mc + "Ignorable", "x14ac")
                 ));
+
+                WriteSheetViews(sheet, doc);
 
                 var sheetFormatPr = new XElement(Namespaces.workbook + "sheetFormatPr");
                 sheetFormatPr.Add(new XAttribute("defaultRowHeight", 15));
@@ -370,15 +435,15 @@ namespace Simplexcel.XlsxInternal
                 {
                     if (!rows.ContainsKey(cell.Key.Row))
                     {
-                        rows[cell.Key.Row] = new XlsxRow {RowIndex = cell.Key.Row + 1};
+                        rows[cell.Key.Row] = new XlsxRow { RowIndex = cell.Key.Row + 1 };
                     }
 
                     var styleIndex = _styles.IndexOf(cell.Value.XlsxCellStyle) + 1;
 
                     var xc = new XlsxCell
                     {
-                            StyleIndex = styleIndex,
-                            Reference = cell.Key.ToString()
+                        StyleIndex = styleIndex,
+                        Reference = cell.Key.ToString()
                     };
 
                     switch (cell.Value.CellType)

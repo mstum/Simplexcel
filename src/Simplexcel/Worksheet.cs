@@ -16,13 +16,15 @@ namespace Simplexcel
 
         private readonly PageSetup _pageSetup = new PageSetup();
 
+        private List<SheetView> _sheetViews;
+
         /// <summary>
         /// Get a list of characters that are invalid to use in the Sheet Name
         /// </summary>
         /// <remarks>
         /// These chars are not part of the ECMA-376 standard, but imposed by Excel
         /// </remarks>
-        public static readonly char[] InvalidSheetNameChars = new[] {'\\', '/', '?', '*', '[', ']'};
+        public static readonly char[] InvalidSheetNameChars = new[] { '\\', '/', '?', '*', '[', ']' };
 
         /// <summary>
         /// Get the maximum allowable length for a sheet name
@@ -110,6 +112,66 @@ namespace Simplexcel
         }
 
         /// <summary>
+        /// Freeze the top row, that is, create a <see cref="SheetView"/> that splits the first row into a pane. 
+        /// </summary>
+        public void FreezeTopRow()
+        {
+            // TODO: Eventually, support more SheetView functionality, right now, keep it simple.
+			if (_sheetViews != null)
+			{
+				throw new InvalidOperationException("You have already frozen either the Top Row or Left Column.");
+			}
+
+            var sheetView = new SheetView();
+            sheetView.Pane = new Pane
+            {
+                ActivePane = Panes.BottomLeft,
+                YSplit = 1,
+                TopLeftCell = "A2",
+                State = PaneState.Frozen
+            };
+            sheetView.AddSelection(new Selection { ActivePane = Panes.BottomLeft });
+            AddSheetView(sheetView);
+        }
+
+        /// <summary>
+        /// Freeze the first column, that is, create a <see cref="SheetView"/> that splits the first row into a pane. 
+        /// </summary>
+        public void FreezeLeftColumn()
+        {
+			// TODO: Eventually, support more SheetView functionality, right now, keep it simple.
+			if (_sheetViews != null)
+            {
+                throw new InvalidOperationException("You have already frozen either the Top Row or Left Column.");
+            }
+
+            var sheetView = new SheetView();
+            sheetView.Pane = new Pane
+            {
+                ActivePane = Panes.TopRight,
+                XSplit = 1,
+                TopLeftCell = "B1",
+                State = PaneState.Frozen
+            };
+            sheetView.AddSelection(new Selection { ActivePane = Panes.TopRight });
+            AddSheetView(sheetView);
+        }
+
+        private void AddSheetView(SheetView sheetView)
+        {
+            if (_sheetViews == null)
+            {
+                _sheetViews = new List<SheetView>();
+            }
+            _sheetViews.Add(sheetView);
+        }
+
+        internal ICollection<SheetView> GetSheetViews()
+        {
+            return _sheetViews;
+        }
+
+        /// <summary>
         /// Populate Worksheet with the provided data.
         /// 
         /// Will use the Object Property Names as Column Headers (First Row) and then populate the cells with data.
@@ -122,7 +184,7 @@ namespace Simplexcel
         /// <param name="data"></param>
         public void Populate<T>(IEnumerable<T> data) where T : class
         {
-            if(data == null)
+            if (data == null)
             {
                 throw new ArgumentNullException(nameof(data));
             }
