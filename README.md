@@ -15,10 +15,9 @@ Instead, it is meant as a way to handle common tasks that can't be handled by ot
 * Fully supported in ASP.net and Windows Services
 * Supports .net Core
 
-# Not supported
+# Not supported (yet?)
 * Automatic Column Sizing
 * Merging Cells
-* Explicit support for Dates (you can use a custom Cell Format string though)
 * Embedding any Media or anything OLE
 * Creating Charts
 * Reading Excel sheets
