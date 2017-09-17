@@ -17,7 +17,7 @@
     <RepositoryUrl>https://github.com/mstum/simplexcel.git</RepositoryUrl>
     <PackageIconUrl>http://mstum.github.com/Simplexcel/package.png</PackageIconUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>xlsx excel</PackageTags>
+    <PackageTags>xlsx excel ooxml netcore netstandard</PackageTags>
     <PackageId>simplexcel</PackageId>
     <IncludeSource>true</IncludeSource>
     <IncludeSymbols>true</IncludeSymbols>
