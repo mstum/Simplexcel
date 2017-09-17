@@ -64,11 +64,6 @@ namespace Simplexcel.TestApp
 
             wb.Add(sheet);
 
-            var sheet2 = new Worksheet("Sheet 2");
-            sheet2[0, 0] = "Sheet Number 2";
-            sheet2[0, 0].Bold = true;
-            wb.Add(sheet2);
-
             var populatedSheet = new Worksheet("Populate");
             populatedSheet.Populate(EnumeratePopulateTestData());
             wb.Add(populatedSheet);
