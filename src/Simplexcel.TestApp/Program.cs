@@ -12,7 +12,6 @@ namespace Simplexcel.TestApp
             wb.Title = "Workbook Title";
             wb.Author = "The Author";
 
-
             var sheet = new Worksheet("Test");
             sheet.PageSetup.Orientation = Orientation.Landscape;
             sheet.PageSetup.PrintRepeatRows = 2;
@@ -39,15 +38,14 @@ namespace Simplexcel.TestApp
             cell.Hyperlink = "https://github.com/mstum/Simplexcel";
             sheet.Cells[0, 3] = cell;
             sheet.ColumnWidths[3] = 40;
-
-
+            
             sheet.Cells[0, 4] = 13;
             sheet.Cells[0, 5] = 13.58;
 
             for (int i = 1; i < 55; i++)
             {
-                sheet.Cells[1,i] = Guid.NewGuid().ToString("N");
-                sheet.Cells[i,0] = Guid.NewGuid().ToString("N");
+                sheet.Cells[1, i] = Guid.NewGuid().ToString("N");
+                sheet.Cells[i, 0] = Guid.NewGuid().ToString("N");
             }
 
             Cell cell2 = "Orange";
@@ -86,18 +84,18 @@ namespace Simplexcel.TestApp
 
             var frozenLeftColumnSheet = new Worksheet("Frozen Left Column");
             frozenLeftColumnSheet.Cells[0, 0] = "Header 1";
-			frozenLeftColumnSheet.Cells[1, 0] = "Header 2";
-			frozenLeftColumnSheet.Cells[2, 0] = "Header 3";
-			foreach (var i in Enumerable.Range(1, 100))
-			{
-				frozenLeftColumnSheet.Cells[0, i] = "Value 1-" + i;
-				frozenLeftColumnSheet.Cells[1, i] = "Value 2-" + i;
-				frozenLeftColumnSheet.Cells[2, i] = "Value 3-" + i;
-			}
+            frozenLeftColumnSheet.Cells[1, 0] = "Header 2";
+            frozenLeftColumnSheet.Cells[2, 0] = "Header 3";
+            foreach (var i in Enumerable.Range(1, 100))
+            {
+                frozenLeftColumnSheet.Cells[0, i] = "Value 1-" + i;
+                frozenLeftColumnSheet.Cells[1, i] = "Value 2-" + i;
+                frozenLeftColumnSheet.Cells[2, i] = "Value 3-" + i;
+            }
             frozenLeftColumnSheet.FreezeLeftColumn();
             wb.Add(frozenLeftColumnSheet);
 
-			wb.Save("compressed.xlsx", compress: true);
+            wb.Save("compressed.xlsx", compress: true);
             wb.Save("uncompressed.xlsx", compress: false);
         }
 
@@ -105,12 +103,12 @@ namespace Simplexcel.TestApp
         {
             var r = new Random();
 
-            for(int i = 0; i < 500; i++)
+            for (int i = 0; i < 500; i++)
             {
                 yield return new PopulateTestData
                 {
                     Id = i,
-                    CreatedUtc = new DateTime(2015, 1, 1, 1, 1, 1).AddHours(r.Next(1, 852)),
+                    CreatedUtc = new DateTime(2015, 1, 1, 1, 1, 1).AddDays(r.Next(1, 852)),
                     Name = "Item Number " + i,
                     Value = int.MaxValue - i,
                     Price = r.Next(800, 9400) * 0.52m,

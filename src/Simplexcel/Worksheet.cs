@@ -112,7 +112,7 @@ namespace Simplexcel
         }
 
         /// <summary>
-        /// Freeze the top row, that is, create a <see cref="SheetView"/> that splits the first row into a pane. 
+        /// Freeze the top row, that is, create a <see cref="SheetView"/> that splits the first row (A) into a pane. 
         /// </summary>
         public void FreezeTopRow()
         {
@@ -135,7 +135,7 @@ namespace Simplexcel
         }
 
         /// <summary>
-        /// Freeze the first column, that is, create a <see cref="SheetView"/> that splits the first row into a pane. 
+        /// Freeze the first column, that is, create a <see cref="SheetView"/> that splits the first column (1) into a pane. 
         /// </summary>
         public void FreezeLeftColumn()
         {

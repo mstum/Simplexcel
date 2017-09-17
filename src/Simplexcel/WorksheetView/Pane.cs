@@ -1,5 +1,4 @@
-﻿using System;
-namespace Simplexcel
+﻿namespace Simplexcel
 {
     public class Pane
     {
@@ -8,34 +7,14 @@ namespace Simplexcel
         internal const Panes DefaultActivePane = Panes.TopLeft;
         internal const PaneState DefaultState = PaneState.Split;
 
-        public int? XSplit
-        {
-            get;
-            set;
-        }
+        public int? XSplit { get; set; }
 
-        public int? YSplit
-        {
-            get;
-            set;
-        }
+        public int? YSplit { get; set; }
 
-        public Panes? ActivePane
-        {
-            get;
-            set;
-        }
+        public Panes? ActivePane { get; set; }
 
-        public PaneState? State
-        {
-            get;
-            set;
-        }
+        public PaneState? State { get; set; }
 
-        public string TopLeftCell
-        {
-            get;
-            set;
-        }
+        public string TopLeftCell { get; set; }
     }
 }
