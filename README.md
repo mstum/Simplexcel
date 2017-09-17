@@ -46,7 +46,7 @@ workbook.Save(@"d:\test.xlsx");
 ```
 
 ### Cell creation
-Cells can be created implicitly from strings, int64's, double and decimal (and anything that's implicitly convertible to those, e.g. int32), or explicitly through the Cell constructor.
+Cells can be created implicitly from strings, int64's, double and decimal (and anything that's implicitly convertible to those, e.g. int32), DateTime, or explicitly through the Cell constructor.
 
 ```cs
 Cell textCell = "fromString";
@@ -54,6 +54,8 @@ Cell intCell = 4; // will be formatted as number without decimal places "0"
 Cell doubleCell = 123.456; // will be formatted with 2 decimal places, "0.00"
 Cell decimalCell = 987.654321m; // will be formatted with 2 decimal places, "0.00"
 decimalCell.Format = "0.000"; // override the cell format with an Excel Formatting string
+Cell dateCell = DateTime.Now; // will be formatted with date and time portions
+Cell cellFromStaticFactory = Cell.FromObject(myObj.SomeProp); // will try to guess the cell type based on the type of the object - note that this causes boxing
 
 // Explicit constructor, specifying the type, value and format (Excel will display this as 88.75%)
 Cell decimalWithFormat = new Cell(CellType.Number, 0.8875m, BuiltInCellFormat.PercentTwoDecimalPlaces);
