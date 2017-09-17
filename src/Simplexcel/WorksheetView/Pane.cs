@@ -1,6 +1,6 @@
 ﻿namespace Simplexcel
 {
-    public class Pane
+    public sealed class Pane
     {
         internal const int DefaultXSplit = 0;
         internal const int DefaultYSplit = 0;

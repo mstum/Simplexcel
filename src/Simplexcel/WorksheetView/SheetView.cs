@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Simplexcel
 {
-    public class SheetView
+    public sealed class SheetView
     {
         private List<Selection> _selections;
 
@@ -12,28 +12,13 @@ namespace Simplexcel
             get { return _selections; }
         }
 
-        public bool? TabSelected
-        {
-            get;
-            set;
-        }
+        public bool? TabSelected { get; set; }
 
-        public bool? ShowRuler
-        {
-            get;
-            set;
-        }
+        public bool? ShowRuler { get; set; }
 
-        public int WorkbookViewId
-        {
-            get { return 0; }
-        }
+        public int WorkbookViewId { get { return 0; } }
 
-        public Pane Pane
-        {
-            get;
-            set;
-        }
+        public Pane Pane { get; set; }
 
         public void AddSelection(Selection sel, bool throwOnDuplicatePane = true)
         {
