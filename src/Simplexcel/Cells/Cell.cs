@@ -160,5 +160,37 @@ namespace Simplexcel
         {
             return new Cell(CellType.Number, Convert.ToDecimal(value), BuiltInCellFormat.NumberTwoDecimalPlaces);
         }
+
+        /// <summary>
+        /// Create a new <see cref="Cell"/> with a <see cref="CellType"/> of Date, formatted as DateAndTime.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static implicit operator Cell(DateTime value)
+        {
+            return new Cell(CellType.Date, value, BuiltInCellFormat.DateAndTime);
+        }
+
+        public static Cell FromObject(object val)
+        {
+            Cell cell;
+            if (val is sbyte || val is short || val is int || val is long || val is byte || val is uint || val is ushort || val is ulong)
+            {
+                cell = new Cell(CellType.Number, Convert.ToDecimal(val), BuiltInCellFormat.NumberNoDecimalPlaces);
+            }
+            else if (val is float || val is double || val is decimal)
+            {
+                cell = new Cell(CellType.Number, Convert.ToDecimal(val), BuiltInCellFormat.General);
+            }
+            else if (val is DateTime)
+            {
+                cell = new Cell(CellType.Date, val, BuiltInCellFormat.DateAndTime);
+            }
+            else
+            {
+                cell = new Cell(CellType.Text, (val ?? String.Empty).ToString(), BuiltInCellFormat.Text);
+            }
+            return cell;
+        }
     }
 }

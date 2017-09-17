@@ -13,7 +13,10 @@
         /// <summary>
         /// Cell contains a number (may strip leading zeroes but sorts properly)
         /// </summary>
-        Number
-        // TODO: Date
+        Number,
+        /// <summary>
+        /// Cell contains a date, must be greater than 01/01/0100
+        /// </summary>
+        Date
     }
 }

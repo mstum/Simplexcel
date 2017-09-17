@@ -226,6 +226,8 @@ public abstract class ExcelResultBase : ActionResult
 ## 2.0.4 (In Development)
 * Support for [freezing panes](https://support.office.com/en-us/article/Freeze-panes-to-lock-rows-and-columns-dab2ffc9-020d-4026-8121-67dd25f2508f). Right now, this is being kept simple: call either `Worksheet.FreezeTopRow` or `Worksheet.FreezeLeftColumn` to freeze either the first row (1) or the leftmost column (A).
 * If a Stream is not seekable (e.g., HttpContext.Response.OutputStream), Simplexcel automatically creates a temporary MemoryStream as an intermediate.
+* Add `Cell.FromObject` to make Cell creation easier by guessing the correct type
+* Support `DateTime` cells, thanks to @mguinness and PR #16
 
 ## 2.0.3 (2017-09-08)
 * Add `Worksheet.Populate<T>` method to fill a sheet with data. Caveats: Does not loot at inherited members, doesn't look at complex types.
@@ -262,6 +264,7 @@ http://mstum.mit-license.org/
 The MIT License (MIT)
  
 Copyright (c) 2013-2017 Michael Stum, http://www.Stum.de <opensource@stum.de>
+Contains contributions by [@mguinness](https://github.com/mguinness)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

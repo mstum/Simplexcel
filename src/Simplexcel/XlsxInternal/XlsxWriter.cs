@@ -456,6 +456,13 @@ namespace Simplexcel.XlsxInternal
                             xc.CellType = XlsxCellTypes.Number;
                             xc.Value = ((Decimal)cell.Value.Value).ToString(System.Globalization.CultureInfo.InvariantCulture);
                             break;
+                        case CellType.Date:
+                            xc.CellType = XlsxCellTypes.Number;
+                            if (cell.Value.Value != null)
+                            {
+                                xc.Value = ((DateTime)cell.Value.Value).ToOleAutDate();
+                            }
+                            break;
                         default:
                             throw new ArgumentException("Unknown Cell Type: " + cell.Value.CellType + " in cell " + cell.Key.ToString() + " of " + sheet.Name);
                     }

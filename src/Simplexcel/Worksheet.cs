@@ -209,23 +209,8 @@ namespace Simplexcel
 
                 foreach (var prop in props)
                 {
-                    Cell cell;
-
                     object val = prop.GetValue(item);
-
-                    if (val is sbyte || val is short || val is int || val is long || val is byte || val is uint || val is ushort || val is ulong)
-                    {
-                        cell = new Cell(CellType.Number, Convert.ToDecimal(val), BuiltInCellFormat.NumberNoDecimalPlaces);
-                    }
-                    else if (val is float || val is double || val is decimal)
-                    {
-                        cell = new Cell(CellType.Number, Convert.ToDecimal(val), BuiltInCellFormat.General);
-                    }
-                    else
-                    {
-                        cell = new Cell(CellType.Text, (val ?? String.Empty).ToString(), BuiltInCellFormat.Text);
-                    }
-
+                    var cell = Cell.FromObject(val);
                     Cells[row, col++] = cell;
                 }
             }

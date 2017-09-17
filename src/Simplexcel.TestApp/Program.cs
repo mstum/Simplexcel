@@ -58,6 +58,10 @@ namespace Simplexcel.TestApp
             sheet.Cells[0, 6] = "👪";
             sheet.Cells[0, 7] = "👨‍👩‍👧‍👦";
 
+            sheet.Cells["D4"] = DateTime.Now;
+            sheet.Cells["D5"] = new Cell(CellType.Date, DateTime.Now, BuiltInCellFormat.DateOnly);
+            sheet.Cells["D6"] = new Cell(CellType.Date, DateTime.Now, BuiltInCellFormat.TimeOnly);
+
             wb.Add(sheet);
 
             var sheet2 = new Worksheet("Sheet 2");
