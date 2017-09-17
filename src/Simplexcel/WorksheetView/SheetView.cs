@@ -7,7 +7,8 @@ namespace Simplexcel
     {
         private List<Selection> _selections;
 
-        internal ICollection<Selection> Selections {
+        internal ICollection<Selection> Selections
+        {
             get { return _selections; }
         }
 
@@ -65,10 +66,6 @@ namespace Simplexcel
             }
 
             _selections.Add(sel);
-        }
-
-        public SheetView()
-        {
         }
     }
 }

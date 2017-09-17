@@ -117,10 +117,10 @@ namespace Simplexcel
         public void FreezeTopRow()
         {
             // TODO: Eventually, support more SheetView functionality, right now, keep it simple.
-			if (_sheetViews != null)
-			{
-				throw new InvalidOperationException("You have already frozen either the Top Row or Left Column.");
-			}
+            if (_sheetViews != null)
+            {
+                throw new InvalidOperationException("You have already frozen either the Top Row or Left Column.");
+            }
 
             var sheetView = new SheetView();
             sheetView.Pane = new Pane
@@ -139,8 +139,8 @@ namespace Simplexcel
         /// </summary>
         public void FreezeLeftColumn()
         {
-			// TODO: Eventually, support more SheetView functionality, right now, keep it simple.
-			if (_sheetViews != null)
+            // TODO: Eventually, support more SheetView functionality, right now, keep it simple.
+            if (_sheetViews != null)
             {
                 throw new InvalidOperationException("You have already frozen either the Top Row or Left Column.");
             }
