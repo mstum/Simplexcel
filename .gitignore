@@ -1,3 +1,4 @@
+*.userprefs
 doc/out
 *resharper.user
 [Dd]ebug/
