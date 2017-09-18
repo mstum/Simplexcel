@@ -10,7 +10,7 @@
         public static void InsertManualPageBreakAfterRow(this Worksheet sheet, string cellAddress)
         {
             CellAddressHelper.ReferenceToColRow(cellAddress, out int row, out int col);
-            sheet.InsertManualPageBreakAfterRow(row);
+            sheet.InsertManualPageBreakAfterRow(row+1);
         }
 
         /// <summary>
@@ -21,7 +21,7 @@
         public static void InsertManualPageBreakAfterColumn(this Worksheet sheet, string cellAddress)
         {
             CellAddressHelper.ReferenceToColRow(cellAddress, out int row, out int col);
-            sheet.InsertManualPageBreakAfterColumn(col);
+            sheet.InsertManualPageBreakAfterColumn(col+1);
         }
     }
 }

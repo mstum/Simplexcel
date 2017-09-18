@@ -55,6 +55,7 @@ namespace Simplexcel.TestApp
             cell2.FontSize = 18;
             sheet.Cells[0, 2] = cell2;
 
+            // Note that Emoji only work in Excel 2013 or newer, not 2007 or 2010. This is an Excel limitation.
             sheet.Cells[0, 6] = "👪";
             sheet.Cells[0, 7] = "👨‍👩‍👧‍👦";
 
