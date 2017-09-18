@@ -37,6 +37,13 @@ namespace Simplexcel.XlsxInternal
             {
                 var relationshipCounter = new RelationshipCounter();
                 var package = new XlsxPackage();
+
+                // Must be done before calling GetXlsxStyles as it may add styles
+                foreach (var sheet in workbook.Sheets)
+                {
+                    HandleLargeNumbers(sheet);
+                }
+
                 var styles = GetXlsxStyles(workbook);
                 var sharedStrings = new SharedStrings();
 
@@ -352,6 +359,23 @@ namespace Simplexcel.XlsxInternal
                 }
             }
 
+            private static void HandleLargeNumbers(Worksheet sheet)
+            {
+                if (sheet.LargeNumberHandlingMode == LargeNumberHandlingMode.StoreAsText)
+                {
+                    return;
+                }
+
+                foreach (var cellPair in sheet.Cells)
+                {
+                    if (cellPair.Value.CellType != CellType.Number) { continue; }
+                    var cell = cellPair.Value;
+                    var numVal = (Decimal)cell.Value;
+                    if (!Cell.IsLargeNumber(numVal)) { continue; }
+                    cell.XlsxCellStyle.Format = BuiltInCellFormat.General;
+                }
+            }
+
             /// <summary>
             /// Create the xl/worksheets/sheetX.xml file
             /// </summary>
@@ -492,8 +516,27 @@ namespace Simplexcel.XlsxInternal
                             xc.Value = sharedStrings.GetStringIndex((string)cell.Value.Value);
                             break;
                         case CellType.Number:
-                            xc.CellType = XlsxCellTypes.Number;
-                            xc.Value = ((Decimal)cell.Value.Value).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                            // Fun: Excel can't handle large numbers as numbers
+                            // https://support.microsoft.com/en-us/help/2643223/long-numbers-are-displayed-incorrectly-in-excel
+                            var numVal = (Decimal)cell.Value.Value;
+                            if (Cell.IsLargeNumber(numVal))
+                            {
+                                if (sheet.LargeNumberHandlingMode == LargeNumberHandlingMode.StoreAsText)
+                                {
+                                    xc.CellType = XlsxCellTypes.SharedString;
+                                    xc.Value = sharedStrings.GetStringIndex(numVal.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                                }
+                                else
+                                {
+                                    xc.CellType = XlsxCellTypes.Number;
+                                    xc.Value = ((Decimal)cell.Value.Value).ToString("E18", System.Globalization.CultureInfo.InvariantCulture);
+                                }
+                            }
+                            else
+                            {
+                                xc.CellType = XlsxCellTypes.Number;
+                                xc.Value = ((Decimal)cell.Value.Value).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                            }
                             break;
                         case CellType.Date:
                             xc.CellType = XlsxCellTypes.Number;

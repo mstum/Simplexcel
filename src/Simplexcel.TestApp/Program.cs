@@ -62,6 +62,10 @@ namespace Simplexcel.TestApp
             sheet.Cells["D4"] = DateTime.Now;
             sheet.Cells["D5"] = new Cell(CellType.Date, DateTime.Now, BuiltInCellFormat.DateOnly);
             sheet.Cells["D6"] = new Cell(CellType.Date, DateTime.Now, BuiltInCellFormat.TimeOnly);
+            sheet.Cells["D7"] = long.MaxValue;
+            sheet.Cells["D8"] = 99999999999L;
+            sheet.Cells["D9"] = 100000000001L;
+            sheet.LargeNumberHandlingMode = LargeNumberHandlingMode.UseScientificNotation;
 
             wb.Add(sheet);
 

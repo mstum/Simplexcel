@@ -8,8 +8,7 @@ namespace Simplexcel
     /// </summary>
     public sealed class Cell
     {
-        private readonly XlsxCellStyle _xlsxCellStyle;
-        internal XlsxCellStyle XlsxCellStyle { get { return _xlsxCellStyle; } }
+        internal XlsxCellStyle XlsxCellStyle { get; private set; }
 
         /// <summary>
         /// Create a new Cell of the given <see cref="CellType"/>.
@@ -27,8 +26,8 @@ namespace Simplexcel
         /// <param name="format"> </param>
         public Cell(CellType type, object value, string format)
         {
-            _xlsxCellStyle = new XlsxCellStyle();
-            _xlsxCellStyle.Format = format;
+            XlsxCellStyle = new XlsxCellStyle();
+            XlsxCellStyle.Format = format;
 
             Value = value;
             CellType = type;
@@ -39,8 +38,8 @@ namespace Simplexcel
         /// </summary>
         public string Format
         {
-            get { return _xlsxCellStyle.Format; }
-            set { _xlsxCellStyle.Format = value; }
+            get { return XlsxCellStyle.Format; }
+            set { XlsxCellStyle.Format = value; }
         }
 
         /// <summary>
@@ -48,8 +47,8 @@ namespace Simplexcel
         /// </summary>
         public CellBorder Border
         {
-            get { return _xlsxCellStyle.Border; }
-            set { _xlsxCellStyle.Border = value; }
+            get { return XlsxCellStyle.Border; }
+            set { XlsxCellStyle.Border = value; }
         }
 
         /// <summary>
@@ -57,8 +56,8 @@ namespace Simplexcel
         /// </summary>
         public string FontName
         {
-            get { return _xlsxCellStyle.Font.Name; }
-            set { _xlsxCellStyle.Font.Name = value; }
+            get { return XlsxCellStyle.Font.Name; }
+            set { XlsxCellStyle.Font.Name = value; }
         }
 
         /// <summary>
@@ -66,8 +65,8 @@ namespace Simplexcel
         /// </summary>
         public int FontSize
         {
-            get { return _xlsxCellStyle.Font.Size; }
-            set { _xlsxCellStyle.Font.Size = value; }
+            get { return XlsxCellStyle.Font.Size; }
+            set { XlsxCellStyle.Font.Size = value; }
         }
 
         /// <summary>
@@ -75,8 +74,8 @@ namespace Simplexcel
         /// </summary>
         public bool Bold
         {
-            get { return _xlsxCellStyle.Font.Bold; }
-            set { _xlsxCellStyle.Font.Bold = value; }
+            get { return XlsxCellStyle.Font.Bold; }
+            set { XlsxCellStyle.Font.Bold = value; }
         }
 
         /// <summary>
@@ -84,8 +83,8 @@ namespace Simplexcel
         /// </summary>
         public bool Italic
         {
-            get { return _xlsxCellStyle.Font.Italic; }
-            set { _xlsxCellStyle.Font.Italic = value; }
+            get { return XlsxCellStyle.Font.Italic; }
+            set { XlsxCellStyle.Font.Italic = value; }
         }
 
         /// <summary>
@@ -93,8 +92,8 @@ namespace Simplexcel
         /// </summary>
         public bool Underline
         {
-            get { return _xlsxCellStyle.Font.Underline; }
-            set { _xlsxCellStyle.Font.Underline = value; }
+            get { return XlsxCellStyle.Font.Underline; }
+            set { XlsxCellStyle.Font.Underline = value; }
         }
 
         /// <summary>
@@ -102,8 +101,8 @@ namespace Simplexcel
         /// </summary>
         public Color TextColor
         {
-            get { return _xlsxCellStyle.Font.TextColor; }
-            set { _xlsxCellStyle.Font.TextColor = value; }
+            get { return XlsxCellStyle.Font.TextColor; }
+            set { XlsxCellStyle.Font.TextColor = value; }
         }
 
         /// <summary>
@@ -192,5 +191,17 @@ namespace Simplexcel
             }
             return cell;
         }
+
+        /// <summary>
+        /// The largest number Excel can handle before <see cref="LargeNumberHandlingMode"/> applies
+        /// </summary>
+        public static decimal LargeNumberLimit => 99999999999m; // TODO: Find the exact limit
+
+        /// <summary>
+        /// Check if the given number is so large that <see cref="LargeNumberHandlingMode"/> would apply to it
+        /// </summary>
+        /// <param name="number">The number to check</param>
+        /// <returns></returns>
+        public static bool IsLargeNumber(decimal number) => number > LargeNumberLimit;
     }
 }
