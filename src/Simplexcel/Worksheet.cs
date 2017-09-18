@@ -17,6 +17,8 @@ namespace Simplexcel
         private readonly PageSetup _pageSetup = new PageSetup();
 
         private List<SheetView> _sheetViews;
+        private List<PageBreak> _rowBreaks;
+        private List<PageBreak> _columnBreaks;
 
         /// <summary>
         /// Get a list of characters that are invalid to use in the Sheet Name
@@ -169,6 +171,53 @@ namespace Simplexcel
         internal ICollection<SheetView> GetSheetViews()
         {
             return _sheetViews;
+        }
+
+        internal ICollection<PageBreak> GetRowBreaks()
+        {
+            return _rowBreaks;
+        }
+
+        internal ICollection<PageBreak> GetColumnBreaks()
+        {
+            return _columnBreaks;
+        }
+
+        /// <summary>
+        /// Insert a manual page break after the row specified by the zero-based index (e.g., 0 for the first row)
+        /// </summary>
+        /// <param name="sheet"></param>
+        /// <param name="cellAddress"></param>
+        public void InsertManualPageBreakAfterRow(int row)
+        {
+            if(_rowBreaks == null)
+            {
+                _rowBreaks = new List<PageBreak>();
+            }
+
+            _rowBreaks.Add(new PageBreak
+            {
+                Id = row,
+                IsManualBreak = true
+            });
+        }
+
+        /// <summary>
+        /// Insert a manual page break to the left of the column specified by the zero-based index (e.g., 0 for column A)
+        /// </summary>
+        /// <param name="col"></param>
+        public void InsertManualPageBreakAfterColumn(int col)
+        {
+            if (_columnBreaks == null)
+            {
+                _columnBreaks = new List<PageBreak>();
+            }
+
+            _columnBreaks.Add(new PageBreak
+            {
+                Id = col,
+                IsManualBreak = true
+            });
         }
 
         /// <summary>

@@ -312,6 +312,58 @@ namespace Simplexcel.XlsxInternal
                 doc.Root.Add(sheetViews);
             }
 
+            private void WritePageBreaks(Worksheet sheet, XDocument doc)
+            {
+                XElement BreakToXml(PageBreak brk)
+                {
+                    var elem = new XElement(Namespaces.workbook + "brk");
+                    elem.Add(new XAttribute("id", brk.Id));
+                    if (brk.IsManualBreak)
+                    {
+                        elem.Add(new XAttribute("man", "1"));
+                    }
+                    if (brk.IsPivotCreatedPageBreak)
+                    {
+                        elem.Add(new XAttribute("pt", "1"));
+                    }
+                    if (brk.Min > 0)
+                    {
+                        elem.Add(new XAttribute("min", brk.Min));
+                    }
+                    if (brk.Max > 0)
+                    {
+                        elem.Add(new XAttribute("max", brk.Max));
+                    }
+                    return elem;
+                }
+
+                XElement PageBreakCollectionToXml(string elementName, ICollection<PageBreak> breaks)
+                {
+                    var elem = new XElement(Namespaces.workbook + elementName);
+                    elem.Add(new XAttribute("count", breaks.Count));
+                    elem.Add(new XAttribute("manualBreakCount", breaks.Count(r => r.IsManualBreak)));
+                    foreach (var brk in breaks)
+                    {
+                        elem.Add(BreakToXml(brk));
+                    }
+                    return elem;
+                }
+
+                var rowBreaks = sheet.GetRowBreaks();
+                if (rowBreaks != null && rowBreaks.Count > 0)
+                {
+                    var rowBreaksElem = PageBreakCollectionToXml("rowBreaks", rowBreaks);
+                    doc.Root.Add(rowBreaksElem);
+                }
+
+                var colBreaks = sheet.GetColumnBreaks();
+                if (colBreaks != null && colBreaks.Count > 0)
+                {
+                    var colBreaksElem = PageBreakCollectionToXml("colBreaks", colBreaks);
+                    doc.Root.Add(colBreaksElem);
+                }
+            }
+
             /// <summary>
             /// Create the xl/worksheets/sheetX.xml file
             /// </summary>
@@ -415,6 +467,8 @@ namespace Simplexcel.XlsxInternal
                 var pageSetup = new XElement(Namespaces.workbook + "pageSetup");
                 pageSetup.Add(new XAttribute("orientation", sheet.PageSetup.Orientation == Orientation.Portrait ? "portrait" : "landscape"));
                 doc.Root.Add(pageSetup);
+
+                WritePageBreaks(sheet, doc);
 
                 file.Content = doc;
                 var rel = new Relationship(_relationshipCounter)

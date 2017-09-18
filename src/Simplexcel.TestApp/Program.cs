@@ -94,6 +94,20 @@ namespace Simplexcel.TestApp
             frozenLeftColumnSheet.FreezeLeftColumn();
             wb.Add(frozenLeftColumnSheet);
 
+            var pageBreakSheet = new Worksheet("Page Breaks");
+            for (var row = 0; row < 20; row++)
+            {
+                for (var col = 0; col < 20; col++)
+                {
+                    pageBreakSheet.Cells[row, col] = $"Row {row} /Col {col}";
+                }
+            }
+            pageBreakSheet.InsertManualPageBreakAfterRow("B1");
+            pageBreakSheet.InsertManualPageBreakAfterRow(5);
+            pageBreakSheet.InsertManualPageBreakAfterColumn("B8");
+            pageBreakSheet.InsertManualPageBreakAfterColumn(16);
+            wb.Add(pageBreakSheet);
+
             wb.Save("compressed.xlsx", compress: true);
             wb.Save("uncompressed.xlsx", compress: false);
         }
