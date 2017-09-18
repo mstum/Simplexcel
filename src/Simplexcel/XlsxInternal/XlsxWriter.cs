@@ -20,68 +20,56 @@ namespace Simplexcel.XlsxInternal
                 throw new InvalidOperationException("You are trying to save a Workbook that does not contain any Worksheets.");
             }
 
-            var writer = new XlsxWriterInternal(workbook);
-            writer.Save(outputStream, compress);
+            XlsxWriterInternal.Save(workbook, outputStream, compress);
         }
 
         /// <summary>
         /// This does the actual writing by manually creating the XML according to ECMA-376, 3rd Edition, Part 1's SpreadsheetML.
-        /// Due to the way state is handled, Save() can only be called once, hence it's a private class around an internal static member that initialized it anew on every Save(Workbook)
         /// 
         /// Note that in many cases, the order of elements in an XML file matters!
         /// </summary>
-        private sealed class XlsxWriterInternal
+        private static class XlsxWriterInternal
         {
-            private readonly Workbook _workbook;
-            private readonly RelationshipCounter _relationshipCounter;
-            private readonly SharedStrings _sharedStrings;
-            private readonly XlsxPackage _package;
-            private readonly IList<XlsxCellStyle> _styles;
-
             // For some reason, Excel interprets column widths as the width minus this factor
             private const decimal ExcelColumnWidthDifference = 0.7109375m;
 
-            public XlsxWriterInternal(Workbook workbook)
+            internal static void Save(Workbook workbook, Stream outputStream, bool compress)
             {
-                _workbook = workbook;
-                _relationshipCounter = new RelationshipCounter();
-                _sharedStrings = new SharedStrings();
-                _package = new XlsxPackage();
-                _styles = GetXlsxStyles();
-            }
+                var relationshipCounter = new RelationshipCounter();
+                var package = new XlsxPackage();
+                var styles = GetXlsxStyles(workbook);
+                var sharedStrings = new SharedStrings();
 
-            internal void Save(Stream outputStream, bool compress)
-            {
                 // docProps/core.xml
-                var cp = CreateCoreFileProperties();
-                _package.XmlFiles.Add(cp.Target);
-                _package.Relationships.Add(cp);
+                var cp = CreateCoreFileProperties(workbook, relationshipCounter);
+                package.XmlFiles.Add(cp.Target);
+                package.Relationships.Add(cp);
 
                 // xl/styles.xml
-                var styles = StyleWriter.CreateStyleXml(_styles);
-                var stylesRel = new Relationship(_relationshipCounter)
+                var stylesXml = StyleWriter.CreateStyleXml(styles);
+                var stylesRel = new Relationship(relationshipCounter)
                 {
                     Type = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles",
-                    Target = styles
+                    Target = stylesXml
                 };
-                _package.XmlFiles.Add(styles);
-                _package.WorkbookRelationships.Add(stylesRel);
+                package.XmlFiles.Add(stylesXml);
+                package.WorkbookRelationships.Add(stylesRel);
 
                 // xl/worksheets/sheetX.xml
                 var sheetinfos = new List<SheetPackageInfo>();
                 int i = 0;
-                foreach (var sheet in _workbook.Sheets)
+                foreach (var sheet in workbook.Sheets)
                 {
                     i++;
                     XmlFile sheetRels;
-                    var rel = CreateSheetFile(sheet, i, out sheetRels);
+                    var rel = CreateSheetFile(sheet, i, relationshipCounter, styles, sharedStrings, out sheetRels);
                     if (sheetRels != null)
                     {
-                        _package.XmlFiles.Add(sheetRels);
+                        package.XmlFiles.Add(sheetRels);
                     }
 
-                    _package.XmlFiles.Add(rel.Target);
-                    _package.WorkbookRelationships.Add(rel);
+                    package.XmlFiles.Add(rel.Target);
+                    package.WorkbookRelationships.Add(rel);
 
                     var sheetinfo = new SheetPackageInfo
                     {
@@ -102,29 +90,29 @@ namespace Simplexcel.XlsxInternal
                 }
 
                 // xl/sharedStrings.xml
-                if (_sharedStrings.Count > 0)
+                if (sharedStrings.Count > 0)
                 {
-                    var ssx = _sharedStrings.ToRelationship(_relationshipCounter);
-                    _package.XmlFiles.Add(ssx.Target);
-                    _package.WorkbookRelationships.Add(ssx);
+                    var ssx = sharedStrings.ToRelationship(relationshipCounter);
+                    package.XmlFiles.Add(ssx.Target);
+                    package.WorkbookRelationships.Add(ssx);
                 }
 
                 // xl/workbook.xml
-                var wb = CreateWorkbookFile(sheetinfos);
-                _package.XmlFiles.Add(wb.Target);
-                _package.Relationships.Add(wb);
+                var wb = CreateWorkbookFile(sheetinfos, relationshipCounter);
+                package.XmlFiles.Add(wb.Target);
+                package.Relationships.Add(wb);
 
                 // xl/_rels/workbook.xml.rels
-                _package.SaveToStream(outputStream, compress);
+                package.SaveToStream(outputStream, compress);
             }
 
             /// <summary>
             /// Get all unique Styles throughout the workbook
             /// </summary>
             /// <returns>A dictionary where the style is the </returns>
-            private IList<XlsxCellStyle> GetXlsxStyles()
+            private static IList<XlsxCellStyle> GetXlsxStyles(Workbook workbook)
             {
-                var result = from sheet in _workbook.Sheets
+                var result = from sheet in workbook.Sheets
                              from cells in sheet.Cells
                              select cells.Value.XlsxCellStyle;
 
@@ -135,7 +123,7 @@ namespace Simplexcel.XlsxInternal
             /// Generated the docProps/core.xml which contains author, creation date etc.
             /// </summary>
             /// <returns></returns>
-            private Relationship CreateCoreFileProperties()
+            private static Relationship CreateCoreFileProperties(Workbook workbook, RelationshipCounter relationshipCounter)
             {
                 var file = new XmlFile();
                 file.ContentType = "application/vnd.openxmlformats-package.core-properties+xml";
@@ -154,14 +142,14 @@ namespace Simplexcel.XlsxInternal
                                 new XAttribute(XNamespace.Xmlns + "xsi", xsi)
                                 );
 
-                if (!string.IsNullOrEmpty(_workbook.Title))
+                if (!string.IsNullOrEmpty(workbook.Title))
                 {
-                    root.Add(new XElement(dc + "title", _workbook.Title));
+                    root.Add(new XElement(dc + "title", workbook.Title));
                 }
-                if (!string.IsNullOrEmpty(_workbook.Author))
+                if (!string.IsNullOrEmpty(workbook.Author))
                 {
-                    root.Add(new XElement(dc + "creator", _workbook.Author));
-                    root.Add(new XElement(cp + "lastModifiedBy", _workbook.Author));
+                    root.Add(new XElement(dc + "creator", workbook.Author));
+                    root.Add(new XElement(cp + "lastModifiedBy", workbook.Author));
                 }
 
                 root.Add(new XElement(dcterms + "created", DateTime.UtcNow, new XAttribute(xsi + "type", "dcterms:W3CDTF")));
@@ -172,7 +160,7 @@ namespace Simplexcel.XlsxInternal
 
                 file.Content = doc;
 
-                var rel = new Relationship(_relationshipCounter)
+                var rel = new Relationship(relationshipCounter)
                 {
                     Target = file,
                     Type = "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties"
@@ -186,7 +174,7 @@ namespace Simplexcel.XlsxInternal
             /// </summary>
             /// <param name="sheetInfos"></param>
             /// <returns></returns>
-            private Relationship CreateWorkbookFile(List<SheetPackageInfo> sheetInfos)
+            private static Relationship CreateWorkbookFile(List<SheetPackageInfo> sheetInfos, RelationshipCounter relationshipCounter)
             {
                 var file = new XmlFile();
                 file.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml";
@@ -240,7 +228,7 @@ namespace Simplexcel.XlsxInternal
 
                 file.Content = doc;
 
-                var rel = new Relationship(_relationshipCounter)
+                var rel = new Relationship(relationshipCounter)
                 {
                     Type = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
                     Target = file
@@ -249,7 +237,7 @@ namespace Simplexcel.XlsxInternal
                 return rel;
             }
 
-            private void WriteSheetViews(Worksheet sheet, XDocument doc)
+            private static void WriteSheetViews(Worksheet sheet, XDocument doc)
             {
                 var sviews = sheet.GetSheetViews();
                 if (sviews == null || sviews.Count == 0) { return; }
@@ -312,7 +300,7 @@ namespace Simplexcel.XlsxInternal
                 doc.Root.Add(sheetViews);
             }
 
-            private void WritePageBreaks(Worksheet sheet, XDocument doc)
+            private static void WritePageBreaks(Worksheet sheet, XDocument doc)
             {
                 XElement BreakToXml(PageBreak brk)
                 {
@@ -371,9 +359,9 @@ namespace Simplexcel.XlsxInternal
             /// <param name="sheetIndex"></param>
             /// <param name="sheetRels">If this worksheet needs an xl/worksheets/_rels/sheetX.xml.rels file</param>
             /// <returns></returns>
-            private Relationship CreateSheetFile(Worksheet sheet, int sheetIndex, out XmlFile sheetRels)
+            private static Relationship CreateSheetFile(Worksheet sheet, int sheetIndex, RelationshipCounter relationshipCounter, IList<XlsxCellStyle> styles, SharedStrings sharedStrings, out XmlFile sheetRels)
             {
-                var rows = GetXlsxRows(sheet);
+                var rows = GetXlsxRows(sheet, styles, sharedStrings);
 
                 var file = new XmlFile();
                 file.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml";
@@ -428,6 +416,7 @@ namespace Simplexcel.XlsxInternal
                 }
                 doc.Root.Add(sheetData);
 
+                sheetRels = null;
                 var hyperlinks = sheet.Cells.Where(c => c.Value != null && !string.IsNullOrEmpty(c.Value.Hyperlink)).ToList();
                 if (hyperlinks.Count > 0)
                 {
@@ -459,10 +448,6 @@ namespace Simplexcel.XlsxInternal
                     sheetRels.Content = new XDocument();
                     sheetRels.Content.Add(hlRelsElem);
                 }
-                else
-                {
-                    sheetRels = null;
-                }
 
                 var pageSetup = new XElement(Namespaces.workbook + "pageSetup");
                 pageSetup.Add(new XAttribute("orientation", sheet.PageSetup.Orientation == Orientation.Portrait ? "portrait" : "landscape"));
@@ -471,7 +456,7 @@ namespace Simplexcel.XlsxInternal
                 WritePageBreaks(sheet, doc);
 
                 file.Content = doc;
-                var rel = new Relationship(_relationshipCounter)
+                var rel = new Relationship(relationshipCounter)
                 {
                     Target = file,
                     Type = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet"
@@ -480,7 +465,7 @@ namespace Simplexcel.XlsxInternal
                 return rel;
             }
 
-            private Dictionary<int, XlsxRow> GetXlsxRows(Worksheet sheet)
+            private static Dictionary<int, XlsxRow> GetXlsxRows(Worksheet sheet, IList<XlsxCellStyle> styles, SharedStrings sharedStrings)
             {
                 var rows = new Dictionary<int, XlsxRow>();
 
@@ -492,7 +477,7 @@ namespace Simplexcel.XlsxInternal
                         rows[cell.Key.Row] = new XlsxRow { RowIndex = cell.Key.Row + 1 };
                     }
 
-                    var styleIndex = _styles.IndexOf(cell.Value.XlsxCellStyle) + 1;
+                    var styleIndex = styles.IndexOf(cell.Value.XlsxCellStyle) + 1;
 
                     var xc = new XlsxCell
                     {
@@ -504,7 +489,7 @@ namespace Simplexcel.XlsxInternal
                     {
                         case CellType.Text:
                             xc.CellType = XlsxCellTypes.SharedString;
-                            xc.Value = _sharedStrings.GetStringIndex((string)cell.Value.Value);
+                            xc.Value = sharedStrings.GetStringIndex((string)cell.Value.Value);
                             break;
                         case CellType.Number:
                             xc.CellType = XlsxCellTypes.Number;
