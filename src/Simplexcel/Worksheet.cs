@@ -92,7 +92,7 @@ namespace Simplexcel
         }
 
         /// <summary>
-        /// How to handle numbers that are larger than <see cref="Cell.LargeNumberLimit"/>?
+        /// How to handle numbers that are larger than <see cref="Cell.LargeNumberPositiveLimit"/> or smaller than <see cref="Cell.LargeNumberNegativeLimit"/>?
         /// </summary>
         public LargeNumberHandlingMode LargeNumberHandlingMode { get; set; }
 

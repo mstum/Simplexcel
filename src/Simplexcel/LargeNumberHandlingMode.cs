@@ -5,6 +5,7 @@
     /// https://support.microsoft.com/en-us/help/2643223/long-numbers-are-displayed-incorrectly-in-excel
     /// 
     /// This decides how to handle larger numbers.
+    /// See <see cref="Cell.LargeNumberNegativeLimit"/> and <see cref="Cell.LargeNumberPositiveLimit"/> for the actual limits.
     /// </summary>
     public enum LargeNumberHandlingMode
     {

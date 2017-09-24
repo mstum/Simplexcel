@@ -529,7 +529,7 @@ namespace Simplexcel.XlsxInternal
                                 else
                                 {
                                     xc.CellType = XlsxCellTypes.Number;
-                                    xc.Value = ((Decimal)cell.Value.Value).ToString("E18", System.Globalization.CultureInfo.InvariantCulture);
+                                    xc.Value = ((Decimal)cell.Value.Value).ToString("E28", System.Globalization.CultureInfo.InvariantCulture);
                                 }
                             }
                             else

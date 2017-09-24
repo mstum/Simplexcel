@@ -63,8 +63,27 @@ namespace Simplexcel.TestApp
             sheet.Cells["D5"] = new Cell(CellType.Date, DateTime.Now, BuiltInCellFormat.DateOnly);
             sheet.Cells["D6"] = new Cell(CellType.Date, DateTime.Now, BuiltInCellFormat.TimeOnly);
             sheet.Cells["D7"] = long.MaxValue;
-            sheet.Cells["D8"] = 99999999999L;
-            sheet.Cells["D9"] = 100000000001L;
+            sheet.Cells["D8"] = long.MinValue;
+            sheet.Cells["D9"] = decimal.MaxValue;
+            sheet.Cells["D10"] = decimal.MinValue;
+
+            sheet.Cells["D11"] = 9999999999L;
+            sheet.Cells["D12"] = 99999999999L;
+            sheet.Cells["D13"] = 100000000000L;
+            sheet.Cells["D14"] = 100000000001L;
+            sheet.Cells["D15"] = 1000000000000L;
+            sheet.Cells["D16"] = 1000000000001L;
+            sheet.Cells["D17"] = Cell.LargeNumberPositiveLimit;
+            sheet.Cells["D18"] = Cell.LargeNumberPositiveLimit + 1;
+
+            sheet.Cells["D19"] = -9999999999L;
+            sheet.Cells["D20"] = -99999999999L;
+            sheet.Cells["D21"] = -100000000000L;
+            sheet.Cells["D22"] = -100000000001L;
+            sheet.Cells["D23"] = -1000000000000L;
+            sheet.Cells["D24"] = -1000000000001L;
+            sheet.Cells["D25"] = Cell.LargeNumberNegativeLimit;
+            sheet.Cells["D26"] = Cell.LargeNumberNegativeLimit + 1;
             sheet.LargeNumberHandlingMode = LargeNumberHandlingMode.UseScientificNotation;
 
             wb.Add(sheet);
