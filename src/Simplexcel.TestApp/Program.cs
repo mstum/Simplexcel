@@ -75,15 +75,17 @@ namespace Simplexcel.TestApp
             sheet.Cells["D16"] = 1000000000001L;
             sheet.Cells["D17"] = Cell.LargeNumberPositiveLimit;
             sheet.Cells["D18"] = Cell.LargeNumberPositiveLimit + 1;
+            sheet.Cells["D19"] = Cell.LargeNumberPositiveLimit - 1;
 
-            sheet.Cells["D19"] = -9999999999L;
-            sheet.Cells["D20"] = -99999999999L;
-            sheet.Cells["D21"] = -100000000000L;
-            sheet.Cells["D22"] = -100000000001L;
-            sheet.Cells["D23"] = -1000000000000L;
-            sheet.Cells["D24"] = -1000000000001L;
-            sheet.Cells["D25"] = Cell.LargeNumberNegativeLimit;
-            sheet.Cells["D26"] = Cell.LargeNumberNegativeLimit + 1;
+            sheet.Cells["D20"] = -9999999999L;
+            sheet.Cells["D21"] = -99999999999L;
+            sheet.Cells["D22"] = -100000000000L;
+            sheet.Cells["D23"] = -100000000001L;
+            sheet.Cells["D24"] = -1000000000000L;
+            sheet.Cells["D25"] = -1000000000001L;
+            sheet.Cells["D26"] = Cell.LargeNumberNegativeLimit;
+            sheet.Cells["D27"] = Cell.LargeNumberNegativeLimit + 1;
+            sheet.Cells["D28"] = Cell.LargeNumberNegativeLimit - 1;
             sheet.LargeNumberHandlingMode = LargeNumberHandlingMode.UseScientificNotation;
 
             wb.Add(sheet);
