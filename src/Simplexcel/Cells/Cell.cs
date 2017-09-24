@@ -191,17 +191,5 @@ namespace Simplexcel
             }
             return cell;
         }
-
-        /// <summary>
-        /// The largest number Excel can handle before <see cref="LargeNumberHandlingMode"/> applies
-        /// </summary>
-        public static decimal LargeNumberLimit => 99999999999m;
-
-        /// <summary>
-        /// Check if the given number is so large that <see cref="LargeNumberHandlingMode"/> would apply to it
-        /// </summary>
-        /// <param name="number">The number to check</param>
-        /// <returns></returns>
-        public static bool IsLargeNumber(decimal number) => number > LargeNumberLimit;
     }
 }

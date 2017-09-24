@@ -59,7 +59,6 @@ namespace Simplexcel
             }
 
             Name = name;
-            LargeNumberHandlingMode = LargeNumberHandlingMode.StoreAsText;
         }
 
         /// <summary>
@@ -90,11 +89,6 @@ namespace Simplexcel
         {
             get { return _columnWidth; }
         }
-
-        /// <summary>
-        /// How to handle numbers that are larger than <see cref="Cell.LargeNumberLimit"/>?
-        /// </summary>
-        public LargeNumberHandlingMode LargeNumberHandlingMode { get; set; }
 
         /// <summary>
         /// Get the cell with the given cell reference, e.g. Get the cell "A1". May return NULL.
