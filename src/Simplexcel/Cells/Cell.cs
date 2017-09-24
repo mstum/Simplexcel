@@ -207,6 +207,6 @@ namespace Simplexcel
         /// </summary>
         /// <param name="number">The number to check</param>
         /// <returns></returns>
-        public static bool IsLargeNumber(decimal number) => number < LargeNumberNegativeLimit || number > LargeNumberPositiveLimit;
+        public static bool IsLargeNumber(decimal? number) => number.HasValue && (number.Value < LargeNumberNegativeLimit || number.Value > LargeNumberPositiveLimit);
     }
 }
