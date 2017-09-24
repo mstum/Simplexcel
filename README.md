@@ -225,10 +225,8 @@ public abstract class ExcelResultBase : ActionResult
 
 # Changelog
 ## 2.1.0 (In Development)
-* Numbers with more than 11 digits are forced as Text, because [of a limitation in Excel](https://support.microsoft.com/en-us/help/2643223/long-numbers-are-displayed-incorrectly-in-excel) - alternatively, scientific notation would be possible by setting `Worksheet.LargeNumberHandlingMode` to `LargeNumberHandlingMode.UseScientificNotation`. You can also use `Cell.IsLargeNumber` to check if a given number would be affected by this, or `Cell.LargeNumberLimit` to get the largest number possible before this limit applies.
-
-## 2.0.5 (2017-09-23)
 * Add support for manual page breaks. Call `Worksheet.InsertManualPageBreakAfterRow` or `Worksheet.InsertManualPageBreakAfterColumn` with either the zero-based index of the row/column after which to create the break, or with a cell address (e.g., B5) to create the break below or to the left of that cell.
+* Numbers with more than 11 digits are forced as Text, because [of a limitation in Excel](https://support.microsoft.com/en-us/help/2643223/long-numbers-are-displayed-incorrectly-in-excel) - alternatively, scientific notation would be possible by setting `Worksheet.LargeNumberHandlingMode` to `LargeNumberHandlingMode.UseScientificNotation`. You can also use `Cell.IsLargeNumber` to check if a given number would be affected by this, or `Cell.LargeNumberLimit` to get the largest number possible before this limit applies.
 
 ## 2.0.4 (2017-09-17)
 * Support for [freezing panes](https://support.office.com/en-us/article/Freeze-panes-to-lock-rows-and-columns-dab2ffc9-020d-4026-8121-67dd25f2508f). Right now, this is being kept simple: call either `Worksheet.FreezeTopRow` or `Worksheet.FreezeLeftColumn` to freeze either the first row (1) or the leftmost column (A).
