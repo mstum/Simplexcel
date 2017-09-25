@@ -38,6 +38,7 @@ namespace Simplexcel.XlsxInternal
 
         internal string GetSqRef()
         {
+            // TODO: Support Ranges. Ranges are Rectangular, e.g., A1:B5 (TopLeft:BottomRight)
             return string.Join(" ", Cells);
         }
     }
