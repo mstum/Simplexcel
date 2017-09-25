@@ -92,7 +92,7 @@ namespace Simplexcel
 
                 var pi = new PopulateCellInfo();
                 var colInfo = prop.GetXlsxColumnAttribute();
-                pi.Name = string.IsNullOrEmpty(colInfo?.Name) ? prop.Name : colInfo.Name;
+                pi.Name = colInfo?.Name == null ? prop.Name : colInfo.Name;
                 pi.ColumnIndex = colInfo?.ColumnIndex != null ? colInfo.ColumnIndex : -1; // -1 will later be reassigned
                 pi.TempColumnIndex = tempCol++;
 
