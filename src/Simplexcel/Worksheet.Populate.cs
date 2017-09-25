@@ -31,8 +31,8 @@ namespace Simplexcel
         /// * No way to specify the order of properties
         /// </summary>
         /// <param name="data"></param>
-        /// <param name="cacheType">If true, the Column info is being cached in memory</param>
-        public void Populate<T>(IEnumerable<T> data, bool cacheType = false) where T : class
+        /// <param name="cacheTypeColumns">If true, the Column info for the given type is being cached in memory</param>
+        public void Populate<T>(IEnumerable<T> data, bool cacheTypeColumns = false) where T : class
         {
             if (data == null)
             {
@@ -41,11 +41,11 @@ namespace Simplexcel
             var type = typeof(T);
 
             // Key = TempColumnIndex, Value = Attribute
-            var cols = cacheType ? TryGetFromCache(type) : null;
+            var cols = cacheTypeColumns ? TryGetFromCache(type) : null;
             if (cols == null)
             {
                 cols = GetColumsFromType(type);
-                if (cacheType)
+                if (cacheTypeColumns)
                 {
                     AddToPopulateCache(type, cols);
                 }
@@ -90,7 +90,7 @@ namespace Simplexcel
                 var pi = new PopulateCellInfo();
                 var colInfo = prop.GetXlsxColumnAttribute();
                 pi.Name = string.IsNullOrEmpty(colInfo?.Name) ? prop.Name : colInfo.Name;
-                pi.ColumnIndex = colInfo?.ColumnIndex != null ? colInfo.ColumnIndex.Value : -1; // -1 will later be reassigned
+                pi.ColumnIndex = colInfo?.ColumnIndex != null ? colInfo.ColumnIndex : -1; // -1 will later be reassigned
                 pi.TempColumnIndex = tempCol++;
 
                 if (pi.ColumnIndex > maxCol)

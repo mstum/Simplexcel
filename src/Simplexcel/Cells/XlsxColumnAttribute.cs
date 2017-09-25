@@ -15,7 +15,18 @@ namespace Simplexcel
         /// If there are Columns with and without an Index, the columns
         /// without an Index will be added after the last column with an Index.
         /// </summary>
-        public int? ColumnIndex { get; set; }
+        public int ColumnIndex { get; set; }
+
+        public XlsxColumnAttribute()
+        {
+            ColumnIndex = -1;
+        }
+
+        public XlsxColumnAttribute(string name)
+        {
+            Name = name;
+            ColumnIndex = -1;
+        }
     }
 
     /// <summary>

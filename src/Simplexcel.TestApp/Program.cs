@@ -92,11 +92,11 @@ namespace Simplexcel.TestApp
 
             // Prime the Cache...
             var populatedSheet = new Worksheet("Populate");
-            populatedSheet.Populate(EnumeratePopulateTestData(), cacheType: true);
+            populatedSheet.Populate(EnumeratePopulateTestData(), cacheTypeColumns: true);
 
             // ...and use the cache
             populatedSheet = new Worksheet("Populate");
-            populatedSheet.Populate(EnumeratePopulateTestData(), cacheType: true);
+            populatedSheet.Populate(EnumeratePopulateTestData(), cacheTypeColumns: true);
             wb.Add(populatedSheet);
 
             var frozenTopRowSheet = new Worksheet("Frozen Top Row");
@@ -166,7 +166,7 @@ namespace Simplexcel.TestApp
         {
             public int Id { get; set; }
 
-            [XlsxColumn(Name = "Unit Price")]
+            [XlsxColumn("Unit Price")]
             public decimal Price { get; set; }
 
             public decimal Quantity { get; set; }
@@ -177,7 +177,7 @@ namespace Simplexcel.TestApp
             public string Name { get; set; }
             public long Value { get; set; }
 
-            [XlsxColumn(Name = "Total")]
+            [XlsxColumn("Total")]
             public decimal TotalPrice { get { return Price * Quantity; } }
             public DateTime CreatedUtc { get; set; }
 
