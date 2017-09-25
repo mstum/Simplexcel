@@ -224,7 +224,7 @@ public abstract class ExcelResultBase : ActionResult
 ```
 
 # Changelog
-## 2.1.0 (In Development)
+## 2.1.0 (2017-09-25)
 * **Functional Change:** Numbers with more than 11 digits are forced as Text by Default, because [of a limitation in Excel](https://support.microsoft.com/en-us/help/2643223/long-numbers-are-displayed-incorrectly-in-excel). To restore the previous functionality, you can set `Worksheet.LargeNumberHandlingMode` to `LargeNumberHandlingMode.None`. You can also use `Cell.IsLargeNumber` to check if a given number would be affected by this.
 * **Functional Change:** `Worksheet.Populate`/`Worksheet.FromData` now also reads properties from base classes.
 * `Worksheet.Populate`/`Worksheet.FromData` accept a new argument, `cacheTypeColumns` which defaults to false. If set to true, then Simplexcel will cache the Reflection-based lookup of object properties. This is useful for if you have a few types that you create sheets from a lot.
