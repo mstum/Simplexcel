@@ -543,6 +543,9 @@ namespace Simplexcel.XlsxInternal
 
             private static void WriteIgnoredErrors(XlsxIgnoredErrorCollection ignoredErrors, XDocument doc)
             {
+                if (ignoredErrors == null) { throw new ArgumentNullException(nameof(ignoredErrors)); }
+                if (doc == null) { throw new ArgumentNullException(nameof(doc)); }
+
                 if (ignoredErrors.DistinctIgnoredErrors.Count == 0)
                 {
                     return;
