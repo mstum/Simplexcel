@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Simplexcel.XlsxInternal
 {
@@ -39,8 +38,8 @@ namespace Simplexcel.XlsxInternal
 
         internal string GetSqRef()
         {
-            // TODO: Support Ranges. Ranges are Rectangular, e.g., A1:B5 (TopLeft:BottomRight)
-            return string.Join(" ", Cells.Select(c => c.ToString()));
+            var ranges = CellAddressHelper.DetermineRanges(Cells);
+            return string.Join(" ", ranges);
         }
     }
 }

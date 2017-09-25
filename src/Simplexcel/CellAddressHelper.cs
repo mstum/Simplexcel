@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Simplexcel
@@ -61,7 +63,7 @@ namespace Simplexcel
                         var ix = Array.IndexOf(_chars, c);
                         if (ix == -1)
                         {
-                            throw new ArgumentException("Cell Reference needs to be in Excel format, e.g. A1 or BA321. Invalid: " + reference, "reference");
+                            throw new ArgumentException("Cell Reference needs to be in Excel format, e.g. A1 or BA321. Invalid: " + reference, nameof(reference));
                         }
 
                         var ixo = ix + 1;
@@ -73,8 +75,21 @@ namespace Simplexcel
             }
             else
             {
-                throw new ArgumentException("Cell Reference needs to be in Excel format, e.g. A1 or BA321. Invalid: " + reference, "reference");
+                throw new ArgumentException("Cell Reference needs to be in Excel format, e.g. A1 or BA321. Invalid: " + reference, nameof(reference));
             }
+        }
+
+        internal static IList<string> DetermineRanges(ICollection<CellAddress> cellAddresses)
+        {
+            var result = new List<string>();
+
+            // TODO: Actually support Ranges. Ranges are Rectangular, e.g., A1:B5 (TopLeft:BottomRight)
+            foreach (var ca in cellAddresses ?? Enumerable.Empty<CellAddress>())
+            {
+                result.Add(ca.ToString());
+            }
+
+            return result;
         }
     }
 }
