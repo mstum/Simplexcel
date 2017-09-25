@@ -32,31 +32,79 @@ namespace Simplexcel
                 throw new ArgumentNullException(nameof(data));
             }
 
-            int row = 0;
-            int col = 0;
+            // Key = ColumnIndex, Value = Attribute
+            var cols = new Dictionary<int, PopulateCellInfo>();
 
-            var props = typeof(T).GetTypeInfo().DeclaredProperties
+            var type = typeof(T);
+            var props = type.GetTypeInfo().GetAllProperties()
                 .Where(p => p.GetIndexParameters().Length == 0)
-                .Where(p => p.PropertyType.GetTypeInfo().IsValueType || p.PropertyType == typeof(string))
                 .ToList();
 
+            int tempCol = 0; // Just a counter to keep the order of Properties the same
+            int maxCol = -1; // Largest Column that has XlsxColumnAttribute.ColumnIndex specified
             foreach (var prop in props)
             {
-                Cells[row, col++] = prop.Name;
+                if(prop.HasXlsxIgnoreAttribute())
+                {
+                    continue;
+                }
+
+                var pi = new PopulateCellInfo();
+                var colInfo = prop.GetXlsxColumnAttribute();
+                pi.Name = string.IsNullOrEmpty(colInfo?.Name) ? prop.Name : colInfo.Name;
+                pi.ColumnIndex = colInfo?.ColumnIndex != null ? colInfo.ColumnIndex.Value : -1; // -1 will later be reassigned
+                pi.TempColumnIndex = tempCol++;
+
+                if(pi.ColumnIndex > -1 && cols.ContainsKey(pi.ColumnIndex))
+                {
+                    throw new InvalidOperationException($"Type {type.FullName} includes more than one Property with ColumnIndex {pi.ColumnIndex}.");
+                }
+
+                if (pi.ColumnIndex > maxCol)
+                {
+                    maxCol = pi.ColumnIndex;
+                }
+
+                pi.Property = prop;
+                cols[pi.TempColumnIndex] = pi;
             }
 
+            // Slot any Columns without an order after maxCol
+            for(int i = 0; i < tempCol; i++)
+            {
+                var pi = cols[i];
+                if(pi.ColumnIndex == -1)
+                {
+                    pi.ColumnIndex = ++maxCol;
+                }
+            }
+
+            foreach (var pi in cols.Values)
+            {
+                Cells[0, pi.ColumnIndex] = pi.Name;
+                Cells[0, pi.ColumnIndex].Bold = true;
+            }
+
+            var row = 0;
             foreach (var item in data)
             {
                 row++;
-                col = 0;
-
-                foreach (var prop in props)
+                
+                foreach (var pi in cols.Values)
                 {
-                    object val = prop.GetValue(item);
+                    object val = pi.Property.GetValue(item);
                     var cell = Cell.FromObject(val);
-                    Cells[row, col++] = cell;
+                    Cells[row, pi.ColumnIndex] = cell;
                 }
             }
+        }
+
+        private class PopulateCellInfo
+        {
+            public string Name { get; set; }
+            public int ColumnIndex { get; set; }
+            public int TempColumnIndex { get; set; }
+            public PropertyInfo Property { get; set; }
         }
     }
 }

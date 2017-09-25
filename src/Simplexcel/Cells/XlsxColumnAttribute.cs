@@ -2,7 +2,7 @@
 
 namespace Simplexcel
 {
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public class XlsxColumnAttribute : Attribute
     {
         /// <summary>
@@ -21,7 +21,7 @@ namespace Simplexcel
     /// <summary>
     /// This attribute causes <see cref="Worksheet.FromData"/> to ignore the property completely
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public class XlsxIgnoreColumnAttribute : Attribute
     {
     }

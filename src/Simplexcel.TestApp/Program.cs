@@ -157,16 +157,20 @@ namespace Simplexcel.TestApp
             }
         }
 
-        private class PopulateTestData
+        private abstract class PopulateTestDataBase
         {
             public int Id { get; set; }
-            public string Name { get; set; }
-            public long Value { get; set; }
 
             [XlsxColumn(Name = "Unit Price")]
             public decimal Price { get; set; }
 
             public decimal Quantity { get; set; }
+        }
+
+        private class PopulateTestData : PopulateTestDataBase
+        {            
+            public string Name { get; set; }
+            public long Value { get; set; }
 
             [XlsxColumn(Name = "Total")]
             public decimal TotalPrice { get { return Price * Quantity; } }
