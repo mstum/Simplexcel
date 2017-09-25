@@ -68,8 +68,7 @@ namespace Simplexcel.XlsxInternal
                 foreach (var sheet in workbook.Sheets)
                 {
                     i++;
-                    XmlFile sheetRels;
-                    var rel = CreateSheetFile(sheet, i, relationshipCounter, styles, sharedStrings, out sheetRels);
+                    var rel = CreateSheetFile(sheet, i, relationshipCounter, styles, sharedStrings, out XmlFile sheetRels);
                     if (sheetRels != null)
                     {
                         package.XmlFiles.Add(sheetRels);
@@ -132,9 +131,11 @@ namespace Simplexcel.XlsxInternal
             /// <returns></returns>
             private static Relationship CreateCoreFileProperties(Workbook workbook, RelationshipCounter relationshipCounter)
             {
-                var file = new XmlFile();
-                file.ContentType = "application/vnd.openxmlformats-package.core-properties+xml";
-                file.Path = "docProps/core.xml";
+                var file = new XmlFile
+                {
+                    ContentType = "application/vnd.openxmlformats-package.core-properties+xml",
+                    Path = "docProps/core.xml"
+                };
 
                 var dc = Namespaces.dc;
                 var dcterms = Namespaces.dcterms;
@@ -180,12 +181,15 @@ namespace Simplexcel.XlsxInternal
             /// Create the xl/workbook.xml file and associated relationship
             /// </summary>
             /// <param name="sheetInfos"></param>
+            /// <param name="relationshipCounter"></param>
             /// <returns></returns>
             private static Relationship CreateWorkbookFile(List<SheetPackageInfo> sheetInfos, RelationshipCounter relationshipCounter)
             {
-                var file = new XmlFile();
-                file.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml";
-                file.Path = "xl/workbook.xml";
+                var file = new XmlFile
+                {
+                    ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml",
+                    Path = "xl/workbook.xml"
+                };
 
                 var doc = new XDocument(new XElement(Namespaces.workbook + "workbook",
                         new XAttribute("xmlns", Namespaces.workbook),
@@ -397,15 +401,20 @@ namespace Simplexcel.XlsxInternal
             /// </summary>
             /// <param name="sheet"></param>
             /// <param name="sheetIndex"></param>
+            /// <param name="relationshipCounter"></param>
+            /// <param name="styles"></param>
+            /// <param name="sharedStrings"></param>
             /// <param name="sheetRels">If this worksheet needs an xl/worksheets/_rels/sheetX.xml.rels file</param>
             /// <returns></returns>
             private static Relationship CreateSheetFile(Worksheet sheet, int sheetIndex, RelationshipCounter relationshipCounter, IList<XlsxCellStyle> styles, SharedStrings sharedStrings, out XmlFile sheetRels)
             {
                 var rows = GetXlsxRows(sheet, styles, sharedStrings);
 
-                var file = new XmlFile();
-                file.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml";
-                file.Path = "xl/worksheets/sheet" + sheetIndex + ".xml";
+                var file = new XmlFile
+                {
+                    ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml",
+                    Path = "xl/worksheets/sheet" + sheetIndex + ".xml"
+                };
 
                 var doc = new XDocument(new XElement(Namespaces.workbook + "worksheet",
                     new XAttribute("xmlns", Namespaces.workbook),
@@ -460,9 +469,11 @@ namespace Simplexcel.XlsxInternal
                 var hyperlinks = sheet.Cells.Where(c => c.Value != null && !string.IsNullOrEmpty(c.Value.Hyperlink)).ToList();
                 if (hyperlinks.Count > 0)
                 {
-                    sheetRels = new XmlFile();
-                    sheetRels.Path = "xl/worksheets/_rels/sheet" + sheetIndex + ".xml.rels";
-                    sheetRels.ContentType = "application/vnd.openxmlformats-package.relationships+xml";
+                    sheetRels = new XmlFile
+                    {
+                        Path = "xl/worksheets/_rels/sheet" + sheetIndex + ".xml.rels",
+                        ContentType = "application/vnd.openxmlformats-package.relationships+xml"
+                    };
 
                     var hlRelsElem = new XElement(Namespaces.relationship + "Relationships");
 
