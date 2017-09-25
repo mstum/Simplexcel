@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -89,10 +90,81 @@ namespace Simplexcel.XlsxInternal
                                         new XAttribute("borderId", borderId),
                                         new XAttribute("xfId", xfId),
                                         new XAttribute("applyNumberFormat", 1));
+                AddAlignmentElement(elem, style);
 
                 cellXfs.Add(elem);
             }
             doc.Root.Add(cellXfs);
+        }
+
+        private static void AddAlignmentElement(XElement elem, XlsxCellStyle style)
+        {
+            if(elem == null)
+            {
+                throw new ArgumentNullException(nameof(elem));
+            }
+
+            if (style == null)
+            {
+                throw new ArgumentNullException(nameof(style));
+            }
+
+            if (style.HorizontalAlignment == HorizontalAlign.None && style.VerticalAlignment == VerticalAlign.None)
+            {
+                return;
+            }
+
+            var alignElem = new XElement(Namespaces.workbook + "alignment");
+            if(style.HorizontalAlignment != HorizontalAlign.None)
+            {
+                string value;
+                switch(style.HorizontalAlignment)
+                {
+                    case HorizontalAlign.General:
+                        value = "general";
+                        break;
+                    case HorizontalAlign.Left:
+                        value = "left";
+                        break;
+                    case HorizontalAlign.Center:
+                        value = "center";
+                        break;
+                    case HorizontalAlign.Right:
+                        value = "right";
+                        break;
+                    case HorizontalAlign.Justify:
+                        value = "justify";
+                        break;
+                    default:
+                        throw new InvalidOperationException("Unhandled HorizontalAlignment in Cell Style: " + style.HorizontalAlignment);
+                }
+                alignElem.Add(new XAttribute("horizontal", value));
+            }
+
+            if (style.VerticalAlignment != VerticalAlign.None)
+            {
+                string value;
+                switch (style.VerticalAlignment)
+                {
+                    case VerticalAlign.Top:
+                        value = "top";
+                        break;
+                    case VerticalAlign.Middle:
+                        value = "center";
+                        break;
+                    case VerticalAlign.Bottom:
+                        value = "bottom";
+                        break;
+                    case VerticalAlign.Justify:
+                        value = "justify";
+                        break;
+                    default:
+                        throw new InvalidOperationException("Unhandled VerticalAlignment in Cell Style: " + style.VerticalAlignment);
+                }
+                alignElem.Add(new XAttribute("vertical", value));
+            }
+
+            elem.Add(alignElem);
         }
 
         private static void StyleAddCellStyleXfsElement(XDocument doc)

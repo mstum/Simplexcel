@@ -18,6 +18,10 @@ namespace Simplexcel.XlsxInternal
         
         internal string Format { get; set; }
 
+        internal VerticalAlign VerticalAlignment { get; set; }
+
+        internal HorizontalAlign HorizontalAlignment { get; set; }
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -28,13 +32,14 @@ namespace Simplexcel.XlsxInternal
 
         public bool Equals(XlsxCellStyle other)
         {
-            if (ReferenceEquals(null, other))
-                return false;
-            if (ReferenceEquals(this, other))
-                return true;
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+
             return Equals(other.Border, Border)
                 && other.Font.Equals(Font)
                 && other.Format.Equals(Format)
+                && Equals(other.VerticalAlignment, VerticalAlignment)
+                && Equals(other.HorizontalAlignment, HorizontalAlignment)
                 ;
         }
 
@@ -45,6 +50,8 @@ namespace Simplexcel.XlsxInternal
                 int result = Border.GetHashCode();
                 result = (result * 397) ^ Font.GetHashCode();
                 result = (result * 397) ^ Format.GetHashCode();
+                result = (result * 397) ^ VerticalAlignment.GetHashCode();
+                result = (result * 397) ^ HorizontalAlignment.GetHashCode();
                 return result;
             }
         }

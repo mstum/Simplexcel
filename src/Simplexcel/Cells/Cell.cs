@@ -105,6 +105,18 @@ namespace Simplexcel
             set { XlsxCellStyle.Font.TextColor = value; }
         }
 
+        public HorizontalAlign HorizontalAlignment
+        {
+            get { return XlsxCellStyle.HorizontalAlignment; }
+            set { XlsxCellStyle.HorizontalAlignment = value; }
+        }
+
+        public VerticalAlign VerticalAlignment
+        {
+            get { return XlsxCellStyle.VerticalAlignment; }
+            set { XlsxCellStyle.VerticalAlignment = value; }
+        }
+
         /// <summary>
         /// The Type of the cell.
         /// </summary>

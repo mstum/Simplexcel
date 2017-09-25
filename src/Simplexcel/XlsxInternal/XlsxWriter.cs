@@ -361,21 +361,35 @@ namespace Simplexcel.XlsxInternal
 
             private static void HandleLargeNumbers(Worksheet sheet)
             {
-                if (sheet.LargeNumberHandlingMode == LargeNumberHandlingMode.StoreAsText)
+                if(sheet == null)
+                {
+                    throw new ArgumentNullException(nameof(sheet));
+                }
+
+                if (sheet.LargeNumberHandlingMode == LargeNumberHandlingMode.None)
                 {
                     return;
                 }
 
-                foreach (var cellPair in sheet.Cells)
+                if (sheet.LargeNumberHandlingMode == LargeNumberHandlingMode.StoreAsText)
                 {
-                    if (cellPair.Value.CellType != CellType.Number) { continue; }
-                    var cell = cellPair.Value;
-                    var numVal = (Decimal)cell.Value;
-                    if (!Cell.IsLargeNumber(numVal)) { continue; }
+                    foreach (var cellPair in sheet.Cells)
+                    {
+                        if (cellPair.Value.CellType != CellType.Number) { continue; }
+                        var cell = cellPair.Value;
+                        var numVal = (Decimal)cell.Value;
+                        if (!Cell.IsLargeNumber(numVal)) { continue; }
 
-                    cell.XlsxCellStyle.Format = BuiltInCellFormat.General;
-                    // TODO: Align Right
+                        cell.Format = BuiltInCellFormat.General;
+                        if (cell.HorizontalAlignment == HorizontalAlign.None)
+                        {
+                            cell.HorizontalAlignment = HorizontalAlign.Right;
+                        }
+                    }
+                    return;
                 }
+
+                throw new InvalidOperationException($"Unhandled LargeNumberHandlingMode in sheet {sheet.Name}: {sheet.LargeNumberHandlingMode}");
             }
 
             /// <summary>
@@ -530,11 +544,9 @@ namespace Simplexcel.XlsxInternal
                                 switch (sheet.LargeNumberHandlingMode)
                                 {
                                     case LargeNumberHandlingMode.StoreAsText:
-                                        {
-                                            xc.CellType = XlsxCellTypes.SharedString;
-                                            xc.Value = sharedStrings.GetStringIndex(numVal.ToString(System.Globalization.CultureInfo.InvariantCulture));
-                                            break;
-                                        }
+                                        xc.CellType = XlsxCellTypes.SharedString;
+                                        xc.Value = sharedStrings.GetStringIndex(numVal.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                                        break;
                                     default:
                                         throw new InvalidOperationException("Unhandled LargeNumberHandlingMode: " + sheet.LargeNumberHandlingMode);
                                 }
