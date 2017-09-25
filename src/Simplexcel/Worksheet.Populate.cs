@@ -8,7 +8,10 @@ namespace Simplexcel
 {
     public sealed partial class Worksheet
     {
-        private static ConcurrentDictionary<Type, Dictionary<int, PopulateCellInfo>> PopulateCache;
+        private static Lazy<ConcurrentDictionary<Type, Dictionary<int, PopulateCellInfo>>> PopulateCache 
+            = new Lazy<ConcurrentDictionary<Type, Dictionary<int, PopulateCellInfo>>>(
+                () => new ConcurrentDictionary<Type, Dictionary<int, PopulateCellInfo>>(),
+                System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
         public static Worksheet FromData<T>(string sheetName, IEnumerable<T> data, bool cacheType = false) where T : class
         {
@@ -120,22 +123,17 @@ namespace Simplexcel
 
         private static void AddToPopulateCache(Type type, Dictionary<int, PopulateCellInfo> cols)
         {
-            if (PopulateCache == null)
-            {
-                PopulateCache = new ConcurrentDictionary<Type, Dictionary<int, PopulateCellInfo>>();
-            }
-
-            PopulateCache[type] = cols;
+            PopulateCache.Value.AddOrUpdate(type, cols, (u1, u2) => cols);
         }
 
         private static Dictionary<int, PopulateCellInfo> TryGetFromCache(Type type)
         {
-            if (PopulateCache == null)
+            if (!PopulateCache.IsValueCreated)
             {
                 return null;
             }
 
-            if (PopulateCache.TryGetValue(type, out var cached))
+            if (PopulateCache.Value.TryGetValue(type, out var cached))
             {
                 return cached;
             }
