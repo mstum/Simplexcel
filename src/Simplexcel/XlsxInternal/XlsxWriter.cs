@@ -555,10 +555,15 @@ namespace Simplexcel.XlsxInternal
                     var elem = new XElement(Namespaces.workbook + "ignoredError");
                     elem.Add(new XAttribute("sqref", ie.GetSqRef()));
 
-                    if (ie.IgnoredError.NumberStoredAsText)
-                    {
-                        elem.Add(new XAttribute("numberStoredAsText", 1));
-                    }
+                    if (ie.IgnoredError.EvalError) { elem.Add(new XAttribute("evalError", 1)); }
+                    if (ie.IgnoredError.TwoDigitTextYear) { elem.Add(new XAttribute("twoDigitTextYear", 1)); }
+                    if (ie.IgnoredError.NumberStoredAsText) { elem.Add(new XAttribute("numberStoredAsText", 1)); }
+                    if (ie.IgnoredError.Formula) { elem.Add(new XAttribute("formula", 1)); }
+                    if (ie.IgnoredError.FormulaRange) { elem.Add(new XAttribute("formulaRange", 1)); }
+                    if (ie.IgnoredError.UnlockedFormula) { elem.Add(new XAttribute("unlockedFormula", 1)); }
+                    if (ie.IgnoredError.EmptyCellReference) { elem.Add(new XAttribute("emptyCellReference", 1)); }
+                    if (ie.IgnoredError.ListDataValidation) { elem.Add(new XAttribute("listDataValidation", 1)); }
+                    if (ie.IgnoredError.CalculatedColumn) { elem.Add(new XAttribute("calculatedColumn", 1)); }
                     igElem.Add(elem);
                 }
 
