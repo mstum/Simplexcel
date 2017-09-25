@@ -225,7 +225,11 @@ public abstract class ExcelResultBase : ActionResult
 
 # Changelog
 ## 2.1.0 (In Development)
-* Numbers with more than 11 digits are forced as Text, because [of a limitation in Excel](https://support.microsoft.com/en-us/help/2643223/long-numbers-are-displayed-incorrectly-in-excel) - alternatively, scientific notation would be possible by setting `Worksheet.LargeNumberHandlingMode` to `LargeNumberHandlingMode.UseScientificNotation`. You can also use `Cell.IsLargeNumber` to check if a given number would be affected by this, or `Cell.LargeNumberLimit` to get the largest number possible before this limit applies.
+* **Functional Change:** Numbers with more than 11 digits are forced as Text by Default, because [of a limitation in Excel](https://support.microsoft.com/en-us/help/2643223/long-numbers-are-displayed-incorrectly-in-excel). To restore the previous functionality, you can set `Worksheet.LargeNumberHandlingMode` to `LargeNumberHandlingMode.None`. You can also use `Cell.IsLargeNumber` to check if a given number would be affected by this.
+* **Functional Change:** `Worksheet.Populate`/`Worksheet.FromData` now also reads properties from base classes.
+* `Worksheet.Populate`/`Worksheet.FromData` accept a new argument, `cacheTypeColumns` which defaults to false. If set to true, then Simplexcel will cache the Reflection-based lookup of object properties. This is useful for if you have a few types that you create sheets from a lot.
+* You can add `[XlsxColumn]` to a Property so that `Worksheet.Populate`/`Worksheet.FromData` can set the column name and a given column order. *Caveat:* If you set `ColumnIndex` on some, but not all Properties, the properties without a `ColumnIndex` will be on the right of the last assigned column, even if that means gaps. I recommend that you either set `ColumnIndex` on all properties or none.
+* You can add `[XlsxIgnoreColumn]` to a Property so that `Worksheet.Populate`/`Worksheet.FromData` ignores it.
 
 ## 2.0.5 (2017-09-23)
 * Add support for manual page breaks. Call `Worksheet.InsertManualPageBreakAfterRow` or `Worksheet.InsertManualPageBreakAfterColumn` with either the zero-based index of the row/column after which to create the break, or with a cell address (e.g., B5) to create the break below or to the left of that cell.
@@ -233,8 +237,8 @@ public abstract class ExcelResultBase : ActionResult
 ## 2.0.4 (2017-09-17)
 * Support for [freezing panes](https://support.office.com/en-us/article/Freeze-panes-to-lock-rows-and-columns-dab2ffc9-020d-4026-8121-67dd25f2508f). Right now, this is being kept simple: call either `Worksheet.FreezeTopRow` or `Worksheet.FreezeLeftColumn` to freeze either the first row (1) or the leftmost column (A).
 * If a Stream is not seekable (e.g., HttpContext.Response.OutputStream), Simplexcel automatically creates a temporary MemoryStream as an intermediate.
-* Add `Cell.FromObject` to make Cell creation easier by guessing the correct type
-* Support `DateTime` cells, thanks to @mguinness and PR #16
+* Add `Cell.FromObject` to make Cell creation easier by guessing the correct type.
+* Support `DateTime` cells, thanks to @mguinness and PR #16.
 
 ## 2.0.3 (2017-09-08)
 * Add `Worksheet.Populate<T>` method to fill a sheet with data. Caveats: Does not loot at inherited members, doesn't look at complex types.
@@ -244,26 +248,26 @@ public abstract class ExcelResultBase : ActionResult
 * Add additional validation when saving to a Stream. The stream must be seekable (and of course writeable), otherwise an Exception is thrown.
 
 ## 2.0.1 (2017-05-18)
-* Fix [Issue #12](https://github.com/mstum/Simplexcel/issues/12): Sanitizing Regex stripped out too many characters (like the Ampersand or Emojis). Note that certain Unicode characters only work on newer versions of Excel (e.g., Emojis work in Excel 2013 but not 2007 or 2010)
+* Fix [Issue #12](https://github.com/mstum/Simplexcel/issues/12): Sanitizing Regex stripped out too many characters (like the Ampersand or Emojis). Note that certain Unicode characters only work on newer versions of Excel (e.g., Emojis work in Excel 2013 but not 2007 or 2010).
 
 ## 2.0.0 (2017-04-22)
-* Re-target to .net Framework 4.5 and .NET Standard 1.3
-* No longer use `System.Drawing.Color` but new type `Simplexcel.Color` should work
-* Classes no longer use Data Contract serializer, hence no more `[DataContract]`, `[DataMember]`, etc. attributes
-* Remove `CompressionLevel` - the entire creation of the actual .xlsx file is re-done (no more dependency on `System.IO.Packaging`) and compression is now a simple bool
+* Re-target to .net Framework 4.5 and .NET Standard 1.3.
+* No longer use `System.Drawing.Color` but new type `Simplexcel.Color` should work.
+* Classes no longer use Data Contract serializer, hence no more `[DataContract]`, `[DataMember]`, etc. attributes.
+* Remove `CompressionLevel` - the entire creation of the actual .xlsx file is re-done (no more dependency on `System.IO.Packaging`) and compression is now a simple bool.
 
 ## 1.0.5 (2014-01-30)
-* SharedStrings are sanitized to avoid XML Errors when using Escape chars (like 0x1B)
+* SharedStrings are sanitized to avoid XML Errors when using Escape chars (like 0x1B).
 
 ## 1.0.4 (2014-01-21)
-* Workbook.Save throws an InvalidOperationException if there are no sheets
+* Workbook.Save throws an InvalidOperationException if there are no sheets.
 
 ## 1.0.3 (2013-08-20)
-* Added support for external hyperlinks
-* Made Workbooks serializable using the .net DataContractSerializer
+* Added support for external hyperlinks.
+* Made Workbooks serializable using the .net DataContractSerializer.
 
 ## 1.0.2 (2013-01-10)
-* Initial Public Release
+* Initial Public Release.
 
 # License
 http://mstum.mit-license.org/

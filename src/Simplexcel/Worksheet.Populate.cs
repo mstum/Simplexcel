@@ -13,10 +13,19 @@ namespace Simplexcel
                 () => new ConcurrentDictionary<Type, Dictionary<int, PopulateCellInfo>>(),
                 System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
-        public static Worksheet FromData<T>(string sheetName, IEnumerable<T> data, bool cacheType = false) where T : class
+        /// <summary>
+        /// Create Worksheet with the provided data.
+        /// 
+        /// Will use the Object Property Names as Column Headers (First Row) and then populate the cells with data.
+        /// You can use <see cref="XlsxColumnAttribute"/> and <see cref="XlsxIgnoreColumnAttribute"/> to control the output.
+        /// </summary>
+        /// <param name="sheetName">The name of the Sheet</param>
+        /// <param name="data">The data, can be empty or null</param>
+        /// <param name="cacheTypeColumns">If true, the Column info for the given type is being cached in memory</param>
+        public static Worksheet FromData<T>(string sheetName, IEnumerable<T> data, bool cacheTypeColumns = false) where T : class
         {
             var sheet = new Worksheet(sheetName);
-            sheet.Populate(data, cacheType);
+            sheet.Populate(data, cacheTypeColumns);
             return sheet;
         }
 
@@ -24,20 +33,14 @@ namespace Simplexcel
         /// Populate Worksheet with the provided data.
         /// 
         /// Will use the Object Property Names as Column Headers (First Row) and then populate the cells with data.
-        /// 
-        /// Caveats:
-        /// * Does not look at inherited members from a Base Class
-        /// * Only looks at strings and value types.
-        /// * No way to specify the order of properties
+        /// You can use <see cref="XlsxColumnAttribute"/> and <see cref="XlsxIgnoreColumnAttribute"/> to control the output.
         /// </summary>
-        /// <param name="data"></param>
+        /// <param name="data">The data, can be empty or null</param>
         /// <param name="cacheTypeColumns">If true, the Column info for the given type is being cached in memory</param>
         public void Populate<T>(IEnumerable<T> data, bool cacheTypeColumns = false) where T : class
         {
-            if (data == null)
-            {
-                throw new ArgumentNullException(nameof(data));
-            }
+            data = data ?? Enumerable.Empty<T>();
+
             var type = typeof(T);
 
             // Key = TempColumnIndex, Value = Attribute
