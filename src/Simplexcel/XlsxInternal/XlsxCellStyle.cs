@@ -22,6 +22,11 @@ namespace Simplexcel.XlsxInternal
 
         internal HorizontalAlign HorizontalAlignment { get; set; }
 
+        /// <summary>
+        /// Compare this <see cref="XlsxCellStyle"/> to another <see cref="XlsxCellStyle"/>
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -30,6 +35,11 @@ namespace Simplexcel.XlsxInternal
             return Equals((XlsxCellStyle)obj);
         }
 
+        /// <summary>
+        /// Compare this <see cref="XlsxCellStyle"/> to another <see cref="XlsxCellStyle"/>
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public bool Equals(XlsxCellStyle other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -56,11 +66,23 @@ namespace Simplexcel.XlsxInternal
             }
         }
 
+        /// <summary>
+        /// Compare a <see cref="XlsxCellStyle"/> to another <see cref="XlsxCellStyle"/>
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
         public static bool operator ==(XlsxCellStyle left, XlsxCellStyle right)
         {
             return Equals(left, right);
         }
 
+        /// <summary>
+        /// Compare a <see cref="XlsxCellStyle"/> to another <see cref="XlsxCellStyle"/>
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
         public static bool operator !=(XlsxCellStyle left, XlsxCellStyle right)
         {
             return !Equals(left, right);

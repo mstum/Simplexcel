@@ -15,17 +15,17 @@ namespace Simplexcel.XlsxInternal
         /// <summary>
         /// All XML Files in this package
         /// </summary>
-        internal IList<XmlFile> XmlFiles { get; private set; }
+        internal IList<XmlFile> XmlFiles { get; }
 
         /// <summary>
         /// Package-level relationships (/_rels/.rels)
         /// </summary>
-        internal IList<Relationship> Relationships { get; private set; }
+        internal IList<Relationship> Relationships { get; }
 
         /// <summary>
         /// Workbook-level relationships (/xl/_rels/workbook.xml.rels)
         /// </summary>
-        internal IList<Relationship> WorkbookRelationships { get; private set; }
+        internal IList<Relationship> WorkbookRelationships { get; }
 
 
         internal XlsxPackage()

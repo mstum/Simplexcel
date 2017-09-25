@@ -44,7 +44,7 @@ namespace Simplexcel.XlsxInternal
                     HandleLargeNumbers(sheet);
                 }
 
-                var styles = GetXlsxStyles(workbook);
+                ExtractWorkbookSpecialXmlParts(workbook, out var styles, out var ignoredErrors);
                 var sharedStrings = new SharedStrings();
 
                 // docProps/core.xml
@@ -68,7 +68,7 @@ namespace Simplexcel.XlsxInternal
                 foreach (var sheet in workbook.Sheets)
                 {
                     i++;
-                    var rel = CreateSheetFile(sheet, i, relationshipCounter, styles, sharedStrings, out XmlFile sheetRels);
+                    var rel = CreateSheetFile(sheet, i, relationshipCounter, styles, ignoredErrors[sheet], sharedStrings, out XmlFile sheetRels);
                     if (sheetRels != null)
                     {
                         package.XmlFiles.Add(sheetRels);
@@ -113,16 +113,39 @@ namespace Simplexcel.XlsxInternal
             }
 
             /// <summary>
-            /// Get all unique Styles throughout the workbook
+            /// Extract certain parts of the workbook that need special handling.
             /// </summary>
-            /// <returns>A dictionary where the style is the </returns>
-            private static IList<XlsxCellStyle> GetXlsxStyles(Workbook workbook)
+            /// <remarks>
+            /// I don't want to loop over cells over and over again, so this is a way to run over all cells once and extract everything needed.
+            /// </remarks>
+            /// <param name="workbook"></param>
+            /// <param name="styles">All unique Styles throughout the workbook</param>
+            /// <param name="ignoredErrors">Any ignored errors. Key is the Worksheet, and the inner dictionary key is the cell range</param>
+            private static void ExtractWorkbookSpecialXmlParts(Workbook workbook, out IList<XlsxCellStyle> styles, out IDictionary<Worksheet, XlsxIgnoredErrorCollection> ignoredErrors)
             {
-                var result = from sheet in workbook.Sheets
-                             from cells in sheet.Cells
-                             select cells.Value.XlsxCellStyle;
+                styles = new List<XlsxCellStyle>();
+                ignoredErrors = new Dictionary<Worksheet, XlsxIgnoredErrorCollection>();
 
-                return result.Distinct().ToList();
+                foreach (var sheet in workbook.Sheets)
+                {
+                    if (!ignoredErrors.ContainsKey(sheet))
+                    {
+                        ignoredErrors[sheet] = new XlsxIgnoredErrorCollection();
+                    }
+                    var sie = ignoredErrors[sheet];
+
+                    foreach (var cpair in sheet.Cells)
+                    {
+                        var cell = cpair.Value;
+
+                        if (!styles.Contains(cell.XlsxCellStyle))
+                        {
+                            styles.Add(cell.XlsxCellStyle);
+                        }
+
+                        sie.AddIgnoredError(cpair.Key, cell.IgnoredErrors);
+                    }
+                }
             }
 
             /// <summary>
@@ -389,6 +412,7 @@ namespace Simplexcel.XlsxInternal
                         {
                             cell.HorizontalAlignment = HorizontalAlign.Right;
                         }
+                        cell.IgnoredErrors.NumberStoredAsText = true;
                     }
                     return;
                 }
@@ -406,7 +430,7 @@ namespace Simplexcel.XlsxInternal
             /// <param name="sharedStrings"></param>
             /// <param name="sheetRels">If this worksheet needs an xl/worksheets/_rels/sheetX.xml.rels file</param>
             /// <returns></returns>
-            private static Relationship CreateSheetFile(Worksheet sheet, int sheetIndex, RelationshipCounter relationshipCounter, IList<XlsxCellStyle> styles, SharedStrings sharedStrings, out XmlFile sheetRels)
+            private static Relationship CreateSheetFile(Worksheet sheet, int sheetIndex, RelationshipCounter relationshipCounter, IList<XlsxCellStyle> styles, XlsxIgnoredErrorCollection ignoredErrors, SharedStrings sharedStrings, out XmlFile sheetRels)
             {
                 var rows = GetXlsxRows(sheet, styles, sharedStrings);
 
@@ -505,6 +529,7 @@ namespace Simplexcel.XlsxInternal
                 doc.Root.Add(pageSetup);
 
                 WritePageBreaks(sheet, doc);
+                WriteIgnoredErrors(ignoredErrors, doc);
 
                 file.Content = doc;
                 var rel = new Relationship(relationshipCounter)
@@ -514,6 +539,30 @@ namespace Simplexcel.XlsxInternal
                 };
 
                 return rel;
+            }
+
+            private static void WriteIgnoredErrors(XlsxIgnoredErrorCollection ignoredErrors, XDocument doc)
+            {
+                if (ignoredErrors.DistinctIgnoredErrors.Count == 0)
+                {
+                    return;
+                }
+
+                var igElem = new XElement(Namespaces.workbook + "ignoredErrors");
+
+                foreach (var ie in ignoredErrors.DistinctIgnoredErrors)
+                {
+                    var elem = new XElement(Namespaces.workbook + "ignoredError");
+                    elem.Add(new XAttribute("sqref", ie.GetSqRef()));
+
+                    if (ie.IgnoredError.NumberStoredAsText)
+                    {
+                        elem.Add(new XAttribute("numberStoredAsText", 1));
+                    }
+                    igElem.Add(elem);
+                }
+
+                doc.Root.Add(igElem);
             }
 
             private static Dictionary<int, XlsxRow> GetXlsxRows(Worksheet sheet, IList<XlsxCellStyle> styles, SharedStrings sharedStrings)

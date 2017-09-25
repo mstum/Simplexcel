@@ -8,7 +8,7 @@ namespace Simplexcel
     /// </summary>
     public sealed class Cell
     {
-        internal XlsxCellStyle XlsxCellStyle { get; private set; }
+        internal XlsxCellStyle XlsxCellStyle { get; }
 
         /// <summary>
         /// Create a new Cell of the given <see cref="CellType"/>.
@@ -33,6 +33,7 @@ namespace Simplexcel
 
             Value = value;
             CellType = type;
+            IgnoredErrors = new IgnoredError();
         }
 
         /// <summary>
@@ -107,12 +108,18 @@ namespace Simplexcel
             set { XlsxCellStyle.Font.TextColor = value; }
         }
 
+        /// <summary>
+        /// The Horizontal Alignment of content within a Cell
+        /// </summary>
         public HorizontalAlign HorizontalAlignment
         {
             get { return XlsxCellStyle.HorizontalAlignment; }
             set { XlsxCellStyle.HorizontalAlignment = value; }
         }
 
+        /// <summary>
+        /// The Vertical Alignment of content within this Cell
+        /// </summary>
         public VerticalAlign VerticalAlignment
         {
             get { return XlsxCellStyle.VerticalAlignment; }
@@ -120,9 +127,14 @@ namespace Simplexcel
         }
 
         /// <summary>
+        /// Any errors that are ignored in this Cell
+        /// </summary>
+        public IgnoredError IgnoredErrors { get; }
+
+        /// <summary>
         /// The Type of the cell.
         /// </summary>
-        public CellType CellType { get; private set; }
+        public CellType CellType { get; }
 
         /// <summary>
         /// The Content of the cell.
@@ -184,6 +196,11 @@ namespace Simplexcel
             return new Cell(CellType.Date, value, BuiltInCellFormat.DateAndTime);
         }
 
+        /// <summary>
+        /// Create a Cell from the given object, trying to determine the best cell type/format.
+        /// </summary>
+        /// <param name="val"></param>
+        /// <returns></returns>
         public static Cell FromObject(object val)
         {
             Cell cell;

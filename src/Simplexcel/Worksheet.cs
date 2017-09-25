@@ -63,7 +63,7 @@ namespace Simplexcel
         /// <summary>
         /// Gets or sets the Name of the Worksheet
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; }
 
         /// <summary>
         /// The Page Orientation and some other related values
