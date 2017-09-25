@@ -19,13 +19,12 @@ namespace Simplexcel.XlsxInternal
             }
 
             var id = ignoredErrors.GetHashCode();
-            var ca = cellAddress.ToString();
 
             foreach (var distinctIgnored in DistinctIgnoredErrors)
             {
                 if (distinctIgnored.IgnoredErrorId == id)
                 {
-                    distinctIgnored.Cells.Add(ca);
+                    distinctIgnored.Cells.Add(cellAddress);
                     return;
                 }
             }
@@ -34,7 +33,7 @@ namespace Simplexcel.XlsxInternal
             {
                 IgnoredError = ignoredErrors
             };
-            newIgnoredError.Cells.Add(ca);
+            newIgnoredError.Cells.Add(cellAddress);
             DistinctIgnoredErrors.Add(newIgnoredError);
         }
     }

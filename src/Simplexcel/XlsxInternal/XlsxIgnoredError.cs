@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Simplexcel.XlsxInternal
 {
     internal sealed class XlsxIgnoredError
     {
         private readonly IgnoredError _ignoredError;
-        internal HashSet<string> Cells { get; }
+        internal HashSet<CellAddress> Cells { get; }
 
         public XlsxIgnoredError()
         {
-            Cells = new HashSet<string>();
+            Cells = new HashSet<CellAddress>();
             _ignoredError = new IgnoredError();
         }
 
@@ -39,7 +40,7 @@ namespace Simplexcel.XlsxInternal
         internal string GetSqRef()
         {
             // TODO: Support Ranges. Ranges are Rectangular, e.g., A1:B5 (TopLeft:BottomRight)
-            return string.Join(" ", Cells);
+            return string.Join(" ", Cells.Select(c => c.ToString()));
         }
     }
 }
