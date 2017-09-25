@@ -1,2 +1,2 @@
-simplexcel_version=2.1.0
-simplexcel_version_suffix=-dev
+project_version=2.1.0
+project_version_suffix=-dev
