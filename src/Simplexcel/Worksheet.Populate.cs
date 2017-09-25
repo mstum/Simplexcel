@@ -44,7 +44,11 @@ namespace Simplexcel
             var cols = cacheType ? TryGetFromCache(type) : null;
             if (cols == null)
             {
-                cols = GetColumsFromType(type, cacheType);
+                cols = GetColumsFromType(type);
+                if (cacheType)
+                {
+                    AddToPopulateCache(type, cols);
+                }
             }
 
             foreach (var pi in cols.Values)
@@ -67,7 +71,7 @@ namespace Simplexcel
             }
         }
 
-        private static Dictionary<int, PopulateCellInfo> GetColumsFromType(Type type, bool cacheType)
+        private static Dictionary<int, PopulateCellInfo> GetColumsFromType(Type type)
         {
             var cols = new Dictionary<int, PopulateCellInfo>();
             var props = type.GetTypeInfo().GetAllProperties()
@@ -89,11 +93,6 @@ namespace Simplexcel
                 pi.ColumnIndex = colInfo?.ColumnIndex != null ? colInfo.ColumnIndex.Value : -1; // -1 will later be reassigned
                 pi.TempColumnIndex = tempCol++;
 
-                if (pi.ColumnIndex > -1 && cols.ContainsKey(pi.ColumnIndex))
-                {
-                    throw new InvalidOperationException($"Type {type.FullName} includes more than one Property with ColumnIndex {pi.ColumnIndex}.");
-                }
-
                 if (pi.ColumnIndex > maxCol)
                 {
                     maxCol = pi.ColumnIndex;
@@ -111,11 +110,6 @@ namespace Simplexcel
                 {
                     pi.ColumnIndex = ++maxCol;
                 }
-            }
-
-            if (cacheType)
-            {
-                AddToPopulateCache(type, cols);
             }
 
             return cols;
