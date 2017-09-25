@@ -1,5 +1,8 @@
 ﻿namespace Simplexcel
 {
+    /// <summary>
+    /// The Horizontal Alignment of content within a Cell
+    /// </summary>
     public enum HorizontalAlign
     {
         /// <summary>

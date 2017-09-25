@@ -1,5 +1,8 @@
 ﻿namespace Simplexcel
 {
+    /// <summary>
+    /// The Vertical Alignment of content within a Cell
+    /// </summary>
     public enum VerticalAlign
     {
         /// <summary>
@@ -29,7 +32,9 @@
         /// 
         /// When text direction is vertical: similar behavior as horizontal justification.
         /// The alignment is justified (flush top and bottom in this case). For each line
-        /// of text, each line of the wrapped text in a cell is aligned to the top and        /// bottom (except the last line). If no single line of text wraps in the cell,        /// then the text is not justified.
+        /// of text, each line of the wrapped text in a cell is aligned to the top and
+        /// bottom (except the last line). If no single line of text wraps in the cell,
+        /// then the text is not justified.
         /// </summary>
         Justify,
 

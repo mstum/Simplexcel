@@ -128,13 +128,15 @@ namespace Simplexcel
                 throw new InvalidOperationException("You have already frozen either the Top Row or Left Column.");
             }
 
-            var sheetView = new SheetView();
-            sheetView.Pane = new Pane
+            var sheetView = new SheetView
             {
-                ActivePane = Panes.BottomLeft,
-                YSplit = 1,
-                TopLeftCell = "A2",
-                State = PaneState.Frozen
+                Pane = new Pane
+                {
+                    ActivePane = Panes.BottomLeft,
+                    YSplit = 1,
+                    TopLeftCell = "A2",
+                    State = PaneState.Frozen
+                }
             };
             sheetView.AddSelection(new Selection { ActivePane = Panes.BottomLeft });
             AddSheetView(sheetView);
@@ -151,13 +153,15 @@ namespace Simplexcel
                 throw new InvalidOperationException("You have already frozen either the Top Row or Left Column.");
             }
 
-            var sheetView = new SheetView();
-            sheetView.Pane = new Pane
+            var sheetView = new SheetView
             {
-                ActivePane = Panes.TopRight,
-                XSplit = 1,
-                TopLeftCell = "B1",
-                State = PaneState.Frozen
+                Pane = new Pane
+                {
+                    ActivePane = Panes.TopRight,
+                    XSplit = 1,
+                    TopLeftCell = "B1",
+                    State = PaneState.Frozen
+                }
             };
             sheetView.AddSelection(new Selection { ActivePane = Panes.TopRight });
             AddSheetView(sheetView);
@@ -190,8 +194,7 @@ namespace Simplexcel
         /// <summary>
         /// Insert a manual page break after the row specified by the zero-based index (e.g., 0 for the first row)
         /// </summary>
-        /// <param name="sheet"></param>
-        /// <param name="cellAddress"></param>
+        /// <param name="row">The zero-based row index (e.g., 0 for the first row)</param>
         public void InsertManualPageBreakAfterRow(int row)
         {
             if (_rowBreaks == null)
@@ -209,7 +212,7 @@ namespace Simplexcel
         /// <summary>
         /// Insert a manual page break to the left of the column specified by the zero-based index (e.g., 0 for column A)
         /// </summary>
-        /// <param name="col"></param>
+        /// <param name="col">The zero-based index of the column (e.g., 0 for column A)</param>
         public void InsertManualPageBreakAfterColumn(int col)
         {
             if (_columnBreaks == null)

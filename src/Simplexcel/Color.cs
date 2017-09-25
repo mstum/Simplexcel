@@ -1,8 +1,27 @@
 namespace Simplexcel {
+    /// <summary>
+    /// Specify a Color, as System.Drawing.Color isn't used.
+    /// </summary>
     public struct Color {
+
+        /// <summary>
+        /// The Red component of the Color
+        /// </summary>
         public readonly byte R;
+
+        /// <summary>
+        /// The Green component of the Color
+        /// </summary>
         public readonly byte G;
+
+        /// <summary>
+        /// The Blue component of the Color
+        /// </summary>
         public readonly byte B;
+
+        /// <summary>
+        /// The Alpha component of the Color (0 = Fully Transparent)
+        /// </summary>
         public readonly byte A;
 
         private Color(byte alpha, byte red, byte green, byte blue) {
@@ -12,11 +31,23 @@ namespace Simplexcel {
             B = blue;
         }
 
+        /// <summary>
+        /// Create a <see cref="Color"/> from the given values
+        /// </summary>
+        /// <param name="alpha"></param>
+        /// <param name="red"></param>
+        /// <param name="green"></param>
+        /// <param name="blue"></param>
+        /// <returns></returns>
         public static Color FromArgb(byte alpha, byte red, byte green, byte blue)
         {
             return new Color(alpha, red, green, blue);
         }
 
+        /// <summary>
+        /// Output the Color as a Hex String in ARGB order, e.g., "FFFF0000"
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return $"{A:X2}{R:X2}{G:X2}{B:X2}";

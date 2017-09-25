@@ -26,8 +26,10 @@ namespace Simplexcel
         /// <param name="format"> </param>
         public Cell(CellType type, object value, string format)
         {
-            XlsxCellStyle = new XlsxCellStyle();
-            XlsxCellStyle.Format = format;
+            XlsxCellStyle = new XlsxCellStyle
+            {
+                Format = format
+            };
 
             Value = value;
             CellType = type;
