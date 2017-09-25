@@ -372,7 +372,9 @@ namespace Simplexcel.XlsxInternal
                     var cell = cellPair.Value;
                     var numVal = (Decimal)cell.Value;
                     if (!Cell.IsLargeNumber(numVal)) { continue; }
+
                     cell.XlsxCellStyle.Format = BuiltInCellFormat.General;
+                    // TODO: Align Right
                 }
             }
 
@@ -492,6 +494,10 @@ namespace Simplexcel.XlsxInternal
             private static Dictionary<int, XlsxRow> GetXlsxRows(Worksheet sheet, IList<XlsxCellStyle> styles, SharedStrings sharedStrings)
             {
                 var rows = new Dictionary<int, XlsxRow>();
+                if(!Enum.IsDefined(typeof(LargeNumberHandlingMode), sheet.LargeNumberHandlingMode))
+                {
+                    throw new InvalidOperationException($"Invalid value for {nameof(Worksheet.LargeNumberHandlingMode)} in sheet {sheet.Name}: {sheet.LargeNumberHandlingMode}");
+                }
 
                 // The order matters!
                 foreach (var cell in sheet.Cells.OrderBy(c => c.Key.Row).ThenBy(c => c.Key.Column))
@@ -519,17 +525,18 @@ namespace Simplexcel.XlsxInternal
                             // Fun: Excel can't handle large numbers as numbers
                             // https://support.microsoft.com/en-us/help/2643223/long-numbers-are-displayed-incorrectly-in-excel
                             var numVal = (Decimal)cell.Value.Value;
-                            if (Cell.IsLargeNumber(numVal))
+                            if (sheet.LargeNumberHandlingMode != LargeNumberHandlingMode.None && Cell.IsLargeNumber(numVal))
                             {
-                                if (sheet.LargeNumberHandlingMode == LargeNumberHandlingMode.StoreAsText)
+                                switch (sheet.LargeNumberHandlingMode)
                                 {
-                                    xc.CellType = XlsxCellTypes.SharedString;
-                                    xc.Value = sharedStrings.GetStringIndex(numVal.ToString(System.Globalization.CultureInfo.InvariantCulture));
-                                }
-                                else
-                                {
-                                    xc.CellType = XlsxCellTypes.Number;
-                                    xc.Value = ((Decimal)cell.Value.Value).ToString("E28", System.Globalization.CultureInfo.InvariantCulture);
+                                    case LargeNumberHandlingMode.StoreAsText:
+                                        {
+                                            xc.CellType = XlsxCellTypes.SharedString;
+                                            xc.Value = sharedStrings.GetStringIndex(numVal.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                                            break;
+                                        }
+                                    default:
+                                        throw new InvalidOperationException("Unhandled LargeNumberHandlingMode: " + sheet.LargeNumberHandlingMode);
                                 }
                             }
                             else

@@ -12,10 +12,13 @@
         /// <summary>
         /// Force the number to be stored as Text (Default)
         /// </summary>
-        StoreAsText,
+        StoreAsText = 0,
+
         /// <summary>
-        /// Keep the number as a number, but force scientific notation
+        /// Do not do anything different, and store numbers as-is.
+        /// This may cause Excel to truncate the number.
+        /// This was the behavior before Simplexcel Version 2.1.0.
         /// </summary>
-        UseScientificNotation
+        None
     }
 }

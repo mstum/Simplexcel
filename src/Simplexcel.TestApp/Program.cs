@@ -86,7 +86,7 @@ namespace Simplexcel.TestApp
             sheet.Cells["D26"] = Cell.LargeNumberNegativeLimit;
             sheet.Cells["D27"] = Cell.LargeNumberNegativeLimit + 1;
             sheet.Cells["D28"] = Cell.LargeNumberNegativeLimit - 1;
-            sheet.LargeNumberHandlingMode = LargeNumberHandlingMode.UseScientificNotation;
+            sheet.LargeNumberHandlingMode = LargeNumberHandlingMode.StoreAsText;
 
             wb.Add(sheet);
 
