@@ -169,12 +169,15 @@ namespace Simplexcel.TestApp
             [XlsxColumn("Unit Price")]
             public decimal Price { get; set; }
 
+            [XlsxColumn(null)]
             public decimal Quantity { get; set; }
         }
 
         private class PopulateTestData : PopulateTestDataBase
         {            
             public string Name { get; set; }
+
+            [XlsxColumn("")]
             public long Value { get; set; }
 
             [XlsxColumn("Total")]
