@@ -230,7 +230,8 @@ public abstract class ExcelResultBase : ActionResult
 * `Worksheet.Populate`/`Worksheet.FromData` accept a new argument, `cacheTypeColumns` which defaults to false. If set to true, then Simplexcel will cache the Reflection-based lookup of object properties. This is useful for if you have a few types that you create sheets from a lot.
 * You can add `[XlsxColumn]` to a Property so that `Worksheet.Populate`/`Worksheet.FromData` can set the column name and a given column order. *Caveat:* If you set `ColumnIndex` on some, but not all Properties, the properties without a `ColumnIndex` will be on the right of the last assigned column, even if that means gaps. I recommend that you either set `ColumnIndex` on all properties or none.
 * You can add `[XlsxIgnoreColumn]` to a Property so that `Worksheet.Populate`/`Worksheet.FromData` ignores it.
-* Added `Cell.HorizontalAlignment` and `Cell.VerticalAlignment` to allow setting the alignment of a cell (left/center/right/justify, top/middle/bottom/justify)
+* Added `Cell.HorizontalAlignment` and `Cell.VerticalAlignment` to allow setting the alignment of a cell (left/center/right/justify, top/middle/bottom/justify).
+* Added XmlDoc to Nuget package, so you should get Intellisense with proper comments now.
 
 ## 2.0.5 (2017-09-23)
 * Add support for manual page breaks. Call `Worksheet.InsertManualPageBreakAfterRow` or `Worksheet.InsertManualPageBreakAfterColumn` with either the zero-based index of the row/column after which to create the break, or with a cell address (e.g., B5) to create the break below or to the left of that cell.
