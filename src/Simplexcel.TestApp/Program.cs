@@ -151,7 +151,8 @@ namespace Simplexcel.TestApp
                     Name = "Item Number " + i,
                     Value = int.MaxValue - i,
                     Price = r.Next(800, 9400) * 0.52m,
-                    Quantity = r.Next(4, 75) * 0.5m
+                    Quantity = r.Next(4, 75) * 0.5m,
+                    IgnoreMe = Guid.NewGuid().ToString()
                 };
             }
         }
@@ -161,10 +162,18 @@ namespace Simplexcel.TestApp
             public int Id { get; set; }
             public string Name { get; set; }
             public long Value { get; set; }
+
+            [XlsxColumn(Name = "Unit Price")]
             public decimal Price { get; set; }
+
             public decimal Quantity { get; set; }
+
+            [XlsxColumn(Name = "Total")]
             public decimal TotalPrice { get { return Price * Quantity; } }
             public DateTime CreatedUtc { get; set; }
+
+            [XlsxIgnoreColumn]
+            public string IgnoreMe { get; set; }
         }
     }
 }
