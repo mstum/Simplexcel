@@ -5,6 +5,9 @@ using System.Reflection;
 
 namespace Simplexcel
 {
+    /// <summary>
+    /// Some utility methods that don't need to be in their respective classes
+    /// </summary>
     public static class SimplexcelExtensionMethods
     {
         /// <summary>

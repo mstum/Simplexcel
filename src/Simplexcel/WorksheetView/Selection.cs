@@ -1,5 +1,8 @@
 ﻿namespace Simplexcel
 {
+    /// <summary>
+    /// Worksheet view selection.
+    /// </summary>
     public sealed class Selection
     {
 		/// <summary>
@@ -12,6 +15,12 @@
 		/// </summary>
 		public string ActiveCell { get; set; }
 
+        // activeCellId
+        // sqref
+
+        /// <summary>
+        /// Create a new selection
+        /// </summary>
         public Selection()
         {
             ActivePane = Panes.TopLeft;
