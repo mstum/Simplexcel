@@ -90,8 +90,13 @@ namespace Simplexcel.TestApp
 
             wb.Add(sheet);
 
+            // Prime the Cache...
             var populatedSheet = new Worksheet("Populate");
-            populatedSheet.Populate(EnumeratePopulateTestData());
+            populatedSheet.Populate(EnumeratePopulateTestData(), cacheType: true);
+
+            // ...and use the cache
+            populatedSheet = new Worksheet("Populate");
+            populatedSheet.Populate(EnumeratePopulateTestData(), cacheType: true);
             wb.Add(populatedSheet);
 
             var frozenTopRowSheet = new Worksheet("Frozen Top Row");

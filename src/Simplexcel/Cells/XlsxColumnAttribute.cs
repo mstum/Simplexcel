@@ -22,7 +22,7 @@ namespace Simplexcel
     /// This attribute causes <see cref="Worksheet.FromData"/> to ignore the property completely
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    public class XlsxIgnoreColumnAttribute : Attribute
+    public sealed class XlsxIgnoreColumnAttribute : Attribute
     {
     }
 }

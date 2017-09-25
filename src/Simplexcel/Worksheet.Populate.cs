@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -7,10 +8,12 @@ namespace Simplexcel
 {
     public sealed partial class Worksheet
     {
-        public static Worksheet FromData<T>(string sheetName, IEnumerable<T> data) where T : class
+        private static ConcurrentDictionary<Type, Dictionary<int, PopulateCellInfo>> PopulateCache;
+
+        public static Worksheet FromData<T>(string sheetName, IEnumerable<T> data, bool cacheType = false) where T : class
         {
             var sheet = new Worksheet(sheetName);
-            sheet.Populate(data);
+            sheet.Populate(data, cacheType);
             return sheet;
         }
 
@@ -25,17 +28,45 @@ namespace Simplexcel
         /// * No way to specify the order of properties
         /// </summary>
         /// <param name="data"></param>
-        public void Populate<T>(IEnumerable<T> data) where T : class
+        /// <param name="cacheType">If true, the Column info is being cached in memory</param>
+        public void Populate<T>(IEnumerable<T> data, bool cacheType = false) where T : class
         {
             if (data == null)
             {
                 throw new ArgumentNullException(nameof(data));
             }
-
-            // Key = ColumnIndex, Value = Attribute
-            var cols = new Dictionary<int, PopulateCellInfo>();
-
             var type = typeof(T);
+
+            // Key = TempColumnIndex, Value = Attribute
+            var cols = cacheType ? TryGetFromCache(type) : null;
+            if (cols == null)
+            {
+                cols = GetColumsFromType(type, cacheType);
+            }
+
+            foreach (var pi in cols.Values)
+            {
+                Cells[0, pi.ColumnIndex] = pi.Name;
+                Cells[0, pi.ColumnIndex].Bold = true;
+            }
+
+            var row = 0;
+            foreach (var item in data)
+            {
+                row++;
+
+                foreach (var pi in cols.Values)
+                {
+                    object val = pi.Property.GetValue(item);
+                    var cell = Cell.FromObject(val);
+                    Cells[row, pi.ColumnIndex] = cell;
+                }
+            }
+        }
+
+        private static Dictionary<int, PopulateCellInfo> GetColumsFromType(Type type, bool cacheType)
+        {
+            var cols = new Dictionary<int, PopulateCellInfo>();
             var props = type.GetTypeInfo().GetAllProperties()
                 .Where(p => p.GetIndexParameters().Length == 0)
                 .ToList();
@@ -44,7 +75,7 @@ namespace Simplexcel
             int maxCol = -1; // Largest Column that has XlsxColumnAttribute.ColumnIndex specified
             foreach (var prop in props)
             {
-                if(prop.HasXlsxIgnoreAttribute())
+                if (prop.HasXlsxIgnoreAttribute())
                 {
                     continue;
                 }
@@ -55,7 +86,7 @@ namespace Simplexcel
                 pi.ColumnIndex = colInfo?.ColumnIndex != null ? colInfo.ColumnIndex.Value : -1; // -1 will later be reassigned
                 pi.TempColumnIndex = tempCol++;
 
-                if(pi.ColumnIndex > -1 && cols.ContainsKey(pi.ColumnIndex))
+                if (pi.ColumnIndex > -1 && cols.ContainsKey(pi.ColumnIndex))
                 {
                     throw new InvalidOperationException($"Type {type.FullName} includes more than one Property with ColumnIndex {pi.ColumnIndex}.");
                 }
@@ -70,33 +101,46 @@ namespace Simplexcel
             }
 
             // Slot any Columns without an order after maxCol
-            for(int i = 0; i < tempCol; i++)
+            for (int i = 0; i < tempCol; i++)
             {
                 var pi = cols[i];
-                if(pi.ColumnIndex == -1)
+                if (pi.ColumnIndex == -1)
                 {
                     pi.ColumnIndex = ++maxCol;
                 }
             }
 
-            foreach (var pi in cols.Values)
+            if (cacheType)
             {
-                Cells[0, pi.ColumnIndex] = pi.Name;
-                Cells[0, pi.ColumnIndex].Bold = true;
+                AddToPopulateCache(type, cols);
             }
 
-            var row = 0;
-            foreach (var item in data)
+            return cols;
+        }
+
+        private static void AddToPopulateCache(Type type, Dictionary<int, PopulateCellInfo> cols)
+        {
+            if (PopulateCache == null)
             {
-                row++;
-                
-                foreach (var pi in cols.Values)
-                {
-                    object val = pi.Property.GetValue(item);
-                    var cell = Cell.FromObject(val);
-                    Cells[row, pi.ColumnIndex] = cell;
-                }
+                PopulateCache = new ConcurrentDictionary<Type, Dictionary<int, PopulateCellInfo>>();
             }
+
+            PopulateCache[type] = cols;
+        }
+
+        private static Dictionary<int, PopulateCellInfo> TryGetFromCache(Type type)
+        {
+            if (PopulateCache == null)
+            {
+                return null;
+            }
+
+            if (PopulateCache.TryGetValue(type, out var cached))
+            {
+                return cached;
+            }
+
+            return null;
         }
 
         private class PopulateCellInfo
