@@ -427,6 +427,7 @@ namespace Simplexcel.XlsxInternal
             /// <param name="sheetIndex"></param>
             /// <param name="relationshipCounter"></param>
             /// <param name="styles"></param>
+            /// <param name="ignoredErrors"></param>
             /// <param name="sharedStrings"></param>
             /// <param name="sheetRels">If this worksheet needs an xl/worksheets/_rels/sheetX.xml.rels file</param>
             /// <returns></returns>
