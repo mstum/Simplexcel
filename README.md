@@ -16,7 +16,7 @@ Instead, it is meant as a way to handle common tasks that can't be handled by ot
 * Supports .net Core
 
 # Usage
-See [USAGE.md](https://github.com/mstum/Simplexcel/blob/master/README.md) for instructions how to use.
+See [USAGE.md](https://github.com/mstum/Simplexcel/blob/master/USAGE.md) for instructions how to use.
 
 # Changelog
 ## 2.1.0 (2017-09-25)
