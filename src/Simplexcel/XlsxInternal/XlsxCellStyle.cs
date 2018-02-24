@@ -10,6 +10,7 @@ namespace Simplexcel.XlsxInternal
         internal XlsxCellStyle()
         {
             Font = new XlsxFont();
+            Fill = new PatternFill();
         }
 
         internal XlsxFont Font { get; set; }
@@ -21,6 +22,8 @@ namespace Simplexcel.XlsxInternal
         internal VerticalAlign VerticalAlignment { get; set; }
 
         internal HorizontalAlign HorizontalAlignment { get; set; }
+
+        internal PatternFill Fill { get; set; }
 
         /// <summary>
         /// Compare this <see cref="XlsxCellStyle"/> to another <see cref="XlsxCellStyle"/>
@@ -50,6 +53,7 @@ namespace Simplexcel.XlsxInternal
                 && other.Format.Equals(Format)
                 && Equals(other.VerticalAlignment, VerticalAlignment)
                 && Equals(other.HorizontalAlignment, HorizontalAlignment)
+                && Equals(other.Fill, Fill)
                 ;
         }
 
@@ -62,6 +66,7 @@ namespace Simplexcel.XlsxInternal
                 result = (result * 397) ^ Format.GetHashCode();
                 result = (result * 397) ^ VerticalAlignment.GetHashCode();
                 result = (result * 397) ^ HorizontalAlignment.GetHashCode();
+                result = (result * 397) ^ Fill.GetHashCode();
                 return result;
             }
         }

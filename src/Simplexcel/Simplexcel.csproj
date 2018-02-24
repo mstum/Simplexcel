@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard13;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard13;netstandard2.0;net45</TargetFrameworks>
     <Version>2.0.3</Version>
     <Product>Simplexcel</Product>
     <Authors>Michael Stum &lt;opensource@stum.de&gt;</Authors>

@@ -88,6 +88,26 @@ namespace Simplexcel.TestApp
             sheet.Cells["D28"] = Cell.LargeNumberNegativeLimit - 1;
             sheet.LargeNumberHandlingMode = LargeNumberHandlingMode.StoreAsText;
 
+            sheet.Cells["C5"] = "ThinDiagonalCrosshatch";
+            sheet.Cells["C5"].Fill = new PatternFill { PatternType = PatternType.ThinDiagonalCrosshatch, PatternColor = Color.Yellow, BackgroundColor = Color.Violet };
+            sheet.Cells["C5"].TextColor = Color.Green;
+
+            sheet.Cells["C6"] = "ThickDiagonalCrosshatch";
+            sheet.Cells["C6"].Fill = new PatternFill { PatternType = PatternType.ThickDiagonalCrosshatch, PatternColor = Color.Violet };
+            sheet.Cells["C6"].TextColor = Color.Green;
+
+            sheet.Cells["C7"] = "DiagonalCrosshatch";
+            sheet.Cells["C7"].Fill = new PatternFill { PatternType = PatternType.DiagonalCrosshatch, BackgroundColor = Color.Violet };
+            sheet.Cells["C7"].TextColor = Color.Green;
+
+            sheet.Cells["C8"] = "FillSolid";
+            sheet.Cells["C8"].Fill = new PatternFill { PatternType = PatternType.Solid, PatternColor = Color.Yellow, BackgroundColor = Color.Violet };
+            sheet.Cells["C8"].TextColor = Color.Green;
+
+            sheet.Cells["C9"] = "SetFillBgColor";
+            sheet.Cells["C9"].Fill.BackgroundColor = Color.Navy;
+            sheet.Cells["C9"].TextColor = Color.Green;
+
             wb.Add(sheet);
 
             // Prime the Cache...

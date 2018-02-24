@@ -1,7 +1,3 @@
-# 2.1.1 (In Development)
-* Add `IgnoredErrors` to a `Cell`, to disable Excel warnings (like "Number stored as text").
-* If `LargeNumberHandlingMode.StoreAsText` is set on a sheet, the "Number stored as Text" warning is automatically disabled for that cell.
-
 # Notes
 *(This is my scratchpad, not all features here might actually make it)*
 ## Chart support

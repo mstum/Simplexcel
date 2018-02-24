@@ -109,6 +109,15 @@ namespace Simplexcel
         }
 
         /// <summary>
+        /// The interior/fill color.
+        /// </summary>
+        public PatternFill Fill
+        {
+            get { return XlsxCellStyle.Fill; }
+            set { XlsxCellStyle.Fill = value; }
+        }
+
+        /// <summary>
         /// The Horizontal Alignment of content within a Cell
         /// </summary>
         public HorizontalAlign HorizontalAlignment

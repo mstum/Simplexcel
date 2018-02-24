@@ -80,5 +80,19 @@ namespace Simplexcel
                 }
             }
         }
+
+        internal static int GetCollectionHashCode<T>(this IEnumerable<T> input)
+        {
+            var hashCode = 0;
+            if (input != null)
+            {
+                foreach (var item in input)
+                {
+                    var itemHashCode = item == null ? 0 : item.GetHashCode();
+                    hashCode = (hashCode * 397) ^ itemHashCode;
+                }
+            }
+            return hashCode;
+        }
     }
 }

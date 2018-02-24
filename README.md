@@ -1,5 +1,5 @@
 # Simplexcel
-This is a simple .xlsx generator library for .net 4.5 or .NET Standard 1.3 (or higher).  
+This is a simple .xlsx generator library for .net 4.5, .NET Standard 1.3 (or higher), and .NET Standard 2.0.  
   
 It does not aim to implement the entirety of the Office Open XML Workbook format and all the small and big features Excel offers.  
 Instead, it is meant as a way to handle common tasks that can't be handled by other workarounds (e.g., CSV Files or HTML Tables) and is fully supported under ASP.net (unlike, say, COM Interop which Microsoft explicitly doesn't support on a server).
@@ -19,6 +19,12 @@ Instead, it is meant as a way to handle common tasks that can't be handled by ot
 See [USAGE.md](https://github.com/mstum/Simplexcel/blob/master/USAGE.md) for instructions how to use.
 
 # Changelog
+## 2.2.0 (2018-02-24)
+* Add `IgnoredErrors` to a `Cell`, to disable Excel warnings (like "Number stored as text").
+* If `LargeNumberHandlingMode.StoreAsText` is set on a sheet, the "Number stored as Text" warning is automatically disabled for that cell.
+* Add `Cell.Fill` property, which allows setting the Fill of the cell, including the background color, pattern type (diagonal, crosshatch, grid, etc.) and pattern color
+* Add `netstandard2.0` version, on top of the existing `netstandard1.3` and `net45` versions.
+
 ## 2.1.0 (2017-09-25)
 * **Functional Change:** Numbers with more than 11 digits are forced as Text by Default, because [of a limitation in Excel](https://support.microsoft.com/en-us/help/2643223/long-numbers-are-displayed-incorrectly-in-excel). To restore the previous functionality, you can set `Worksheet.LargeNumberHandlingMode` to `LargeNumberHandlingMode.None`. You can also use `Cell.IsLargeNumber` to check if a given number would be affected by this.
 * **Functional Change:** `Worksheet.Populate`/`Worksheet.FromData` now also reads properties from base classes.

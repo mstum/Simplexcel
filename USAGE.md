@@ -197,3 +197,25 @@ public abstract class ExcelResultBase : ActionResult
     }
 }
 ```
+
+## Fills (since 2.2.0)
+You can set the Fill of a cell, for example:
+
+```cs
+// Specify all parameters of a PatternFill
+sheet.Cells["C5"].Fill = new PatternFill { PatternType = PatternType.ThinDiagonalCrosshatch, BackgroundColor = Color.Yellow, PatternColor = Color.Violet };
+
+// Setting only a background color will set the PatternColor to be automatically chosen by Excel
+sheet.Cells["C7"].Fill = new PatternFill { PatternType = PatternType.DiagonalCrosshatch, BackgroundColor = Color.Violet };
+
+// Only set the background color. This automatically sets the PatternType to Solid the first time.
+sheet.Cells["C9"].Fill.BackgroundColor = Color.Navy;
+```
+
+The `PatternType` follows the naming convention in Excel:
+
+![Pattern Styles](/doc/patternstyles.png?raw=true "Pattern Styles")
+
+* Solid, Gray750, Gray500, Gray250, Gray125, Gray0625 (That's 75%, 50%, 25%, 12.5% and 6.25% Gray)
+* HorizontalStripe, VerticalStripe, ReverseDiagonalStripe, DiagonalStripe, DiagonalCrosshatch, ThickDiagonalCrosshatch
+* ThinHorizontalStripe, ThinVerticalStripe, ThinReverseDiagonalStripe, ThinDiagonalStripe, ThinHorizontalCrosshatch, ThinDiagonalCrosshatch
