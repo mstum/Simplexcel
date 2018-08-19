@@ -1,0 +1,33 @@
+version: '2.2.0.{build}'
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+  assembly_version: '{version}'
+  file_version: '{version}'
+  informational_version: '{version}'
+configuration:
+- Release
+image:
+- Visual Studio 2017
+platform: Any CPU
+init:
+- ps: $Env:LABEL = $Env:APPVEYOR_BUILD_NUMBER.PadLeft(5, "0")
+environment:
+  PATH: $(PATH);$(PROGRAMFILES)\dotnet\
+before_build:
+  - cmd: dotnet --version
+build_script:
+- appveyor-retry dotnet restore -v Minimal
+- dotnet pack src --configuration %CONFIGURATION% -o ..\..\nuget
+artifacts:
+- path: nuget\*.nupkg
+cache:
+- '%USERPROFILE%\.nuget\packages'
