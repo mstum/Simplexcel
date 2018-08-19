@@ -2,12 +2,6 @@ version: '2.2.0.{build}'
 only_commits:
   files:
     - src\simplexcel\*
-assembly_info:
-  patch: true
-  file: '**\AssemblyInfo.*'
-  assembly_version: '{version}'
-  assembly_file_version: '{version}'
-  assembly_informational_version: '{version}'
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
@@ -29,8 +23,8 @@ install:
   - cmd: dotnet --version
   - cmd: rd /S /Q src\Simplexcel.MvcTestApp
 build_script:
-- appveyor-retry dotnet restore -v Minimal src\Simplexcel
-- appveyor-retry dotnet restore -v Minimal src\Simplexcel.Tests
-- dotnet pack src\simplexcel --configuration %CONFIGURATION% -o ..\..\nuget
+- appveyor-retry dotnet restore -v Minimal src
+- dotnet test src
+- dotnet pack src --configuration %CONFIGURATION% -o ..\..\nuget
 artifacts:
 - path: nuget\*.nupkg
