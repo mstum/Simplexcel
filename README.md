@@ -1,7 +1,10 @@
 # Simplexcel
-This is a simple .xlsx generator library for .net 4.5, .NET Standard 1.3 (or higher), and .NET Standard 2.0.  
-  
-It does not aim to implement the entirety of the Office Open XML Workbook format and all the small and big features Excel offers.  
+
+[![Build status](https://ci.appveyor.com/api/projects/status/813rp00484jxyrai?svg=true)](https://ci.appveyor.com/project/mstum/simplexcel)
+
+This is a simple .xlsx generator library for .net 4.5, .NET Standard 1.3 (or higher), and .NET Standard 2.0.
+
+It does not aim to implement the entirety of the Office Open XML Workbook format and all the small and big features Excel offers.
 Instead, it is meant as a way to handle common tasks that can't be handled by other workarounds (e.g., CSV Files or HTML Tables) and is fully supported under ASP.net (unlike, say, COM Interop which Microsoft explicitly doesn't support on a server).
 
 # Features
@@ -76,8 +79,8 @@ See [USAGE.md](https://github.com/mstum/Simplexcel/blob/master/USAGE.md) for ins
 http://mstum.mit-license.org/
 
 The MIT License (MIT)
- 
-Copyright (c) 2013-2017 Michael Stum, http://www.Stum.de <opensource@stum.de>  
+
+Copyright (c) 2013-2017 Michael Stum, http://www.Stum.de <opensource@stum.de>
 Contains contributions by [@mguinness](https://github.com/mguinness)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
