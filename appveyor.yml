@@ -2,6 +2,7 @@ version: '2.2.0.{build}'
 only_commits:
   files:
     - src\simplexcel\*
+    - appveyor.yml
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
@@ -21,7 +22,10 @@ environment:
   PATH: $(PATH);$(PROGRAMFILES)\dotnet\
 install:
   - cmd: dotnet --version
+  - cmd: dotnet sln remove src\Simplexcel.MvcTestApp\Simplexcel.MvcTestApp.csproj src\Simplexcel.sln
+  - cmd: dotnet sln remove src\Simplexcel.TestApp\Simplexcel.TestApp.csproj src\Simplexcel.sln
   - cmd: rd /S /Q src\Simplexcel.MvcTestApp
+  - cmd: rd /S /Q src\Simplexcel.TestApp
 build_script:
 - appveyor-retry dotnet restore -v Minimal src
 - dotnet test src
