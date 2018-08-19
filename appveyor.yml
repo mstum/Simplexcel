@@ -22,14 +22,13 @@ environment:
   PATH: $(PATH);$(PROGRAMFILES)\dotnet\
 install:
   - cmd: dotnet --version
+- cmd: dotnet sln src\Simplexcel.sln remove src\Simplexcel.MvcTestApp\Simplexcel.MvcTestApp.csproj
+  - cmd: dotnet sln src\Simplexcel.sln remove src\Simplexcel.TestApp\Simplexcel.TestApp.csproj
   - cmd: rd /S /Q src\Simplexcel.MvcTestApp
   - cmd: rd /S /Q src\Simplexcel.TestApp
-before_build:
-  - cmd: dotnet sln src\Simplexcel.sln remove src\Simplexcel.MvcTestApp\Simplexcel.MvcTestApp.csproj
-  - cmd: dotnet sln src\Simplexcel.sln remove src\Simplexcel.TestApp\Simplexcel.TestApp.csproj
 build_script:
 - appveyor-retry dotnet restore -v Minimal src
-- dotnet test src
+- dotnet test src\Simplexcel.Tests
 - dotnet pack src --configuration %CONFIGURATION% -o ..\..\nuget
 artifacts:
 - path: nuget\*.nupkg
