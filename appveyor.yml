@@ -27,7 +27,6 @@ before_build:
 build_script:
 - appveyor-retry dotnet restore -v Minimal src\Simplexcel
 - appveyor-retry dotnet restore -v Minimal src\Simplexcel.Tests
-- dotnet test src\Simplexcel.Tests
 - dotnet pack src\simplexcel --configuration %CONFIGURATION% -o ..\..\nuget
 artifacts:
 - path: nuget\*.nupkg
