@@ -1,0 +1,12 @@
+dist: trusty
+sudo: false
+language: csharp
+dotnet: 2.1.302
+mono: none
+env:
+ - CONFIGURATION=Release
+script:
+ - dotnet restore -v Minimal src/Simplexcel
+ - dotnet restore -v Minimal src/Simplexcel.Tests
+ - dotnet test src/Simplexcel.Tests
+ - dotnet pack src/Simplexcel --configuration $CONFIGURATION -o ..\..\nuget
