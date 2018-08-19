@@ -25,8 +25,8 @@ install:
   - cmd: rd /S /Q src\Simplexcel.MvcTestApp
   - cmd: rd /S /Q src\Simplexcel.TestApp
 before_build:
-  - cmd: dotnet sln remove .\src\Simplexcel.MvcTestApp\Simplexcel.MvcTestApp.csproj .\src\Simplexcel.sln
-  - cmd: dotnet sln remove .\src\Simplexcel.TestApp\Simplexcel.TestApp.csproj .\src\Simplexcel.sln
+  - cmd: dotnet sln src\Simplexcel.sln remove src\Simplexcel.MvcTestApp\Simplexcel.MvcTestApp.csproj
+  - cmd: dotnet sln src\Simplexcel.sln remove src\Simplexcel.TestApp\Simplexcel.TestApp.csproj
 build_script:
 - appveyor-retry dotnet restore -v Minimal src
 - dotnet test src
