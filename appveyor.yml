@@ -25,7 +25,8 @@ environment:
 before_build:
   - cmd: dotnet --version
 build_script:
-- appveyor-retry dotnet restore -v Minimal src
+- appveyor-retry dotnet restore -v Minimal src\Simplexcel
+- appveyor-retry dotnet restore -v Minimal src\Simplexcel.Tests
 - dotnet pack src --configuration %CONFIGURATION% -o ..\..\nuget
 artifacts:
 - path: nuget\*.nupkg
