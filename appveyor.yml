@@ -22,7 +22,7 @@ environment:
   PATH: $(PATH);$(PROGRAMFILES)\dotnet\
 install:
   - cmd: dotnet --version
-- cmd: dotnet sln src\Simplexcel.sln remove src\Simplexcel.MvcTestApp\Simplexcel.MvcTestApp.csproj
+  - cmd: dotnet sln src\Simplexcel.sln remove src\Simplexcel.MvcTestApp\Simplexcel.MvcTestApp.csproj
   - cmd: dotnet sln src\Simplexcel.sln remove src\Simplexcel.TestApp\Simplexcel.TestApp.csproj
   - cmd: rd /S /Q src\Simplexcel.MvcTestApp
   - cmd: rd /S /Q src\Simplexcel.TestApp
