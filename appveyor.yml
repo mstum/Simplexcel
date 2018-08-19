@@ -25,7 +25,7 @@ environment:
 before_build:
   - cmd: dotnet --version
 build_script:
-- appveyor-retry dotnet restore -v Minimal
+- appveyor-retry dotnet restore -v Minimal src
 - dotnet pack src --configuration %CONFIGURATION% -o ..\..\nuget
 artifacts:
 - path: nuget\*.nupkg
