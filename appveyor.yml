@@ -1,4 +1,7 @@
 version: '2.2.0.{build}'
+only_commits:
+  files:
+    - src\simplexcel\*
 assembly_info:
   patch: true
   file: '**\AssemblyInfo.*'
@@ -22,13 +25,12 @@ init:
 - ps: $Env:LABEL = $Env:APPVEYOR_BUILD_NUMBER.PadLeft(5, "0")
 environment:
   PATH: $(PATH);$(PROGRAMFILES)\dotnet\
-before_build:
+install:
   - cmd: dotnet --version
+  - cmd: rd /S /Q src\Simplexcel.MvcTestApp
 build_script:
 - appveyor-retry dotnet restore -v Minimal src\Simplexcel
 - appveyor-retry dotnet restore -v Minimal src\Simplexcel.Tests
 - dotnet pack src\simplexcel --configuration %CONFIGURATION% -o ..\..\nuget
 artifacts:
 - path: nuget\*.nupkg
-cache:
-- '%USERPROFILE%\.nuget\packages'
