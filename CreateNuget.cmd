@@ -1,1 +1,1 @@
-dotnet pack src --configuration release -o ..\..\nuget
+dotnet pack src\simplexcel --configuration release -o ..\..\nuget
