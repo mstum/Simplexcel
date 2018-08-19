@@ -22,10 +22,11 @@ environment:
   PATH: $(PATH);$(PROGRAMFILES)\dotnet\
 install:
   - cmd: dotnet --version
-  - cmd: dotnet sln remove src\Simplexcel.MvcTestApp\Simplexcel.MvcTestApp.csproj src\Simplexcel.sln
-  - cmd: dotnet sln remove src\Simplexcel.TestApp\Simplexcel.TestApp.csproj src\Simplexcel.sln
   - cmd: rd /S /Q src\Simplexcel.MvcTestApp
   - cmd: rd /S /Q src\Simplexcel.TestApp
+before_build:
+  - cmd: dotnet sln remove src\Simplexcel.MvcTestApp\Simplexcel.MvcTestApp.csproj src\Simplexcel.sln
+  - cmd: dotnet sln remove src\Simplexcel.TestApp\Simplexcel.TestApp.csproj src\Simplexcel.sln
 build_script:
 - appveyor-retry dotnet restore -v Minimal src
 - dotnet test src
