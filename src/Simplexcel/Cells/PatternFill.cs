@@ -60,7 +60,7 @@ namespace Simplexcel
             if (ReferenceEquals(this, other)) return true;
             return Equals(other.PatternType, PatternType)
                 && Equals(other.PatternColor, PatternColor)
-                && Equals(other.PatternColor, PatternColor);
+                && Equals(other.BackgroundColor, BackgroundColor);
         }
 
         public override int GetHashCode()
@@ -72,9 +72,9 @@ namespace Simplexcel
                 {
                     result = (result * 397) ^ PatternColor.GetHashCode();
                 }
-                if (PatternColor.HasValue)
+                if (BackgroundColor.HasValue)
                 {
-                    result = (result * 397) ^ PatternColor.GetHashCode();
+                    result = (result * 397) ^ BackgroundColor.GetHashCode();
                 }
                 return result;
             }

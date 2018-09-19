@@ -159,6 +159,13 @@ namespace Simplexcel.TestApp
             pageBreakSheet.InsertManualPageBreakAfterColumn(16);
             wb.Add(pageBreakSheet);
 
+            var colorBugSheet = new Worksheet("Color Bug");
+            colorBugSheet.Cells[0, 0] = "Hello,";
+            colorBugSheet.Cells["B1"] = "World!";
+            colorBugSheet.Cells[0, 0].Fill.BackgroundColor = Color.Blue;
+            colorBugSheet.Cells["B1"].Fill.BackgroundColor = Color.Red;
+            wb.Add(colorBugSheet);
+
             wb.Save("compressed.xlsx", compress: true);
             wb.Save("uncompressed.xlsx", compress: false);
         }
