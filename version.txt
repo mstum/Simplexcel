@@ -1,2 +1,2 @@
-project_version=2.2.0
+project_version=2.2.1
 project_version_suffix=

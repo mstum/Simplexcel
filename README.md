@@ -22,6 +22,9 @@ Instead, it is meant as a way to handle common tasks that can't be handled by ot
 See [USAGE.md](https://github.com/mstum/Simplexcel/blob/master/USAGE.md) for instructions how to use.
 
 # Changelog
+## 2.2.1 (2018-09-19)
+* Fixed bug where Background Color wasn't correctly applied to a Fill. ([Issue 23](https://github.com/mstum/Simplexcel/issues/23))
+
 ## 2.2.0 (2018-02-24)
 * Add `IgnoredErrors` to a `Cell`, to disable Excel warnings (like "Number stored as text").
 * If `LargeNumberHandlingMode.StoreAsText` is set on a sheet, the "Number stored as Text" warning is automatically disabled for that cell.
