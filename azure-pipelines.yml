@@ -45,3 +45,21 @@ steps:
   inputs:
     command: test
     projects: '$(testProject)'
+
+- task: NuGetCommand@2
+  displayName: Push nupkg to MyGet Dev Feed
+  inputs:
+    command: 'push'
+    nuGetFeedType: 'external'
+    publishFeedCredentials: 'MyGetMenhirEntDev'
+    verbosityPush: 'Detailed'
+    packagesToPush: '$(build.artifactStagingDirectory)/*.nupkg;!$(build.artifactStagingDirectory)/*.symbols.nupkg'
+
+- task: NuGetCommand@2
+  displayName: Push symbols to MyGet Dev Feed
+  inputs:
+    command: 'push'
+    nuGetFeedType: 'external'
+    publishFeedCredentials: 'MyGetMenhirEntDevSymbols'
+    verbosityPush: 'Detailed'
+    packagesToPush: '$(build.artifactStagingDirectory)/*.symbols.nupkg'
