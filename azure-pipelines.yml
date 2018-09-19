@@ -9,7 +9,7 @@ variables:
   major: '2'
   minor: '2'
   patch: '1'
-  nugetConfigPath: ''
+  nugetConfigPath: '$(build.SourcesDirectory)/NuGet.config'
 
 steps:
 - task: DotNetCoreCLI@2
