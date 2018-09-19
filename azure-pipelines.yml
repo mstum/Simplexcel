@@ -12,6 +12,11 @@ variables:
   nugetConfigPath: '$(build.SourcesDirectory)/NuGet.config'
 
 steps:
+- script: |
+    dotnet sln src\Simplexcel.sln remove src\Simplexcel.MvcTestApp\Simplexcel.MvcTestApp.csproj
+    dotnet sln src\Simplexcel.sln remove src\Simplexcel.TestApp\Simplexcel.TestApp.csproj
+  displayName: Remove TestApp Projects from sln
+
 - task: DotNetCoreCLI@2
   displayName: dotnet restore
   inputs:
