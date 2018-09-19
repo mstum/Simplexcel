@@ -1,6 +1,6 @@
 
 name: 'v$(major).$(minor).$(patch)$(Rev:.r)'
-queue: 'Hosted Ubuntu 1604'
+queue: 'Hosted VS2017'
 
 variables:
   solution: 'src/Simplexcel.sln'
@@ -45,21 +45,3 @@ steps:
   inputs:
     command: test
     projects: '$(testProject)'
-
-# - task: NuGetCommand@2
-#   displayName: Push nupkg to MyGet
-#   inputs:
-#     command: 'push'
-#     nuGetFeedType: 'external'
-#     publishFeedCredentials: 'MyGetMenhirEntDev'
-#     verbosityPush: 'Detailed'
-#     packagesToPush: '$(build.artifactStagingDirectory)/*.nupkg;!$(build.artifactStagingDirectory)/*.symbols.nupkg'
-
-# - task: NuGetCommand@2
-#   displayName: Push symbols to MyGet
-#   inputs:
-#     command: 'push'
-#     nuGetFeedType: 'external'
-#     publishFeedCredentials: 'MyGetMenhirEntDevSymbols'
-#     verbosityPush: 'Detailed'
-#     packagesToPush: '$(build.artifactStagingDirectory)/*.symbols.nupkg'
