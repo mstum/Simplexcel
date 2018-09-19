@@ -1,0 +1,60 @@
+
+name: 'v$(major).$(minor).$(patch)$(Rev:.r)'
+queue: 'Hosted Ubuntu 1604'
+
+variables:
+  solution: 'src/Simplexcel.sln'
+  testProject: 'src/Simplexcel.Tests'
+  buildConfiguration: 'Release'
+  major: '2'
+  minor: '2'
+  patch: '1'
+  nugetConfigPath: ''
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: dotnet restore
+  inputs:
+    command: 'restore'
+    projects: '$(solution)'
+    verbosityRestore: 'normal'
+    feedsToUse: 'config'
+    nugetConfigPath: '$(nugetConfigPath)'
+
+- task: DotNetCoreCLI@2
+  displayName: dotnet pack
+  inputs:
+    command: 'pack'
+    configuration: '$(buildConfiguration)'
+    packagesToPack: '$(solution)'
+    nobuild: false
+    verbosityPack: 'normal'
+    versioningScheme: 'byPrereleaseNumber'
+    majorVersion: '$(major)'
+    minorVersion: '$(minor)'
+    patchVersion: '$(patch)'
+    packDirectory: '$(build.artifactStagingDirectory)'
+
+- task: DotNetCoreCLI@2
+  displayName: dotnet test
+  inputs:
+    command: test
+    projects: '$(testProject)'
+
+# - task: NuGetCommand@2
+#   displayName: Push nupkg to MyGet
+#   inputs:
+#     command: 'push'
+#     nuGetFeedType: 'external'
+#     publishFeedCredentials: 'MyGetMenhirEntDev'
+#     verbosityPush: 'Detailed'
+#     packagesToPush: '$(build.artifactStagingDirectory)/*.nupkg;!$(build.artifactStagingDirectory)/*.symbols.nupkg'
+
+# - task: NuGetCommand@2
+#   displayName: Push symbols to MyGet
+#   inputs:
+#     command: 'push'
+#     nuGetFeedType: 'external'
+#     publishFeedCredentials: 'MyGetMenhirEntDevSymbols'
+#     verbosityPush: 'Detailed'
+#     packagesToPush: '$(build.artifactStagingDirectory)/*.symbols.nupkg'
