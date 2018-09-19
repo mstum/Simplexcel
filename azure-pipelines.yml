@@ -63,3 +63,28 @@ steps:
     publishFeedCredentials: 'MyGetMenhirEntDevSymbols'
     verbosityPush: 'Detailed'
     packagesToPush: '$(build.artifactStagingDirectory)/*.symbols.nupkg'
+
+- task: DeleteFiles@1
+  displayName: Clean Dev .nupkgs
+  inputs:
+    sourceFolder: '$(build.artifactStagingDirectory)'
+    contents: '**'
+
+- task: DotNetCoreCLI@2
+  displayName: Create Release Package
+  inputs:
+    command: 'pack'
+    configuration: '$(buildConfiguration)'
+    packagesToPack: '$(solution)'
+    nobuild: false
+    verbosityPack: 'normal'
+    versioningScheme: 'byBuildNumber'
+    majorVersion: '$(major)'
+    minorVersion: '$(minor)'
+    patchVersion: '$(patch)'
+    packDirectory: '$(build.artifactStagingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+    artifactName: 'drop'
