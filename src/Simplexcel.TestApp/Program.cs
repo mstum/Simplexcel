@@ -108,6 +108,11 @@ namespace Simplexcel.TestApp
             sheet.Cells["C9"].Fill.BackgroundColor = Color.Navy;
             sheet.Cells["C9"].TextColor = Color.Green;
 
+            sheet.Cells["F5"] = "Hello,";
+            sheet.Cells["G5"] = "World!";
+            sheet.Cells["F5"].Fill.BackgroundColor = Color.Blue;
+            sheet.Cells["G5"].Fill.BackgroundColor = Color.Red;
+
             wb.Add(sheet);
 
             // Prime the Cache...
@@ -159,12 +164,19 @@ namespace Simplexcel.TestApp
             pageBreakSheet.InsertManualPageBreakAfterColumn(16);
             wb.Add(pageBreakSheet);
 
-            var colorBugSheet = new Worksheet("Color Bug");
-            colorBugSheet.Cells[0, 0] = "Hello,";
-            colorBugSheet.Cells["B1"] = "World!";
-            colorBugSheet.Cells[0, 0].Fill.BackgroundColor = Color.Blue;
-            colorBugSheet.Cells["B1"].Fill.BackgroundColor = Color.Red;
-            wb.Add(colorBugSheet);
+            var formulaSheet = new Worksheet("Formula");
+            formulaSheet.Cells["A1"] = 5;
+            formulaSheet.Cells["A2"] = 10;
+            formulaSheet.Cells["A3"] = 15;
+            formulaSheet.Cells["B1"] = Cell.Formula("SUM(A:A)");
+            formulaSheet.Cells["B2"] = Cell.Formula("SUM(A1:A2)");
+            formulaSheet.Cells["B3"] = Cell.Formula("AVERAGE(A:A)");
+            formulaSheet.Cells["B4"] = Cell.Formula("MEDIAN(A:A)");
+            formulaSheet.Cells["C1"] = Cell.Formula("A1+B1");
+            formulaSheet.Cells["C2"] = Cell.Formula("=SUM(B:B)");
+            formulaSheet.Cells["C3"] = Cell.Formula("C5+A1");
+            formulaSheet.Cells["C5"] = Cell.Formula("SUM(B:B)+C1");
+            wb.Add(formulaSheet);
 
             wb.Save("compressed.xlsx", compress: true);
             wb.Save("uncompressed.xlsx", compress: false);

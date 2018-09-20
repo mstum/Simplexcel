@@ -481,8 +481,16 @@ namespace Simplexcel.XlsxInternal
                         var ce = new XElement(Namespaces.workbook + "c",
                             new XAttribute("r", cell.Reference),
                             new XAttribute("t", cell.CellType),
-                            new XAttribute("s", cell.StyleIndex),
-                            new XElement(Namespaces.workbook + "v", cell.Value));
+                            new XAttribute("s", cell.StyleIndex));
+
+                        if (cell.CellType == XlsxCellTypes.FormulaString)
+                        {
+                            ce.Add(new XElement(Namespaces.workbook + "f", cell.Value));
+                        }
+                        else
+                        {
+                            ce.Add(new XElement(Namespaces.workbook + "v", cell.Value));
+                        }
 
                         re.Add(ce);
                     }
@@ -603,6 +611,10 @@ namespace Simplexcel.XlsxInternal
                         case CellType.Text:
                             xc.CellType = XlsxCellTypes.SharedString;
                             xc.Value = sharedStrings.GetStringIndex((string)cell.Value.Value);
+                            break;
+                        case CellType.Formula:
+                            xc.CellType = XlsxCellTypes.FormulaString;
+                            xc.Value = (string)cell.Value.Value;
                             break;
                         case CellType.Number:
                             // Fun: Excel can't handle large numbers as numbers

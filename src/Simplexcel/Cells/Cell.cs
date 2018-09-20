@@ -156,6 +156,16 @@ namespace Simplexcel
         public string Hyperlink { get; set; }
 
         /// <summary>
+        /// Create a new <see cref="Cell"/> that includes a Formula (e.g., SUM(A1:A5)). Do not include the initial = sign!
+        /// </summary>
+        /// <param name="formula">The formula, without the initial = sign (so "SUM(A1:A5)", not "=SUM(A1:A5)")</param>
+        /// <returns></returns>
+        public static Cell Formula(string formula)
+        {
+            return new Cell(CellType.Formula, formula, BuiltInCellFormat.General);
+        }
+
+        /// <summary>
         /// Create a new <see cref="Cell"/> with a <see cref="CellType"/> of Text from a string.
         /// </summary>
         /// <param name="value"></param>
