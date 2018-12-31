@@ -1,0 +1,4 @@
+build_version=2.3
+build_prod_branch=master
+build_config=Release
+build_solution=../src/Simplexcel.sln
