@@ -28,6 +28,7 @@ try {
     Build-WriteTitle "Getting git branch information"
     $commitCount = & git rev-list --count HEAD
     $branchName = Build-GetPropertyOrDefault $buildProps "GIT_BRANCH" "$(& git rev-parse --abbrev-ref HEAD)"
+    $branchName = $branchName -ireplace "origin/", ""
     $isProdBuild = $branchName -eq $productionBranch
     Build-Log-Information "Git branch: $branchName, commit count: $commitCount, is production branch: $isProdBuild"
 
