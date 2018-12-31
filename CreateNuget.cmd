@@ -1,1 +1,0 @@
-dotnet pack src\simplexcel --configuration release -o ..\..\nuget
