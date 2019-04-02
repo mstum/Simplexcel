@@ -167,6 +167,49 @@ namespace Simplexcel
             AddSheetView(sheetView);
         }
 
+        /// <summary>
+        /// Freezes rows at the top and columns on the left.
+        /// </summary>
+        /// <param name="rows">The number of rows to freeze.</param>
+        /// <param name="columns">The number of columns to freeze.</param>
+        public void FreezeTopLeft(int rows, int columns)
+        {
+            // TODO: Eventually, support more SheetView functionality, right now, keep it simple.
+            if (_sheetViews != null)
+            {
+                throw new InvalidOperationException("You have already frozen either the Top Row or Left Column.");
+            }
+
+            if (rows < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(rows), "Rows cannot be negative.");
+            }
+
+            if (columns < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(columns), "Columns cannot be negative.");
+            }
+
+            if (columns == 0 && rows == 0)
+            {
+                return;
+            }
+
+            var sheetView = new SheetView
+            {
+                Pane = new Pane
+                {
+                    ActivePane = Panes.BottomRight,
+                    XSplit = columns > 0 ? (int?)columns : null,
+                    YSplit = rows > 0 ? (int?)rows : null,
+                    TopLeftCell = CellAddressHelper.ColRowToReference(columns, rows),
+                    State = PaneState.Frozen
+                }
+            };
+            sheetView.AddSelection(new Selection { ActivePane = Panes.BottomRight });
+            AddSheetView(sheetView);
+        }
+
         private void AddSheetView(SheetView sheetView)
         {
             if (_sheetViews == null)
