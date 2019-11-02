@@ -22,8 +22,6 @@ jobs:
       uses: actions/checkout@v1
     - name: Run build script
       shell: pwsh
-      env:
-        FOO_TEST: ${{ secrets.TEST_SECRET }}
       run: |
         $Env:GIT_BRANCH=$Env:GITHUB_REF
         $Env:build_artifactsDir=$Env:RUNNER_TEMP
@@ -51,6 +49,7 @@ jobs:
       shell: pwsh
       run: |
         Write-Host "${{ steps.pwshbuild.outputs }}"
+        Write-Host "${{ secrets.TEST_SECRET }}"
     - name: Setup Nuget.exe
       if: steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'False' || steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'True'
       uses: warrenbuckley/Setup-Nuget@v1
