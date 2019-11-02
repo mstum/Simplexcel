@@ -178,6 +178,15 @@ namespace Simplexcel.TestApp
             formulaSheet.Cells["C5"] = Cell.Formula("SUM(B:B)+C1");
             wb.Add(formulaSheet);
 
+            var freezeTopLeftSheet = new Worksheet("FreezeTopLeft");
+            for (var row = 0; row < 10; row++)
+                for (var col = 0; col < 10; col++)
+                {
+                    freezeTopLeftSheet[row, col] = $"{row},{col}";
+                }
+            freezeTopLeftSheet.FreezeTopLeft(2, 2);
+            wb.Add(freezeTopLeftSheet);
+
             wb.Save("compressed.xlsx", compress: true);
             wb.Save("uncompressed.xlsx", compress: false);
         }
