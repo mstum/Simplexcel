@@ -28,4 +28,4 @@ jobs:
         $Env:GIT_BRANCH = $Env:GIT_BRANCH -ireplace "origin/", ""
         cd scripts
         ./build.ps1
-        dir ../artifacts
+        Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"}
