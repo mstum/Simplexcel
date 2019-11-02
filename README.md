@@ -1,8 +1,8 @@
 # Simplexcel
 
-master: [![Actions Status](https://github.com/mstum/Simplexcel/workflows/CI%20Build/badge.svg?branch=master)](https://github.com/mstum/Simplexcel/actions)
-
-release: [![Actions Status](https://github.com/mstum/Simplexcel/workflows/CI%20Build/badge.svg?branch=release)](https://github.com/mstum/Simplexcel/actions)
+| master | release |
+| ------ | ------- |
+| [![Actions Status](https://github.com/mstum/Simplexcel/workflows/CI%20Build/badge.svg?branch=master)](https://github.com/mstum/Simplexcel/actions) | [![Actions Status](https://github.com/mstum/Simplexcel/workflows/CI%20Build/badge.svg?branch=release)](https://github.com/mstum/Simplexcel/actions) |
 
 This is a simple .xlsx generator library for .net 4.5, .NET Standard 1.3 (or higher), and .NET Standard 2.0.
 
