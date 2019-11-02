@@ -1,16 +1,15 @@
 name: CI Build
 
-
 on:
   pull_request:
   push:
     branches:
-    - master
+      - master
     paths:
-    - 'src/simplexcel/*'
-    - '.github/workflows/*'
-    - 'scripts/*'
-    - '!/docs/*' # Don't run workflow when files are only in the /docs directory
+      - "src/simplexcel/*"
+      - ".github/workflows/*"
+      - "scripts/*"
+      - "!/docs/*" # Don't run workflow when files are only in the /docs directory
 
 # To avoid vendor lock-in, this is mostly driven by a build script
 jobs:
@@ -18,55 +17,55 @@ jobs:
     name: Linux
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v1
-    - name: Run build script
-      shell: pwsh
-      run: |
-        $Env:GIT_BRANCH=$Env:GITHUB_REF
-        $Env:build_artifactsDir=$Env:RUNNER_TEMP
-        cd scripts
-        ./build.ps1
-        Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"}
+      - name: Checkout code
+        uses: actions/checkout@v1
+      - name: Run build script
+        shell: pwsh
+        run: |
+          $Env:GIT_BRANCH=$Env:GITHUB_REF
+          $Env:build_artifactsDir=$Env:RUNNER_TEMP
+          cd scripts
+          ./build.ps1
+          Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"}
   build: # Actual prod build
     name: Windows
     runs-on: windows-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v1
-    # To avoid vendor lock-in, this is mostly driven by a build script
-    - name: Run build script
-      id: pwshbuild
-      shell: pwsh
-      run: |
-        $Env:GIT_BRANCH=$Env:GITHUB_REF
-        $Env:build_artifactsDir=$Env:RUNNER_TEMP
-        cd scripts
-        ./build.ps1
-        Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"}
-        Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"} | %{ "$($_.Name)=$($_.Value)" -replace '\\', '\\' } | Out-File "$Env:RUNNER_TEMP/mhbuild.txt"
-    - name: Setup Nuget.exe
-      if: success() && !startsWith(github.ref, 'refs/pull')
-      uses: warrenbuckley/Setup-Nuget@v1
-    - name: Add private GitHub registry to NuGet
-      if: success() && !startsWith(github.ref, 'refs/pull')
-      run: nuget sources add -name "GPR" -Source https://nuget.pkg.github.com/mstum/index.json -Username mstum -Password ${{ secrets.GITHUB_TOKEN }}
-    - name: Publish to GPR
-      if: success() && !startsWith(github.ref, 'refs/pull')
-      shell: pwsh
-      run: |
-        $buildOut = Get-Content -Raw "$Env:RUNNER_TEMP/mhbuild.txt"
-        $buildOut | Write-Host
-        $mhv = $buildOut | ConvertFrom-StringData
-        $mhv | Format-Table
+      - name: Checkout code
+        uses: actions/checkout@v1
+      # To avoid vendor lock-in, this is mostly driven by a build script
+      - name: Run build script
+        id: pwshbuild
+        shell: pwsh
+        run: |
+          $Env:GIT_BRANCH=$Env:GITHUB_REF
+          $Env:build_artifactsDir=$Env:RUNNER_TEMP
+          cd scripts
+          ./build.ps1
+          Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"}
+          Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"} | %{ "$($_.Name)=$($_.Value)" -replace '\\', '\\' } | Out-File "$Env:RUNNER_TEMP/mhbuild.txt"
+      - name: Setup Nuget.exe
+        if: success() && !startsWith(github.ref, 'refs/pull')
+        uses: warrenbuckley/Setup-Nuget@v1
+      - name: Add private GitHub registry to NuGet
+        if: success() && !startsWith(github.ref, 'refs/pull')
+        run: nuget sources add -name "GPR" -Source https://nuget.pkg.github.com/mstum/index.json -Username mstum -Password ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish to GPR
+        if: success() && !startsWith(github.ref, 'refs/pull')
+        shell: pwsh
+        run: |
+          $buildOut = Get-Content -Raw "$Env:RUNNER_TEMP/mhbuild.txt"
+          $buildOut | Write-Host
+          $mhv = $buildOut | ConvertFrom-StringData
+          $mhv | Format-Table
 
-        $isProdBuild = $mhv.MH_IS_PROD_BUILD -eq "True"
-        $nupkgPath = "$($mhv.MH_BUILD_OUTPUT)/simplexcel.$($mhv.MH_BUILD_VERSION_PACKAGE).nupkg"
-        If ($isProdBuild) {
-          Write-Host "Release build, pushing to Nuget.org: $nupkgPath"
-          # TODO: Publish to Nuget
-        } else {
-          # Publish to GitHub Package Repository
-          Write-Host "Dev build, pushing to GPR: $nupkgPath"
-          nuget push $nupkgPath -Source "GPR" -SkipDuplicate
-        }
+          $isProdBuild = $mhv.MH_IS_PROD_BUILD -eq "True"
+          $nupkgPath = "$($mhv.MH_BUILD_OUTPUT)/simplexcel.$($mhv.MH_BUILD_VERSION_PACKAGE).nupkg"
+          If ($isProdBuild) {
+            Write-Host "Release build, pushing to Nuget.org: $nupkgPath"
+            # TODO: Publish to Nuget
+          } else {
+            # Publish to GitHub Package Repository
+            Write-Host "Dev build, pushing to GPR: $nupkgPath"
+            nuget push $nupkgPath -Source "GPR" -SkipDuplicate
+          }
