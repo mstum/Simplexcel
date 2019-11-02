@@ -34,5 +34,19 @@ namespace Simplexcel.Tests
         {
             Assert.Throws<ArgumentException>(() => new Worksheet(null));
         }
+
+        [Fact]
+        public void FreezeTopLeft_NegativeRows_Throws()
+        {
+            var ws = new Worksheet("Foo");
+            Assert.Throws<ArgumentOutOfRangeException>("rows", () => ws.FreezeTopLeft(-1, 9));
+        }
+
+        [Fact]
+        public void FreezeTopLeft_NegativeColumns_Throws()
+        {
+            var ws = new Worksheet("Foo");
+            Assert.Throws<ArgumentOutOfRangeException>("columns", () => ws.FreezeTopLeft(9, -1));
+        }
     }
 }

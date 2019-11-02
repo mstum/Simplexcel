@@ -2,8 +2,7 @@
     [switch] $Verbose = $false
 )
 try {
-    if ($Verbose -eq $true)
-    {
+    if ($Verbose -eq $true) {
         $PSDefaultParameterValues['*:Verbose'] = $true
         $VerbosePreference = "Continue"
         $DebugPreference = "Continue"
@@ -17,14 +16,14 @@ try {
 
     Build-WriteTitle "Reading Build Properties and Environment"
     $buildProps = Build-ReadProperties
-    Build-Log-Hashtable $buildProps  
+    Build-Log-Hashtable $buildProps
 
     $solution = Build-GetRequiredProperty $buildProps "build_solution"
     $version = Build-GetRequiredProperty $buildProps "build_version"
     $artifactsDir = Build-GetPropertyOrDefault $buildProps "build_artifactsDir" "../artifacts" # Build Server Env
     $Env:MH_BUILD_OUTPUT = $artifactsDir
     Build-Log-Information "Artifacts Output Directory: $artifactsDir"
-    
+
     $productionBranch = Build-GetPropertyOrDefault $buildProps "build_prod_branch" "master"
     $buildConfig = Build-GetPropertyOrDefault $buildProps "build_config" "Release"
 
@@ -33,14 +32,17 @@ try {
     $branchName = Build-GetPropertyOrDefault $buildProps "GIT_BRANCH" "$(& git rev-parse --abbrev-ref HEAD)"
     $branchName = $branchName -ireplace "refs/heads/", ""
     $branchName = $branchName -ireplace "origin/", ""
+    if ($branchName -imatch "^refs/pull/(\d+)/merge$") {
+        $branchName = "pr-$($Matches[1])"
+    }
     $isProdBuild = $branchName -eq $productionBranch
     Build-Log-Information "Git branch: $branchName, commit count: $commitCount, is production branch: $isProdBuild"
     $Env:MH_IS_PROD_BUILD = $isProdBuild
 
     Build-WriteTitle "Determining Version Number"
     $part3 = [math]::Floor($commitCount / 65535)
-    $part4 = $commitCount % 65535    
-    $versionSuffix = $(If ($isProdBuild) { "" } Else {  "-$branchName" })
+    $part4 = $commitCount % 65535
+    $versionSuffix = $(If ($isProdBuild) { "" } Else { "-$branchName" })
     $version = "$version.$part3.$part4"
     Build-Log-Information "Version: $version$versionSuffix"
     $Env:MH_BUILD_VERSION = $version
@@ -63,7 +65,6 @@ try {
     Build-WriteTitle "dotnet test"
     dotnet test "../src/Simplexcel.Tests" -c $buildConfig -r "$artifactsDir/testoutput"
 }
-finally
-{
+finally {
     $PSDefaultParameterValues.Remove('*:Verbose')
 }

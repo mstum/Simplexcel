@@ -120,50 +120,70 @@ namespace Simplexcel
         /// <summary>
         /// Freeze the top row, that is, create a <see cref="SheetView"/> that splits the first row (A) into a pane. 
         /// </summary>
-        public void FreezeTopRow()
-        {
-            // TODO: Eventually, support more SheetView functionality, right now, keep it simple.
-            if (_sheetViews != null)
-            {
-                throw new InvalidOperationException("You have already frozen either the Top Row or Left Column.");
-            }
-
-            var sheetView = new SheetView
-            {
-                Pane = new Pane
-                {
-                    ActivePane = Panes.BottomLeft,
-                    YSplit = 1,
-                    TopLeftCell = "A2",
-                    State = PaneState.Frozen
-                }
-            };
-            sheetView.AddSelection(new Selection { ActivePane = Panes.BottomLeft });
-            AddSheetView(sheetView);
-        }
+        public void FreezeTopRow() => FreezeTopLeft(1, 0, Panes.BottomLeft);
 
         /// <summary>
         /// Freeze the first column, that is, create a <see cref="SheetView"/> that splits the first column (1) into a pane. 
         /// </summary>
-        public void FreezeLeftColumn()
+        public void FreezeLeftColumn() => FreezeTopLeft(0, 1, Panes.TopRight);
+
+        /// <summary>
+        /// Freezes rows at the top and columns on the left.
+        /// </summary>
+        /// <param name="rows">The number of rows to freeze.</param>
+        /// <param name="columns">The number of columns to freeze.</param>
+        /// <param name="activePane">The pane that's selected in the sheet. Leave null to automatically determine this.</param>
+        public void FreezeTopLeft(int rows, int columns, Panes? activePane = null)
         {
             // TODO: Eventually, support more SheetView functionality, right now, keep it simple.
             if (_sheetViews != null)
             {
-                throw new InvalidOperationException("You have already frozen either the Top Row or Left Column.");
+                throw new InvalidOperationException("You have already frozen rows and/or columns on this Worksheet.");
+            }
+
+            if (rows < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(rows), "Rows cannot be negative.");
+            }
+
+            if (columns < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(columns), "Columns cannot be negative.");
+            }
+
+            if (columns == 0 && rows == 0)
+            {
+                return;
+            }
+
+            if (!activePane.HasValue)
+            {
+                if (columns == 0)
+                {
+                    activePane = Panes.BottomLeft;
+                }
+                else if (rows == 0)
+                {
+                    activePane = Panes.TopRight;
+                }
+                else
+                {
+                    activePane = Panes.BottomRight;
+                }
             }
 
             var sheetView = new SheetView
             {
                 Pane = new Pane
                 {
-                    ActivePane = Panes.TopRight,
-                    XSplit = 1,
-                    TopLeftCell = "B1",
+                    ActivePane = activePane.Value,
+                    XSplit = columns > 0 ? (int?)columns : null,
+                    YSplit = rows > 0 ? (int?)rows : null,
+                    TopLeftCell = CellAddressHelper.ColRowToReference(columns, rows),
                     State = PaneState.Frozen
                 }
             };
-            sheetView.AddSelection(new Selection { ActivePane = Panes.TopRight });
+            sheetView.AddSelection(new Selection { ActivePane = activePane.Value });
             AddSheetView(sheetView);
         }
 
