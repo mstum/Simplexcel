@@ -136,50 +136,28 @@ namespace Simplexcel.XlsxInternal
             var alignElem = new XElement(Namespaces.workbook + "alignment");
             if(style.HorizontalAlignment != HorizontalAlign.None)
             {
-                string value;
-                switch(style.HorizontalAlignment)
+                var value = style.HorizontalAlignment switch
                 {
-                    case HorizontalAlign.General:
-                        value = "general";
-                        break;
-                    case HorizontalAlign.Left:
-                        value = "left";
-                        break;
-                    case HorizontalAlign.Center:
-                        value = "center";
-                        break;
-                    case HorizontalAlign.Right:
-                        value = "right";
-                        break;
-                    case HorizontalAlign.Justify:
-                        value = "justify";
-                        break;
-                    default:
-                        throw new InvalidOperationException("Unhandled HorizontalAlignment in Cell Style: " + style.HorizontalAlignment);
-                }
+                    HorizontalAlign.General => "general",
+                    HorizontalAlign.Left => "left",
+                    HorizontalAlign.Center => "center",
+                    HorizontalAlign.Right => "right",
+                    HorizontalAlign.Justify => "justify",
+                    _ => throw new InvalidOperationException("Unhandled HorizontalAlignment in Cell Style: " + style.HorizontalAlignment),
+                };
                 alignElem.Add(new XAttribute("horizontal", value));
             }
 
             if (style.VerticalAlignment != VerticalAlign.None)
             {
-                string value;
-                switch (style.VerticalAlignment)
+                var value = style.VerticalAlignment switch
                 {
-                    case VerticalAlign.Top:
-                        value = "top";
-                        break;
-                    case VerticalAlign.Middle:
-                        value = "center";
-                        break;
-                    case VerticalAlign.Bottom:
-                        value = "bottom";
-                        break;
-                    case VerticalAlign.Justify:
-                        value = "justify";
-                        break;
-                    default:
-                        throw new InvalidOperationException("Unhandled VerticalAlignment in Cell Style: " + style.VerticalAlignment);
-                }
+                    VerticalAlign.Top => "top",
+                    VerticalAlign.Middle => "center",
+                    VerticalAlign.Bottom => "bottom",
+                    VerticalAlign.Justify => "justify",
+                    _ => throw new InvalidOperationException("Unhandled VerticalAlignment in Cell Style: " + style.VerticalAlignment),
+                };
                 alignElem.Add(new XAttribute("vertical", value));
             }
 

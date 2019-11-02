@@ -8,7 +8,7 @@ namespace Simplexcel
 {
     public sealed partial class Worksheet
     {
-        private static Lazy<ConcurrentDictionary<Type, Dictionary<int, PopulateCellInfo>>> PopulateCache 
+        private readonly static Lazy<ConcurrentDictionary<Type, Dictionary<int, PopulateCellInfo>>> PopulateCache 
             = new Lazy<ConcurrentDictionary<Type, Dictionary<int, PopulateCellInfo>>>(
                 () => new ConcurrentDictionary<Type, Dictionary<int, PopulateCellInfo>>(),
                 System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
@@ -39,7 +39,7 @@ namespace Simplexcel
         /// <param name="cacheTypeColumns">If true, the Column info for the given type is being cached in memory</param>
         public void Populate<T>(IEnumerable<T> data, bool cacheTypeColumns = false) where T : class
         {
-            data = data ?? Enumerable.Empty<T>();
+            data ??= Enumerable.Empty<T>();
 
             var type = typeof(T);
 

@@ -336,7 +336,7 @@ namespace Simplexcel.XlsxInternal
 
             private static void WritePageBreaks(Worksheet sheet, XDocument doc)
             {
-                XElement BreakToXml(PageBreak brk)
+                static XElement BreakToXml(PageBreak brk)
                 {
                     var elem = new XElement(Namespaces.workbook + "brk");
                     elem.Add(new XAttribute("id", brk.Id));
@@ -359,7 +359,7 @@ namespace Simplexcel.XlsxInternal
                     return elem;
                 }
 
-                XElement PageBreakCollectionToXml(string elementName, ICollection<PageBreak> breaks)
+                static XElement PageBreakCollectionToXml(string elementName, ICollection<PageBreak> breaks)
                 {
                     var elem = new XElement(Namespaces.workbook + elementName);
                     elem.Add(new XAttribute("count", breaks.Count));

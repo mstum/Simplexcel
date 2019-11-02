@@ -73,9 +73,11 @@ namespace Simplexcel.XlsxInternal
         {
             var version = typeof(Workbook).GetTypeInfo().Assembly.GetName().Version;
 
-            var infoXml = new XmlFile();
-            infoXml.Path = "simplexcel.xml";
-            infoXml.Content = new XDocument(new XElement(Namespaces.simplexcel + "docInfo", new XAttribute("xmlns", Namespaces.simplexcel)));
+            var infoXml = new XmlFile
+            {
+                Path = "simplexcel.xml",
+                Content = new XDocument(new XElement(Namespaces.simplexcel + "docInfo", new XAttribute("xmlns", Namespaces.simplexcel)))
+            };
 
             infoXml.Content.Root.Add(new XElement(Namespaces.simplexcel + "version",
                 new XAttribute("major", version.Major),
@@ -95,9 +97,11 @@ namespace Simplexcel.XlsxInternal
         /// <returns></returns>
         internal XmlFile WorkbookRelsXml()
         {
-            var file = new XmlFile();
-            file.ContentType = "application/vnd.openxmlformats-package.relationships+xml";
-            file.Path = "xl/_rels/workbook.xml.rels";
+            var file = new XmlFile
+            {
+                ContentType = "application/vnd.openxmlformats-package.relationships+xml",
+                Path = "xl/_rels/workbook.xml.rels"
+            };
 
             var content = new XDocument(new XElement(Namespaces.relationship + "Relationships", new XAttribute("xmlns", Namespaces.relationship)));
             foreach (var rel in WorkbookRelationships)

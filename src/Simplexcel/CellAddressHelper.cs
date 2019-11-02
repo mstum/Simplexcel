@@ -29,7 +29,7 @@ namespace Simplexcel
         internal static string ColToReference(int col)
         {
             var dividend = (col + 1);
-            string columnName = String.Empty;
+            var columnName = string.Empty;
             while (dividend > 0)
             {
                 var modifier = (dividend - 1) % 26;

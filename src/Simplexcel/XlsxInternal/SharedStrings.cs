@@ -50,9 +50,11 @@ namespace Simplexcel.XlsxInternal
         /// <returns></returns>
         internal XmlFile ToXmlFile()
         {
-            var file = new XmlFile();
-            file.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml";
-            file.Path = "xl/sharedStrings.xml";
+            var file = new XmlFile
+            {
+                ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml",
+                Path = "xl/sharedStrings.xml"
+            };
 
             var sst = new XDocument(new XElement(Namespaces.x + "sst",
                     new XAttribute("xmlns", Namespaces.x),
@@ -62,8 +64,10 @@ namespace Simplexcel.XlsxInternal
 
             foreach (var kvp in _sharedStrings.OrderBy(k => k.Value))
             {
-                var tElem = new XElement(Namespaces.x + "t");
-                tElem.Value = kvp.Key;
+                var tElem = new XElement(Namespaces.x + "t")
+                {
+                    Value = kvp.Key
+                };
 
                 var siElem = new XElement(Namespaces.x + "si", tElem);
                 sst.Root.Add(siElem);
