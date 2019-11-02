@@ -36,6 +36,7 @@ jobs:
       uses: actions/checkout@v1
     # To avoid vendor lock-in, this is mostly driven by a build script
     - name: Run build script
+      id: pwshbuild
       shell: pwsh
       run: |
         $Env:GIT_BRANCH=$Env:GITHUB_REF
@@ -51,17 +52,13 @@ jobs:
       if: success()
       run: nuget sources add -name "GPR" -Source https://nuget.pkg.github.com/mstum/index.json -Username mstum -Password ${{ secrets.GITHUB_TOKEN }}
     - name: Publish to GPR
-      if: success()
+      if: steps.pwshbuild.outputs.MH_IS_PROD_BUILD != "True"
       shell: pwsh
       run: |
         $buildOut = Get-Content -Raw "$Env:RUNNER_TEMP/mhbuild.txt"
         $buildOut | Write-Host
         $mhv = $buildOut | ConvertFrom-StringData
+        $mhv | Write-Host
         $nupkgPath = "$($mhv.MH_BUILD_OUTPUT)/simplexcel.$($mhv.MH_BUILD_VERSION_PACKAGE).nupkg"
-        $isProdBuild = $mhv.MH_IS_PROD_BUILD -eq "True"
-        if ($isProdBuild) {
-            Write-Host "Prod build, pushing to nuget"
-        } else {
-            Write-Host "Dev build, pushing to GPR"
-            nuget push $nupkgPath -Source "GPR" -SkipDuplicate
-        }  
+        Write-Host "Dev build, pushing to GPR: $nupkgPath"
+        nuget push $nupkgPath -Source "GPR" -SkipDuplicate
