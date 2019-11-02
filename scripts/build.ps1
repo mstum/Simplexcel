@@ -22,15 +22,20 @@ try {
     $solution = Build-GetRequiredProperty $buildProps "build_solution"
     $version = Build-GetRequiredProperty $buildProps "build_version"
     $artifactsDir = Build-GetPropertyOrDefault $buildProps "build_artifactsDir" "../artifacts" # Build Server Env
+    $Env:MH_BUILD_OUTPUT = $artifactsDir
+    Build-Log-Information "Artifacts Output Directory: $artifactsDir"
+    
     $productionBranch = Build-GetPropertyOrDefault $buildProps "build_prod_branch" "master"
     $buildConfig = Build-GetPropertyOrDefault $buildProps "build_config" "Release"
 
     Build-WriteTitle "Getting git branch information"
     $commitCount = & git rev-list --count HEAD
     $branchName = Build-GetPropertyOrDefault $buildProps "GIT_BRANCH" "$(& git rev-parse --abbrev-ref HEAD)"
+    $branchName = $branchName -ireplace "refs/heads/", ""
     $branchName = $branchName -ireplace "origin/", ""
     $isProdBuild = $branchName -eq $productionBranch
     Build-Log-Information "Git branch: $branchName, commit count: $commitCount, is production branch: $isProdBuild"
+    $Env:MH_IS_PROD_BUILD = $isProdBuild
 
     Build-WriteTitle "Determining Version Number"
     $part3 = [math]::Floor($commitCount / 65535)
@@ -38,6 +43,9 @@ try {
     $versionSuffix = $(If ($isProdBuild) { "" } Else {  "-$branchName" })
     $version = "$version.$part3.$part4"
     Build-Log-Information "Version: $version$versionSuffix"
+    $Env:MH_BUILD_VERSION = $version
+    $Env:MH_BUILD_VERSION_SUFFIX = $versionSuffix
+    $Env:MH_BUILD_VERSION_PACKAGE = "$version$versionSuffix"
 
     Build-WriteTitle "Remove TestApp Projects from sln"
     dotnet sln $solution remove ../src/Simplexcel.MvcTestApp/Simplexcel.MvcTestApp.csproj
