@@ -2,8 +2,7 @@
     [switch] $Verbose = $false
 )
 try {
-    if ($Verbose -eq $true)
-    {
+    if ($Verbose -eq $true) {
         $PSDefaultParameterValues['*:Verbose'] = $true
         $VerbosePreference = "Continue"
         $DebugPreference = "Continue"
@@ -43,7 +42,7 @@ try {
     Build-WriteTitle "Determining Version Number"
     $part3 = [math]::Floor($commitCount / 65535)
     $part4 = $commitCount % 65535
-    $versionSuffix = $(If ($isProdBuild) { "" } Else {  "-$branchName" })
+    $versionSuffix = $(If ($isProdBuild) { "" } Else { "-$branchName" })
     $version = "$version.$part3.$part4"
     Build-Log-Information "Version: $version$versionSuffix"
     $Env:MH_BUILD_VERSION = $version
@@ -66,7 +65,6 @@ try {
     Build-WriteTitle "dotnet test"
     dotnet test "../src/Simplexcel.Tests" -c $buildConfig -r "$artifactsDir/testoutput"
 }
-finally
-{
+finally {
     $PSDefaultParameterValues.Remove('*:Verbose')
 }
