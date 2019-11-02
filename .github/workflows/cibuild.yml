@@ -12,11 +12,26 @@ on:
     - 'scripts/*'
     - '!/docs/*' # Don't run workflow when files are only in the /docs directory
 
+# To avoid vendor lock-in, this is mostly driven by a build script
 jobs:
-  build:
+  build-linux: # Sanity check build
+    name: Linux
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v1
+    - name: Run build script
+      shell: pwsh
+      run: |
+        $Env:GIT_BRANCH=$Env:GITHUB_REF
+        $Env:GIT_BRANCH = $Env:GIT_BRANCH -ireplace "refs/heads/", ""
+        $Env:GIT_BRANCH = $Env:GIT_BRANCH -ireplace "origin/", ""
+        cd scripts
+        ./build.ps1
+        Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"}
+  build: # Actual prod build
     name: Windows
     runs-on: windows-latest
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v1
@@ -30,11 +45,6 @@ jobs:
         cd scripts
         ./build.ps1
         Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"}
-  publish-gpr:
-    name: Publish to GitHub Package Repository
-    runs-on: windows-latest
-    needs: [build]
-    steps:
     - name: Testing 123
       shell: pwsh
       run: |
