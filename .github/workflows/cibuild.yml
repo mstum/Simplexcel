@@ -22,5 +22,6 @@ jobs:
     - name: Build
       shell: pwsh
       run: |
+        $Env:GIT_BRANCH=$Env:GITHUB_REF
         cd scripts
         ./build.ps1
