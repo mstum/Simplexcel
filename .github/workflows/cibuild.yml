@@ -1,0 +1,21 @@
+name: CI Build
+
+
+on:
+  pull_request:
+  push:
+    branches:
+    - master
+    paths:
+    - 'src/simplexcel/*'
+    - '!/docs/*' # Don't run workflow when files are only in the /docs directory
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run a one-line script
+      run: pwsh scripts/build.ps1
