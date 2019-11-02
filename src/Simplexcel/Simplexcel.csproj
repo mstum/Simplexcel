@@ -25,12 +25,8 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../simplexcel_oss.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard13'">
-    <PackageReference Include="System.IO.Compression" Version="4.3.0">
-    </PackageReference>
-  </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
     <Reference Include="System.IO.Compression" />
