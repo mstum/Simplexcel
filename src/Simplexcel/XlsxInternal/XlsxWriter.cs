@@ -642,7 +642,7 @@ namespace Simplexcel.XlsxInternal
                             xc.CellType = XlsxCellTypes.Number;
                             if (cell.Value.Value != null)
                             {
-                                xc.Value = ((DateTime)cell.Value.Value).ToOleAutDate();
+                                xc.Value = ((DateTime)cell.Value.Value).ToOADate();
                             }
                             break;
                         default:
