@@ -63,8 +63,9 @@ jobs:
           If ($isProdBuild) {
             Write-Host "Release build, pushing to Nuget.org: $nupkgPath"
             # TODO: Publish to Nuget
+            dotnet nuget push "$nupkgPath" -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
           } else {
             # Publish to GitHub Package Repository
             Write-Host "Dev build, pushing to GPR: $nupkgPath"
-            nuget push $nupkgPath -Source "GPR" -SkipDuplicate
+            nuget push "$nupkgPath" -Source "GPR" -SkipDuplicate
           }
