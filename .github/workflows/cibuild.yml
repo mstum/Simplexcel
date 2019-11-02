@@ -36,5 +36,5 @@ jobs:
           # TODO: Publish to Nuget
         } else {
           # Publish to GitHub Package Repository
-          Write-Host "$Env:MH_BUILD_OUTPUT/simplexcel.{$Env:MH_BUILD_VERSION_PACKAGE}.nupkg"
+          Write-Host "$Env:MH_BUILD_OUTPUT/simplexcel.$Env:MH_BUILD_VERSION_PACKAGE.nupkg"
         }
