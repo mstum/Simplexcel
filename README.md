@@ -1,6 +1,6 @@
 # Simplexcel
 
-[![Build status](https://ci.appveyor.com/api/projects/status/813rp00484jxyrai?svg=true)](https://ci.appveyor.com/project/mstum/simplexcel)
+[![Actions Status](https://github.com/mstum/Simplexcel/workflows/CI%20Build/badge.svg)](https://github.com/mstum/Simplexcel/actions)
 
 This is a simple .xlsx generator library for .net 4.5, .NET Standard 1.3 (or higher), and .NET Standard 2.0.
 
