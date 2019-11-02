@@ -52,7 +52,7 @@ jobs:
       if: success()
       run: nuget sources add -name "GPR" -Source https://nuget.pkg.github.com/mstum/index.json -Username mstum -Password ${{ secrets.GITHUB_TOKEN }}
     - name: Publish to GPR
-      if: steps.pwshbuild.outputs.MH_IS_PROD_BUILD != "True"
+      if: steps.pwshbuild.outputs.MH_IS_PROD_BUILD != 'True'
       shell: pwsh
       run: |
         $buildOut = Get-Content -Raw "$Env:RUNNER_TEMP/mhbuild.txt"
