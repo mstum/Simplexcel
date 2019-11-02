@@ -14,14 +14,17 @@ on:
 
 jobs:
   build:
-
+    name: Windows
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Build
+    - name: Checkout code
+      uses: actions/checkout@v1
+    - name: Run build script
       shell: pwsh
       run: |
         $Env:GIT_BRANCH=$Env:GITHUB_REF
+        $Env:GIT_BRANCH = $Env:GIT_BRANCH -ireplace "refs/heads/", ""
+        $Env:GIT_BRANCH = $Env:GIT_BRANCH -ireplace "origin/", ""
         cd scripts
         ./build.ps1
