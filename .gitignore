@@ -28,3 +28,4 @@ Thumbs.db
 Desktop.ini
 BenchmarkDotNet.Artifacts
 src/Simplexcel.TestApp/*.xlsx
+artifacts/
