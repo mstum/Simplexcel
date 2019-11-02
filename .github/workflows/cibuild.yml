@@ -19,5 +19,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: pwsh -wd %CD%/scripts scripts/build.ps1
+    - name: Build
+      shell: pwsh
+      run: |
+        cd scripts
+        ./build.ps1
