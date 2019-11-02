@@ -45,11 +45,15 @@ jobs:
         ./build.ps1
         Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"}
         Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"} | %{ "$($_.Name)=$($_.Value)" -replace '\\', '\\' } | Out-File "$Env:RUNNER_TEMP/mhbuild.txt"
+    - name: Outputs
+      shell: pwsh
+      run: |
+        Write-Host "${{ steps.pwshbuild.outputs }}"
     - name: Setup Nuget.exe
-      if: success()
+      if: steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'False' || steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'True'
       uses: warrenbuckley/Setup-Nuget@v1
     - name: Add private GitHub registry to NuGet
-      if: success()
+      if: steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'False' || steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'True'
       run: nuget sources add -name "GPR" -Source https://nuget.pkg.github.com/mstum/index.json -Username mstum -Password ${{ secrets.GITHUB_TOKEN }}
     - name: Publish to GPR
       if: steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'False'
