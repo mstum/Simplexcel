@@ -6,10 +6,9 @@ on:
     branches:
       - master
     paths:
-      - "src/simplexcel/*"
-      - ".github/workflows/*"
-      - "scripts/*"
-      - "!/docs/*" # Don't run workflow when files are only in the /docs directory
+      - "src/**"
+      - ".github/workflows/**"
+      - "scripts/**"
 
 # To avoid vendor lock-in, this is mostly driven by a build script
 jobs:
