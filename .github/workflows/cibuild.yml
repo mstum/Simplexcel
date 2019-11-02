@@ -20,6 +20,7 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v1
+    # To avoid vendor lock-in, this is mostly driven by a build script
     - name: Run build script
       shell: pwsh
       run: |
@@ -29,3 +30,11 @@ jobs:
         cd scripts
         ./build.ps1
         Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"}
+        
+        # Publish Packages if successful
+        If ($Env:MH_IS_PROD_BUILD -eq "True") {
+          # TODO: Publish to Nuget
+        } else {
+          # Publish to GitHub Package Repository
+          Write-Host "$Env:MH_BUILD_OUTPUT/simplexcel.{$Env:MH_BUILD_VERSION_PACKAGE}.nupkg"
+        }
