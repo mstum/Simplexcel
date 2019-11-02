@@ -24,8 +24,6 @@ jobs:
       shell: pwsh
       run: |
         $Env:GIT_BRANCH=$Env:GITHUB_REF
-        $Env:GIT_BRANCH = $Env:GIT_BRANCH -ireplace "refs/heads/", ""
-        $Env:GIT_BRANCH = $Env:GIT_BRANCH -ireplace "origin/", ""
         cd scripts
         ./build.ps1
         Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"}
@@ -40,12 +38,12 @@ jobs:
       shell: pwsh
       run: |
         $Env:GIT_BRANCH=$Env:GITHUB_REF
-        $Env:GIT_BRANCH = $Env:GIT_BRANCH -ireplace "refs/heads/", ""
-        $Env:GIT_BRANCH = $Env:GIT_BRANCH -ireplace "origin/", ""
         cd scripts
         ./build.ps1
         Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"}
+        Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"} | %{ "$($_.Name)=$($_.Value)" } | Out-File "$Env:RUNNER_TEMP/result.txt"
     - name: Testing 123
       shell: pwsh
       run: |
-        Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"}
+        $foo = Get-Content -Raw "$Env:RUNNER_TEMP/result.txt" | ConvertFrom-StringData
+        $foo | Format-List
