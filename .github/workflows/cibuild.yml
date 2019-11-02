@@ -43,7 +43,7 @@ jobs:
         cd scripts
         ./build.ps1
         Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"}
-        Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"} | %{ "$($_.Name)='$($_.Value)'" } | Out-File "$Env:RUNNER_TEMP/mhbuild.txt"
+        Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"} | %{ "$($_.Name)=$($_.Value)" -replace '\\', '\\' } | Out-File "$Env:RUNNER_TEMP/mhbuild.txt"
     - name: Setup Nuget.exe
       if: success()
       uses: warrenbuckley/Setup-Nuget@v1
