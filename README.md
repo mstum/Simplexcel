@@ -24,6 +24,10 @@ Instead, it is meant as a way to handle common tasks that can't be handled by ot
 See [USAGE.md](https://github.com/mstum/Simplexcel/blob/master/USAGE.md) for instructions how to use.
 
 # Changelog
+## 2.3.0 (In Development)
+* Add `Worksheet.FreezeTopLeft` method (by @bcopeland in PR #26) to freeze more than just the top row/left column
+* Support for Formulas, for example: `sheet.Cells["B4"] = Cell.Formula("MEDIAN(A:A)");`. See [the test app](https://github.com/mstum/Simplexcel/blob/0e22dddfcb26b9672ba3ccab6d229da7535127e7/src/Simplexcel.TestApp/Program.cs#L167) for some examples
+
 ## 2.2.1 (2018-09-19)
 * Fixed bug where Background Color wasn't correctly applied to a Fill. ([Issue 23](https://github.com/mstum/Simplexcel/issues/23))
 
