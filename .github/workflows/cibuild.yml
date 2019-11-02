@@ -8,6 +8,8 @@ on:
     - master
     paths:
     - 'src/simplexcel/*'
+    - '.github/workflows/*'
+    - 'scripts/*'
     - '!/docs/*' # Don't run workflow when files are only in the /docs directory
 
 jobs:
