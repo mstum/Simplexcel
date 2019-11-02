@@ -58,7 +58,7 @@ jobs:
         $buildOut = Get-Content -Raw "$Env:RUNNER_TEMP/mhbuild.txt"
         $buildOut | Write-Host
         $mhv = $buildOut | ConvertFrom-StringData
-        $mhv | Write-Host
+        $mhv | Format-Table
         
         $isProdBuild = $mhv.MH_IS_PROD_BUILD -eq "True"
         $nupkgPath = "$($mhv.MH_BUILD_OUTPUT)/simplexcel.$($mhv.MH_BUILD_VERSION_PACKAGE).nupkg"
