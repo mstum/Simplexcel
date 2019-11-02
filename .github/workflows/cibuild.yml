@@ -32,9 +32,11 @@ jobs:
         Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"}
         
         # Publish Packages if successful
+        $nupkgPath = "$Env:MH_BUILD_OUTPUT/simplexcel.$Env:MH_BUILD_VERSION_PACKAGE.nupkg"
         If ($Env:MH_IS_PROD_BUILD -eq "True") {
           # TODO: Publish to Nuget
         } else {
           # Publish to GitHub Package Repository
-          Write-Host "$Env:MH_BUILD_OUTPUT/simplexcel.$Env:MH_BUILD_VERSION_PACKAGE.nupkg"
+          Write-Host "Publishing $nupkgPath to GitHub Package Repository"          
+          dotnet nuget push "$nupkgPath" -k "${{ secrets.GITHUB_TOKEN }}" -s "https://nuget.pkg.github.com/mstum/index.json"
         }
