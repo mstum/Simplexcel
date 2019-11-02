@@ -45,25 +45,28 @@ jobs:
         ./build.ps1
         Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"}
         Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"} | %{ "$($_.Name)=$($_.Value)" -replace '\\', '\\' } | Out-File "$Env:RUNNER_TEMP/mhbuild.txt"
-    - name: Outputs
-      shell: pwsh
-      run: |
-        Write-Host "${{ steps.pwshbuild.outputs }}"
-        Write-Host "${{ secrets.TEST_SECRET }}"
     - name: Setup Nuget.exe
-      if: steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'False' || steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'True'
+      if: success()
       uses: warrenbuckley/Setup-Nuget@v1
     - name: Add private GitHub registry to NuGet
-      if: steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'False' || steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'True'
+      if: success()
       run: nuget sources add -name "GPR" -Source https://nuget.pkg.github.com/mstum/index.json -Username mstum -Password ${{ secrets.GITHUB_TOKEN }}
     - name: Publish to GPR
-      if: steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'False'
+      if: success()
       shell: pwsh
       run: |
         $buildOut = Get-Content -Raw "$Env:RUNNER_TEMP/mhbuild.txt"
         $buildOut | Write-Host
         $mhv = $buildOut | ConvertFrom-StringData
         $mhv | Write-Host
+        
+        $isProdBuild = $mhv.MH_IS_PROD_BUILD -eq "True"
         $nupkgPath = "$($mhv.MH_BUILD_OUTPUT)/simplexcel.$($mhv.MH_BUILD_VERSION_PACKAGE).nupkg"
-        Write-Host "Dev build, pushing to GPR: $nupkgPath"
-        nuget push $nupkgPath -Source "GPR" -SkipDuplicate
+        If ($isProdBuild) {
+          Write-Host "Release build, pushing to Nuget.org: $nupkgPath"
+          # TODO: Publish to Nuget
+        } else {
+          # Publish to GitHub Package Repository
+          Write-Host "Dev build, pushing to GPR: $nupkgPath"
+          nuget push $nupkgPath -Source "GPR" -SkipDuplicate
+        }
