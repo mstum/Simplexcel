@@ -28,3 +28,4 @@ jobs:
         $Env:GIT_BRANCH = $Env:GIT_BRANCH -ireplace "origin/", ""
         cd scripts
         ./build.ps1
+        dir ../artifacts
