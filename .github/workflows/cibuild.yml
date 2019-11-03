@@ -23,7 +23,7 @@ jobs:
           $Env:build_artifactsDir=$Env:RUNNER_TEMP
           cd scripts
           ./build.ps1
-          Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"}
+          Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"} | %{ echo "::set-output name=$($_.Name)::$($_.Value)" }
   build: # Actual prod build
     name: Windows
     runs-on: windows-latest
@@ -39,18 +39,17 @@ jobs:
           $Env:build_artifactsDir=$Env:RUNNER_TEMP
           cd scripts
           ./build.ps1
-          Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"}
           Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"} | %{ echo "::set-output name=$($_.Name)::$($_.Value)" }
-      - name: Setup Nuget.exe
+      - name: Setup Nuget.exe (Development)
         if: success() && !startsWith(github.ref, 'refs/pull') && steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'False'
         uses: warrenbuckley/Setup-Nuget@v1
-      - name: Add private GitHub registry to NuGet
-        if: success() && !startsWith(github.ref, 'refs/pull') && steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'False'
-        run: nuget sources add -name "GPR" -Source https://nuget.pkg.github.com/mstum/index.json -Username mstum -Password ${{ secrets.GITHUB_TOKEN }}
       - name: Publish to GPR (Development)
         if: success() && !startsWith(github.ref, 'refs/pull') && steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'False'
         shell: pwsh
         run: |
+          # Add GitHub Package Repository nuget source - see https://github.com/NuGet/Home/issues/8580
+          nuget sources add -name "GPR" -Source https://nuget.pkg.github.com/mstum/index.json -Username mstum -Password ${{ secrets.GITHUB_TOKEN }}
+          
           $mhPath = "${{ steps.pwshbuild.outputs.MH_BUILD_OUTPUT }}"
           $nupkgName = "simplexcel.${{ steps.pwshbuild.outputs.MH_BUILD_VERSION_PACKAGE }}.nupkg"
           $nupkgPath = Join-Path -Path $mhPath -ChildPath $nupkgName
