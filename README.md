@@ -29,7 +29,7 @@ See [USAGE.md](https://github.com/mstum/Simplexcel/blob/master/USAGE.md) for ins
 * The library is now signed and strongly named for improved compatibility
   * The AssemblyVersion is `3.0.0.0` and will not change in the future
   * The AssemblyFileVersion and AssemblyInformationalVersion will contain the actual version number
-  * The actual signing key is checked in as [`simplexcel_oss.snk`](src/simplexcel_oss.snk), and a dump of the public key and token is in [`simplexcel_oss.txt`]((src/simplexcel_oss.txt))
+  * The actual signing key is checked in as [`simplexcel_oss.snk`](src/simplexcel_oss.snk), and a dump of the public key and token is in [`simplexcel_oss.txt`](src/simplexcel_oss.txt)
   * There is a static `SimplexcelVersion` class with some helpers:
     * PublicKeyToken is the public key token for the assembly (e.g., 65e777c740a5d92a)
     * PublicKey is the full public key token for the assembly (e.g., 0024000004800000940000000602000000240000525341310...)
