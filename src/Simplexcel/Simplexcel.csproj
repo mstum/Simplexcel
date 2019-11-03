@@ -10,7 +10,7 @@
     <NeutralLanguage>en</NeutralLanguage>
     <Title>Simplexcel .xlsx library</Title>
     <Description>A 100% managed code library to generate Excel .xlsx Workbooks. Can be safely used on a server, no COM Interop or other unsafe/unsupported operations.</Description>
-    <Copyright>© 2013-2017 Michael Stum</Copyright>
+    <Copyright>© 2013-2019 Michael Stum</Copyright>
     <PackageLicenseUrl>https://raw.githubusercontent.com/mstum/simplexcel/master/LICENSE.txt</PackageLicenseUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/mstum/simplexcel</PackageProjectUrl>
