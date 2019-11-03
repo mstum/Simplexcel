@@ -4,7 +4,7 @@
 | ------ | ------- |
 | [![Actions Status](https://github.com/mstum/Simplexcel/workflows/CI%20Build/badge.svg?branch=master)](https://github.com/mstum/Simplexcel/actions) | [![Actions Status](https://github.com/mstum/Simplexcel/workflows/CI%20Build/badge.svg?branch=release)](https://github.com/mstum/Simplexcel/actions) |
 
-This is a simple .xlsx generator library for .net 4.5, .NET Standard 1.3 (or higher), and .NET Standard 2.0.
+This is a simple .xlsx generator library for .net 4.5, .NET Standard 2.0, and .NET Standard 2.1.
 
 It does not aim to implement the entirety of the Office Open XML Workbook format and all the small and big features Excel offers.
 Instead, it is meant as a way to handle common tasks that can't be handled by other workarounds (e.g., CSV Files or HTML Tables) and is fully supported under ASP.net (unlike, say, COM Interop which Microsoft explicitly doesn't support on a server).
@@ -25,6 +25,7 @@ See [USAGE.md](https://github.com/mstum/Simplexcel/blob/master/USAGE.md) for ins
 
 # Changelog
 ## 3.0.0 (In Development)
+* Support for Charts (TBD)
 * Remove targeting netstandard1.3, add targeting for netstandard2.1
 * The library is now signed and strongly named for improved compatibility
   * The AssemblyVersion is `3.0.0.0` and will not change in the future

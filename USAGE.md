@@ -60,8 +60,8 @@ sheet.Cells[0, 2] = myCell;
 // To change the width of a column, specify a value. Specifying NULL will use the default
 sheet.ColumnWidths[2] = 30;
 ```
-			
-In Excel, this will create a beautiful sheet:  
+
+In Excel, this will create a beautiful sheet:
 ![Cell formatting](/doc/formatting.png?raw=true "Cell formatting")
 
 ### Page Setup
@@ -84,16 +84,16 @@ for (int i = 0; i < 100; i++)
     sheet.Cells[i + 2, 0] = "Entry Number " + (i + 1);
 }
 ```
-			
-This looks like this when printing:  
+
+This looks like this when printing:
 ![Page Setup](/doc/repeatrows.png?raw=true "Page Setup")
 
 ### Hyperlinks
 You can create Hyperlinks for a cell.
 
 ```cs
-sheet.Cells["A1"] = "Click me now!";  
-sheet.Cells["A1"].Hyperlink = "https://github.com/mstum/Simplexcel/";  
+sheet.Cells["A1"] = "Click me now!";
+sheet.Cells["A1"].Hyperlink = "https://github.com/mstum/Simplexcel/";
 ```
 
 This will NOT automatically format it as a Hyperlink (blue/underlined) to give you freedom to format as desired.
@@ -219,3 +219,23 @@ The `PatternType` follows the naming convention in Excel:
 * Solid, Gray750, Gray500, Gray250, Gray125, Gray0625 (That's 75%, 50%, 25%, 12.5% and 6.25% Gray)
 * HorizontalStripe, VerticalStripe, ReverseDiagonalStripe, DiagonalStripe, DiagonalCrosshatch, ThickDiagonalCrosshatch
 * ThinHorizontalStripe, ThinVerticalStripe, ThinReverseDiagonalStripe, ThinDiagonalStripe, ThinHorizontalCrosshatch, ThinDiagonalCrosshatch
+
+## Formulas (since 2.3.0)
+You can assign a formula to a cell, for example:
+
+```cs
+sheet.Cells["A1"] = 5;
+sheet.Cells["A2"] = 10;
+sheet.Cells["A3"] = 15;
+sheet.Cells["B1"] = Cell.Formula("SUM(A:A)");
+sheet.Cells["B2"] = Cell.Formula("SUM(A1:A2)");
+sheet.Cells["B3"] = Cell.Formula("AVERAGE(A:A)");
+sheet.Cells["B4"] = Cell.Formula("MEDIAN(A:A)");
+sheet.Cells["C1"] = Cell.Formula("A1+B1");
+sheet.Cells["C2"] = Cell.Formula("=SUM(B:B)");
+sheet.Cells["C3"] = Cell.Formula("C5+A1");
+sheet.Cells["C5"] = Cell.Formula("SUM(B:B)+C1");
+```
+
+Formulas are interpreted by the application (Excel, LibreOffice Calc, etc.) and functionality might this differ between
+different applications or versions (e.g., XLOOKUP was added to Excel in late 2019 and is not available on most versions).
