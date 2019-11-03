@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Xml.Linq;
 
 namespace Simplexcel.XlsxInternal
@@ -71,8 +70,6 @@ namespace Simplexcel.XlsxInternal
 
         private void WriteInfoXmlFile(ZipPackage pkg)
         {
-            var version = typeof(Workbook).GetTypeInfo().Assembly.GetName().Version;
-
             var infoXml = new XmlFile
             {
                 Path = "simplexcel.xml",
@@ -80,10 +77,11 @@ namespace Simplexcel.XlsxInternal
             };
 
             infoXml.Content.Root.Add(new XElement(Namespaces.simplexcel + "version",
-                new XAttribute("major", version.Major),
-                new XAttribute("minor", version.Minor),
-                new XAttribute("build", version.Build),
-                new XAttribute("revision", version.Revision)
+                new XAttribute("major", SimplexcelVersion.Version.Major),
+                new XAttribute("minor", SimplexcelVersion.Version.Minor),
+                new XAttribute("build", SimplexcelVersion.Version.Build),
+                new XAttribute("revision", SimplexcelVersion.Version.Revision),
+                new XText(SimplexcelVersion.VersionString)
             ));
 
             infoXml.Content.Root.Add(new XElement(Namespaces.simplexcel + "created", DateTime.UtcNow));
