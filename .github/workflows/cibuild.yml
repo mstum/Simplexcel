@@ -40,23 +40,20 @@ jobs:
           cd scripts
           ./build.ps1
           Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"}
-          Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"} | %{ "$($_.Name)=$($_.Value)" -replace '\\', '\\' } | Out-File "$Env:RUNNER_TEMP/mhbuild.txt"
           Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"} | %{ echo "::set-output name=$($_.Name)::$($_.Value)" }
       - name: Setup Nuget.exe
-        if: success() && !startsWith(github.ref, 'refs/pull')
+        if: success() && !startsWith(github.ref, 'refs/pull') && steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'False'
         uses: warrenbuckley/Setup-Nuget@v1
       - name: Add private GitHub registry to NuGet
-        if: success() && !startsWith(github.ref, 'refs/pull')
+        if: success() && !startsWith(github.ref, 'refs/pull') && steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'False'
         run: nuget sources add -name "GPR" -Source https://nuget.pkg.github.com/mstum/index.json -Username mstum -Password ${{ secrets.GITHUB_TOKEN }}
       - name: Publish to GPR (Development)
-        if: success() && steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'False'
+        if: success() && !startsWith(github.ref, 'refs/pull') && steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'False'
         shell: pwsh
         run: |
-          $buildOut = Get-Content -Raw "$Env:RUNNER_TEMP/mhbuild.txt"
-          $buildOut | Write-Host
-          $mhv = $buildOut | ConvertFrom-StringData
-          $mhv | Format-Table
-          $nupkgPath = "$($mhv.MH_BUILD_OUTPUT)/simplexcel.$($mhv.MH_BUILD_VERSION_PACKAGE).nupkg"
+          $mhPath = "${{ steps.pwshbuild.outputs.MH_BUILD_OUTPUT }}"
+          $nupkgName = "simplexcel.${{ steps.pwshbuild.outputs.MH_BUILD_VERSION_PACKAGE }}.nupkg"
+          $nupkgPath = Join-Path -Path $mhPath -ChildPath $nupkgName
           
           # Publish to GitHub Package Repository
           Write-Host "Dev build, pushing to GPR: $nupkgPath"
@@ -65,11 +62,9 @@ jobs:
         if: success() && steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'True'
         shell: pwsh
         run: |
-          $buildOut = Get-Content -Raw "$Env:RUNNER_TEMP/mhbuild.txt"
-          $buildOut | Write-Host
-          $mhv = $buildOut | ConvertFrom-StringData
-          $mhv | Format-Table
-          $nupkgPath = "$($mhv.MH_BUILD_OUTPUT)/simplexcel.$($mhv.MH_BUILD_VERSION_PACKAGE).nupkg"
+          $mhPath = "${{ steps.pwshbuild.outputs.MH_BUILD_OUTPUT }}"
+          $nupkgName = "simplexcel.${{ steps.pwshbuild.outputs.MH_BUILD_VERSION_PACKAGE }}.nupkg"
+          $nupkgPath = Join-Path -Path $mhPath -ChildPath $nupkgName
           
           # Publish to Nuget.org
           Write-Host "Release build, pushing to Nuget.org: $nupkgPath"
