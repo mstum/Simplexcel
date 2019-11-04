@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <IsPackable>false</IsPackable>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>sn.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>

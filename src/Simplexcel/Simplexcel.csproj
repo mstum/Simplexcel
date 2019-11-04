@@ -22,6 +22,8 @@
     <IncludeSource>true</IncludeSource>
     <IncludeSymbols>true</IncludeSymbols>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>sn.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard13'">
