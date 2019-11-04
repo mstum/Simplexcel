@@ -25,7 +25,6 @@ See [USAGE.md](https://github.com/mstum/Simplexcel/blob/master/USAGE.md) for ins
 
 # Changelog
 ## 3.0.0 (In Development)
-* Support for Charts (TBD)
 * Remove targeting netstandard1.3, add targeting for netstandard2.1
 * The library is now signed and strongly named for improved compatibility
   * The AssemblyVersion is `3.0.0.0` and will not change in the future
