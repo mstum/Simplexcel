@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -17,7 +16,7 @@ namespace Simplexcel
         /// <param name="cellAddress"></param>
         public static void InsertManualPageBreakAfterRow(this Worksheet sheet, string cellAddress)
         {
-            CellAddressHelper.ReferenceToColRow(cellAddress, out int row, out int col);
+            CellAddressHelper.ReferenceToColRow(cellAddress, out int row, out _);
             sheet.InsertManualPageBreakAfterRow(row+1);
         }
 
@@ -28,7 +27,7 @@ namespace Simplexcel
         /// <param name="cellAddress"></param>
         public static void InsertManualPageBreakAfterColumn(this Worksheet sheet, string cellAddress)
         {
-            CellAddressHelper.ReferenceToColRow(cellAddress, out int row, out int col);
+            CellAddressHelper.ReferenceToColRow(cellAddress, out _, out int col);
             sheet.InsertManualPageBreakAfterColumn(col+1);
         }
 
@@ -52,47 +51,6 @@ namespace Simplexcel
             }
 
             return prop.GetCustomAttributes(XlsxColumnType).Cast<XlsxColumnAttribute>().FirstOrDefault();
-        }
-
-        internal static IEnumerable<PropertyInfo> GetAllProperties(this TypeInfo typeInfo) => GetAllForType(typeInfo, ti => ti.DeclaredProperties);
-
-        private static IEnumerable<T> GetAllForType<T>(TypeInfo typeInfo, Func<TypeInfo, IEnumerable<T>> accessor)
-        {
-            if (typeInfo == null)
-            {
-                yield break;
-            }
-
-            // The Stack is to make sure that we fetch Base Type Properties first
-            var baseTypes = new Stack<TypeInfo>();
-            while (typeInfo != null)
-            {
-                baseTypes.Push(typeInfo);
-                typeInfo = typeInfo.BaseType?.GetTypeInfo();
-            }
-
-            while (baseTypes.Count > 0)
-            {
-                var ti = baseTypes.Pop();
-                foreach (var t in accessor(ti))
-                {
-                    yield return t;
-                }
-            }
-        }
-
-        internal static int GetCollectionHashCode<T>(this IEnumerable<T> input)
-        {
-            var hashCode = 0;
-            if (input != null)
-            {
-                foreach (var item in input)
-                {
-                    var itemHashCode = item == null ? 0 : item.GetHashCode();
-                    hashCode = (hashCode * 397) ^ itemHashCode;
-                }
-            }
-            return hashCode;
         }
     }
 }

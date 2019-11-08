@@ -16,7 +16,7 @@ namespace Simplexcel
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
+            if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != typeof(GradientStop)) return false;
             return Equals((GradientStop)obj);
@@ -24,7 +24,7 @@ namespace Simplexcel
 
         public bool Equals(GradientStop other)
         {
-            if (ReferenceEquals(null, other)) return false;
+            if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
             return Equals(other.Position, Position)
                 && Equals(other.Color, Color);

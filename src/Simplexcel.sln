@@ -1,14 +1,19 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.13
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29424.173
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simplexcel", "Simplexcel\Simplexcel.csproj", "{39AFAE0E-34D0-43AD-ACD7-39FBE03A57F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simplexcel", "Simplexcel\Simplexcel.csproj", "{39AFAE0E-34D0-43AD-ACD7-39FBE03A57F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simplexcel.TestApp", "Simplexcel.TestApp\Simplexcel.TestApp.csproj", "{C015203B-2EA6-48D7-8571-E3EAC963A583}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simplexcel.TestApp", "Simplexcel.TestApp\Simplexcel.TestApp.csproj", "{C015203B-2EA6-48D7-8571-E3EAC963A583}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simplexcel.Tests", "Simplexcel.Tests\Simplexcel.Tests.csproj", "{1A651F47-91E3-40EC-93EF-DAD0326BD995}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simplexcel.Tests", "Simplexcel.Tests\Simplexcel.Tests.csproj", "{1A651F47-91E3-40EC-93EF-DAD0326BD995}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simplexcel.MvcTestApp", "Simplexcel.MvcTestApp\Simplexcel.MvcTestApp.csproj", "{26E384B1-4991-4B7B-B68C-4DDB500AE37C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{12C68E3A-847B-44A1-9492-026905E2FDBA}"
+	ProjectSection(SolutionItems) = preProject
+		simplexcel_oss.snk = simplexcel_oss.snk
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,5 +40,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B4AFD13E-5383-4FDE-BA21-BA7BAA4C7D7E}
 	EndGlobalSection
 EndGlobal

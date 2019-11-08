@@ -14,9 +14,11 @@ namespace Simplexcel.MvcTestApp
 
         protected override Workbook GenerateWorkbook()
         {
-            var wb = new Workbook();
-            wb.Title = "Workbook Title";
-            wb.Author = "The Author";
+            var wb = new Workbook
+            {
+                Title = "Workbook Title",
+                Author = "The Author"
+            };
 
             var sheet = new Worksheet("Test");
             sheet.PageSetup.Orientation = Orientation.Landscape;

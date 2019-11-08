@@ -60,7 +60,8 @@ try {
     # if <Version> is set in the project file, this will not allow the use of a version suffix.
     # => Set <VersionPrefix>1.2.3</VersionPrefix> to only specify the version number.
     # The SDK will then create a Version property based on VersionPrefix and VersionSuffix
-    dotnet pack -c $buildConfig -o $artifactsDir -p:PackageVersion=$version$versionSuffix -p:Version=$version$versionSuffix -p:AssemblyVersion=$version -p:FileVersion=$version $solution
+    # AssemblyVersion is fixed at 3.0.0.0 due to strong naming since Simplexcel 3.0
+    dotnet pack -c $buildConfig -o $artifactsDir -p:PackageVersion=$version$versionSuffix -p:Version=$version$versionSuffix -p:AssemblyVersion="3.0.0.0" -p:FileVersion=$version $solution
 
     Build-WriteTitle "dotnet test"
     dotnet test "../src/Simplexcel.Tests" -c $buildConfig -r "$artifactsDir/testoutput"

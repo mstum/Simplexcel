@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard13;netstandard2.0;net45</TargetFrameworks>
-    <Version>2.0.3</Version>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net45</TargetFrameworks>
+    <Version>3.0.0</Version>
     <Product>Simplexcel</Product>
     <Authors>Michael Stum &lt;opensource@stum.de&gt;</Authors>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
-    <FileVersion>2.0.0.0</FileVersion>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <FileVersion>3.0.0.0</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <Title>Simplexcel .xlsx library</Title>
     <Description>A 100% managed code library to generate Excel .xlsx Workbooks. Can be safely used on a server, no COM Interop or other unsafe/unsupported operations.</Description>
-    <Copyright>© 2013-2017 Michael Stum</Copyright>
+    <Copyright>© 2013-2019 Michael Stum</Copyright>
     <PackageLicenseUrl>https://raw.githubusercontent.com/mstum/simplexcel/master/LICENSE.txt</PackageLicenseUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/mstum/simplexcel</PackageProjectUrl>
@@ -22,12 +22,11 @@
     <IncludeSource>true</IncludeSource>
     <IncludeSymbols>true</IncludeSymbols>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../simplexcel_oss.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard13'">
-    <PackageReference Include="System.IO.Compression" Version="4.3.0">
-    </PackageReference>
-  </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
     <Reference Include="System.IO.Compression" />

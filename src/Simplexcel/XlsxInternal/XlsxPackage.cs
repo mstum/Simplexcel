@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Xml.Linq;
 
 namespace Simplexcel.XlsxInternal
@@ -71,17 +70,18 @@ namespace Simplexcel.XlsxInternal
 
         private void WriteInfoXmlFile(ZipPackage pkg)
         {
-            var version = typeof(Workbook).GetTypeInfo().Assembly.GetName().Version;
-
-            var infoXml = new XmlFile();
-            infoXml.Path = "simplexcel.xml";
-            infoXml.Content = new XDocument(new XElement(Namespaces.simplexcel + "docInfo", new XAttribute("xmlns", Namespaces.simplexcel)));
+            var infoXml = new XmlFile
+            {
+                Path = "simplexcel.xml",
+                Content = new XDocument(new XElement(Namespaces.simplexcel + "docInfo", new XAttribute("xmlns", Namespaces.simplexcel)))
+            };
 
             infoXml.Content.Root.Add(new XElement(Namespaces.simplexcel + "version",
-                new XAttribute("major", version.Major),
-                new XAttribute("minor", version.Minor),
-                new XAttribute("build", version.Build),
-                new XAttribute("revision", version.Revision)
+                new XAttribute("major", SimplexcelVersion.Version.Major),
+                new XAttribute("minor", SimplexcelVersion.Version.Minor),
+                new XAttribute("build", SimplexcelVersion.Version.Build),
+                new XAttribute("revision", SimplexcelVersion.Version.Revision),
+                new XText(SimplexcelVersion.VersionString)
             ));
 
             infoXml.Content.Root.Add(new XElement(Namespaces.simplexcel + "created", DateTime.UtcNow));
@@ -95,9 +95,11 @@ namespace Simplexcel.XlsxInternal
         /// <returns></returns>
         internal XmlFile WorkbookRelsXml()
         {
-            var file = new XmlFile();
-            file.ContentType = "application/vnd.openxmlformats-package.relationships+xml";
-            file.Path = "xl/_rels/workbook.xml.rels";
+            var file = new XmlFile
+            {
+                ContentType = "application/vnd.openxmlformats-package.relationships+xml",
+                Path = "xl/_rels/workbook.xml.rels"
+            };
 
             var content = new XDocument(new XElement(Namespaces.relationship + "Relationships", new XAttribute("xmlns", Namespaces.relationship)));
             foreach (var rel in WorkbookRelationships)

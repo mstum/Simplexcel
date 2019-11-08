@@ -4,7 +4,7 @@
 | ------ | ------- |
 | [![Actions Status](https://github.com/mstum/Simplexcel/workflows/CI%20Build/badge.svg?branch=master)](https://github.com/mstum/Simplexcel/actions) | [![Actions Status](https://github.com/mstum/Simplexcel/workflows/CI%20Build/badge.svg?branch=release)](https://github.com/mstum/Simplexcel/actions) |
 
-This is a simple .xlsx generator library for .net 4.5, .NET Standard 1.3 (or higher), and .NET Standard 2.0.
+This is a simple .xlsx generator library for .net 4.5, .NET Standard 2.0, and .NET Standard 2.1.
 
 It does not aim to implement the entirety of the Office Open XML Workbook format and all the small and big features Excel offers.
 Instead, it is meant as a way to handle common tasks that can't be handled by other workarounds (e.g., CSV Files or HTML Tables) and is fully supported under ASP.net (unlike, say, COM Interop which Microsoft explicitly doesn't support on a server).
@@ -24,6 +24,19 @@ Instead, it is meant as a way to handle common tasks that can't be handled by ot
 See [USAGE.md](https://github.com/mstum/Simplexcel/blob/master/USAGE.md) for instructions how to use.
 
 # Changelog
+## 3.0.0 (2019-11-08)
+* Remove targeting netstandard1.3, add targeting for netstandard2.1
+* The library is now signed and strongly named for improved compatibility
+  * The AssemblyVersion is `3.0.0.0` and will not change in the future
+  * The AssemblyFileVersion and AssemblyInformationalVersion will contain the actual version number
+  * The actual signing key is checked in as [`simplexcel_oss.snk`](src/simplexcel_oss.snk), and a dump of the public key and token is in [`simplexcel_oss.txt`](src/simplexcel_oss.txt)
+  * There is a static `SimplexcelVersion` class with some helpers:
+    * PublicKeyToken is the public key token for the assembly (e.g., 65e777c740a5d92a)
+    * PublicKey is the full public key token for the assembly (e.g., 0024000004800000940000000602000000240000525341310...)
+    * VersionString is the AssemblyInformationalVersion as a string, which may include a suffix if it's a development version (e.g., 2.3.0.177-v3-dev)
+    * Version is the AssemblyFileVersion as a Version object, which does include any suffix (e.g., 2.3.0.177)
+* No functional changes, just making sure that this is independent of future changes
+
 ## 2.3.0 (2019-11-02)
 * Add `Worksheet.FreezeTopLeft` method (by @bcopeland in PR #26) to freeze more than just the top row/left column
 * Support for Formulas, for example: `sheet.Cells["B4"] = Cell.Formula("MEDIAN(A:A)");`. See [the test app](https://github.com/mstum/Simplexcel/blob/0e22dddfcb26b9672ba3ccab6d229da7535127e7/src/Simplexcel.TestApp/Program.cs#L167) for some examples
