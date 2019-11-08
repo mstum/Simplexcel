@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="7" uniqueCount="7">
+    <si>
+        <t>January</t>
+    </si>
+    <si>
+        <t>February</t>
+    </si>
+    <si>
+        <t>March</t>
+    </si>
+    <si>
+        <t>April</t>
+    </si>
+    <si>
+        <t>Seattle</t>
+    </si>
+    <si>
+        <t>New York</t>
+    </si>
+    <si>
+        <t>Dallas</t>
+    </si>
+</sst>
