@@ -21,6 +21,16 @@ namespace Simplexcel.TestApp
 
             sheet.ColumnWidths[0] = 24.6;
 
+            // Version Info
+            sheet["F11"] = "Version";
+            sheet["G11"] = SimplexcelVersion.Version.ToString();
+            sheet["F12"] = "VersionString";
+            sheet["G12"] = SimplexcelVersion.VersionString;
+            sheet["F13"] = "PublicKeyToken";
+            sheet["G13"] = SimplexcelVersion.PublicKeyToken;
+            sheet["F14"] = "PublicKey";
+            sheet["G14"] = SimplexcelVersion.PublicKey;
+
             sheet.Cells["A1"] = "Test";
             sheet.Cells["A1"].FontName = "Arial Black";
 

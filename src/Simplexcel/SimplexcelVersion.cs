@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace Simplexcel
 {
@@ -37,12 +38,14 @@ namespace Simplexcel
             // [assembly: AssemblyFileVersion("3.0.0.177")]
             // [assembly: AssemblyInformationalVersion("3.0.0.177-v3-dev")]
             var assembly = typeof(SimplexcelVersion).Assembly;
-            VersionString = FileVersionInfo.GetVersionInfo(assembly.Location).ProductVersion;
-            Version = new Version(FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion);
-
             var asmName = assembly.GetName();
             PublicKey = asmName.GetPublicKey().ToHexString();
             PublicKeyToken = asmName.GetPublicKeyToken().ToHexString();
+
+            var infoVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+            var fileVersion = assembly.GetCustomAttribute<AssemblyFileVersionAttribute>();
+            Version = fileVersion != null ? new Version(fileVersion.Version) : asmName.Version;
+            VersionString = infoVersion?.InformationalVersion ?? asmName.Version.ToString();
         }
     }
 }
