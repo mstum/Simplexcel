@@ -40,10 +40,11 @@ try {
     $Env:MH_IS_PROD_BUILD = $isProdBuild
 
     Build-WriteTitle "Determining Version Number"
-    $part3 = [math]::Floor($commitCount / 65535)
+    # Don't need two version parts unless we get over 65535 commits
+    #$part3 = [math]::Floor($commitCount / 65535)
     $part4 = $commitCount % 65535
     $versionSuffix = $(If ($isProdBuild) { "" } Else { "-$branchName" })
-    $version = "$version.$part3.$part4"
+    $version = "$version.$part4"
     Build-Log-Information "Version: $version$versionSuffix"
     $Env:MH_BUILD_VERSION = $version
     $Env:MH_BUILD_VERSION_SUFFIX = $versionSuffix

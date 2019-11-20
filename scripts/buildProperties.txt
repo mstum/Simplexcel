@@ -1,4 +1,4 @@
-build_version=3.1
+build_version=3.0.1
 build_prod_branch=release
 build_config=Release
 build_solution=../src/Simplexcel.sln
