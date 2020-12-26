@@ -40,23 +40,17 @@ jobs:
           cd scripts
           ./build.ps1
           Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"} | %{ echo "::set-output name=$($_.Name)::$($_.Value)" }
-      - name: Setup Nuget.exe (Development)
-        if: success() && !startsWith(github.ref, 'refs/pull') && steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'False'
-        uses: nuget/setup-nuget@v1
       - name: Publish to GPR (Development)
         if: success() && !startsWith(github.ref, 'refs/pull') && steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'False'
         shell: pwsh
-        run: |
-          # Add GitHub Package Repository nuget source - see https://github.com/NuGet/Home/issues/8580
-          nuget sources add -name "GPR" -Source https://nuget.pkg.github.com/mstum/index.json -Username mstum -Password ${{ secrets.GITHUB_TOKEN }}
-          
+        run: |         
           $mhPath = "${{ steps.pwshbuild.outputs.MH_BUILD_OUTPUT }}"
           $nupkgName = "simplexcel.${{ steps.pwshbuild.outputs.MH_BUILD_VERSION_PACKAGE }}.nupkg"
           $nupkgPath = Join-Path -Path $mhPath -ChildPath $nupkgName
           
           # Publish to GitHub Package Repository
           Write-Host "Dev build, pushing to GPR: $nupkgPath"
-          nuget push "$nupkgPath" -Source "GPR" -SkipDuplicate
+          dotnet nuget push "$nupkgPath" --source https://nuget.pkg.github.com/mstum --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate --no-symbols true
       - name: Publish to Nuget.org (Release)
         if: success() && steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'True'
         shell: pwsh
