@@ -42,7 +42,7 @@ jobs:
           Get-ChildItem Env: | Where-Object {$_.Name -Match "^MH_"} | %{ echo "::set-output name=$($_.Name)::$($_.Value)" }
       - name: Setup Nuget.exe (Development)
         if: success() && !startsWith(github.ref, 'refs/pull') && steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'False'
-        uses: warrenbuckley/Setup-Nuget@v1
+        uses: nuget/setup-nuget@v1
       - name: Publish to GPR (Development)
         if: success() && !startsWith(github.ref, 'refs/pull') && steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'False'
         shell: pwsh

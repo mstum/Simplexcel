@@ -24,6 +24,9 @@ Instead, it is meant as a way to handle common tasks that can't be handled by ot
 See [USAGE.md](https://github.com/mstum/Simplexcel/blob/master/USAGE.md) for instructions how to use.
 
 # Changelog
+## 3.0.2 (2020-12-25)
+* Add [`SourceLink`](https://docs.microsoft.com/en-us/dotnet/standard/library-guidance/sourcelink) support
+
 ## 3.0.1 (2019-11-20)
 * Fix `TypeInitializationException` in SimplexcelVersion in some contexts (e.g., UWP, Xamarin) ([Issue #30](https://github.com/mstum/Simplexcel/issues/30))
 

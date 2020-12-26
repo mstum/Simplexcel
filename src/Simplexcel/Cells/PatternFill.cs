@@ -46,14 +46,15 @@ namespace Simplexcel
             }
         }
 
+        /// <summary>
+        /// Compare to another <see cref="PatternFill"/> object.
+        /// </summary>
         public override bool Equals(object obj)
-        {
-            if (obj is null) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof(PatternFill)) return false;
-            return Equals((PatternFill)obj);
-        }
+            => Equals(obj as PatternFill);
 
+        /// <summary>
+        /// Compare to another <see cref="PatternFill"/> object.
+        /// </summary>
         public bool Equals(PatternFill other)
         {
             if (other is null) return false;
@@ -63,6 +64,7 @@ namespace Simplexcel
                 && Equals(other.BackgroundColor, BackgroundColor);
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             unchecked
@@ -80,14 +82,14 @@ namespace Simplexcel
             }
         }
 
-        public static bool operator ==(PatternFill left, PatternFill right)
-        {
-            return Equals(left, right);
-        }
+        /// <summary>
+        /// Check whether the <see cref="PatternFill"/> objects <paramref name="left"/> and <paramref name="right"/> are <see cref="Equals(PatternFill)">Equal</see>.
+        /// </summary>
+        public static bool operator ==(PatternFill left, PatternFill right) => Equals(left, right);
 
-        public static bool operator !=(PatternFill left, PatternFill right)
-        {
-            return !Equals(left, right);
-        }
+        /// <summary>
+        /// Check whether the <see cref="PatternFill"/> objects <paramref name="left"/> and <paramref name="right"/> are not <see cref="Equals(PatternFill)">Equal</see>.
+        /// </summary>
+        public static bool operator !=(PatternFill left, PatternFill right) => !Equals(left, right);
     }
 }
