@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Run build script
         shell: pwsh
         run: |
@@ -29,7 +29,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       # To avoid vendor lock-in, this is mostly driven by a build script
       - name: Run build script
         id: pwshbuild
