@@ -95,6 +95,14 @@ namespace Simplexcel
         public LargeNumberHandlingMode LargeNumberHandlingMode { get; set; }
 
         /// <summary>
+        /// Whether to enable the AutoFilter feature on the first non-empty row.
+        /// <para/>
+        /// Defaults to <see langword="false"/>.
+        /// </summary>
+        /// <remarks>See <a href="https://support.microsoft.com/en-us/office/use-autofilter-to-filter-your-data-7d87d63e-ebd0-424b-8106-e2ab61133d92">Use AutoFilter to filter your data</a></remarks>
+        public bool AutoFilter { get; set; }
+
+        /// <summary>
         /// Get the cell with the given cell reference, e.g. Get the cell "A1". May return NULL.
         /// </summary>
         /// <param name="address"></param>

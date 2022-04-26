@@ -136,7 +136,7 @@ namespace Simplexcel.TestApp
             populatedSheet.Populate(EnumeratePopulateTestData(), cacheTypeColumns: true);
             wb.Add(populatedSheet);
 
-            var frozenTopRowSheet = new Worksheet("Frozen Top Row");
+            var frozenTopRowSheet = new Worksheet("Frozen Top Row") { AutoFilter = true };
             frozenTopRowSheet.Cells[0, 0] = "Header 1";
             frozenTopRowSheet.Cells[0, 1] = "Header 2";
             frozenTopRowSheet.Cells[0, 2] = "Header 3";

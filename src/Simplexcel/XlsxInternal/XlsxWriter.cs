@@ -473,8 +473,10 @@ namespace Simplexcel.XlsxInternal
                 }
 
                 var sheetData = new XElement(Namespaces.workbook + "sheetData");
+                XlsxRow firstRow = null;
                 foreach (var row in rows.OrderBy(rk => rk.Key))
                 {
+                    firstRow ??= row.Value;
                     var re = new XElement(Namespaces.workbook + "row", new XAttribute("r", row.Value.RowIndex));
                     foreach (var cell in row.Value.Cells)
                     {
@@ -497,6 +499,15 @@ namespace Simplexcel.XlsxInternal
                     sheetData.Add(re);
                 }
                 doc.Root.Add(sheetData);
+
+                var firstRowCells = firstRow?.Cells;
+                if (sheet.AutoFilter && firstRowCells?.Count > 0)
+                {
+                    var firstRef = firstRowCells.First().Reference;
+                    var lastRef = firstRowCells.Last().Reference;
+                    var autoFilter = new XElement(Namespaces.workbook + "autoFilter", new XAttribute("ref", $"{firstRef}:{lastRef}"));
+                    doc.Root.Add(autoFilter);
+                }
 
                 sheetRels = null;
                 var hyperlinks = sheet.Cells.Where(c => c.Value != null && !string.IsNullOrEmpty(c.Value.Hyperlink)).ToList();
