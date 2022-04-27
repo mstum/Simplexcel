@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+            fetch-depth: 0
       - name: Run build script
         shell: pwsh
         run: |
@@ -30,6 +32,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+            fetch-depth: 0
       # To avoid vendor lock-in, this is mostly driven by a build script
       - name: Run build script
         id: pwshbuild
@@ -50,7 +54,7 @@ jobs:
           
           # Publish to GitHub Package Repository
           Write-Host "Dev build, pushing to GPR: $nupkgPath"
-          dotnet nuget push "$nupkgPath" --source https://nuget.pkg.github.com/mstum --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate --no-symbols true
+          dotnet nuget push "$nupkgPath" --source https://nuget.pkg.github.com/mstum --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate --no-symbols
       - name: Publish to Nuget.org (Release)
         if: success() && steps.pwshbuild.outputs.MH_IS_PROD_BUILD == 'True'
         shell: pwsh

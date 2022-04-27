@@ -16,7 +16,7 @@ try {
 
     Build-WriteTitle "Reading Build Properties and Environment"
     $buildProps = Build-ReadProperties
-    Build-Log-Hashtable $buildProps
+    #Build-Log-Hashtable $buildProps
 
     $solution = Build-GetRequiredProperty $buildProps "build_solution"
     $version = Build-GetRequiredProperty $buildProps "build_version"
