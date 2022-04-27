@@ -28,7 +28,7 @@ try {
     $buildConfig = Build-GetPropertyOrDefault $buildProps "build_config" "Release"
 
     Build-WriteTitle "Getting git branch information"
-    $commitCount = & git rev-list --count $branchName
+    $commitCount = & git rev-list --count HEAD
     $branchName = Build-GetPropertyOrDefault $buildProps "GIT_BRANCH" "$(& git rev-parse --abbrev-ref HEAD)"
     $branchName = $branchName -ireplace "refs/heads/", ""
     $branchName = $branchName -ireplace "origin/", ""
