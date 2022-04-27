@@ -173,7 +173,7 @@ namespace Simplexcel.XlsxInternal
 
         private static void StyleAddNumFmtsElement(XDocument doc, List<string> numberFormats)
         {
-            var numFmtsElem = new XElement(Namespaces.workbook + "numFmts", new XAttribute("count", numberFormats.Count + 1));
+            var numFmtsElem = new XElement(Namespaces.workbook + "numFmts", new XAttribute("count", numberFormats.Count));
 
             for (int i = 0; i < numberFormats.Count; i++)
             {
