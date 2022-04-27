@@ -10,6 +10,41 @@ namespace Simplexcel.XlsxInternal
         private const int CustomFormatIndex = 164;
 
         /// <summary>
+        /// Standard format codes as defined in ECMA-376, 3rd Edition, Part 1, 18.8.30 numFmt (Number Format)
+        /// </summary>
+        private static Dictionary<string, int> StandardFormatIds = new Dictionary<string, int>
+        {
+            ["General"] = 0,
+            ["0"] = 1,
+            ["0.00"] = 2,
+            ["#,##0"] = 3,
+            ["#,##0.00"] = 4,
+            ["0%"] = 9,
+            ["0.00%"] = 10,
+            ["0.00E+00"] = 11,
+            ["# ?/?"] = 12,
+            ["# ??/??"] = 13,
+            ["mm-dd-yy"] = 14,
+            ["d-mmm-yy"] = 15,
+            ["d-mmm"] = 16,
+            ["mmm-yy"] = 17,
+            ["h:mm AM/PM"] = 18,
+            ["h:mm:ss AM/PM"] = 19,
+            ["h:mm"] = 20,
+            ["h:mm:ss"] = 21,
+            ["m/d/yy h:mm"] = 22,
+            ["#,##0 ;(#,##0)"] = 37,
+            ["#,##0 ;[Red](#,##0)"] = 38,
+            ["#,##0.00;(#,##0.00)"] = 39,
+            ["#,##0.00;[Red](#,##0.00)"] = 40,
+            ["mm:ss"] = 45,
+            ["[h]:mm:ss"] = 46,
+            ["mmss.0"] = 47,
+            ["##0.0E+0"] = 48,
+            ["@"] = 49,
+        };
+
+        /// <summary>
         /// Create a styles.xml file
         /// </summary>
         /// <param name="styles"></param>
@@ -29,7 +64,7 @@ namespace Simplexcel.XlsxInternal
                     uniqueBorders.Add(style.Border);
                 }
 
-                if (!numberFormats.Contains(style.Format))
+                if (!numberFormats.Contains(style.Format) && !StandardFormatIds.ContainsKey(style.Format))
                 {
                     numberFormats.Add(style.Format);
                 }
@@ -79,7 +114,7 @@ namespace Simplexcel.XlsxInternal
 
             foreach (var style in styles)
             {
-                var numFmtId = numberFormats.IndexOf(style.Format) + CustomFormatIndex;
+                var numFmtId = StandardFormatIds.TryGetValue(style.Format, out var standardNumFmtId) ? standardNumFmtId : numberFormats.IndexOf(style.Format) + CustomFormatIndex;
                 var fontId = fontInfos.IndexOf(style.Font);
                 var fillId = fills.IndexOf(style.Fill);
                 var borderId = uniqueBorders.IndexOf(style.Border);

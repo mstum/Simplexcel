@@ -36,14 +36,14 @@
         public const string Text = "@";
 
         /// <summary>
-        /// m/d/yyyy h:mm
+        /// m/d/yy h:mm
         /// </summary>
-        public const string DateAndTime = "m/d/yyyy h:mm";
+        public const string DateAndTime = "m/d/yy h:mm";
 
         /// <summary>
-        /// m/d/yyyy
+        /// mm-dd-yy
         /// </summary>
-        public const string DateOnly = "m/d/yyyy";
+        public const string DateOnly = "mm-dd-yy";
 
         /// <summary>
         /// h:mm
