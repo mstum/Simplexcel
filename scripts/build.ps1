@@ -16,7 +16,7 @@ try {
 
     Build-WriteTitle "Reading Build Properties and Environment"
     $buildProps = Build-ReadProperties
-    Build-Log-Hashtable $buildProps
+    #Build-Log-Hashtable $buildProps
 
     $solution = Build-GetRequiredProperty $buildProps "build_solution"
     $version = Build-GetRequiredProperty $buildProps "build_version"
@@ -28,7 +28,7 @@ try {
     $buildConfig = Build-GetPropertyOrDefault $buildProps "build_config" "Release"
 
     Build-WriteTitle "Getting git branch information"
-    $commitCount = & git rev-list --count HEAD
+    $commitCount = & git rev-list --count $branchName
     $branchName = Build-GetPropertyOrDefault $buildProps "GIT_BRANCH" "$(& git rev-parse --abbrev-ref HEAD)"
     $branchName = $branchName -ireplace "refs/heads/", ""
     $branchName = $branchName -ireplace "origin/", ""
