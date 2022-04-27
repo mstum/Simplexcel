@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+            fetch-depth: 0
       - name: Run build script
         shell: pwsh
         run: |
@@ -30,6 +32,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+            fetch-depth: 0
       # To avoid vendor lock-in, this is mostly driven by a build script
       - name: Run build script
         id: pwshbuild
