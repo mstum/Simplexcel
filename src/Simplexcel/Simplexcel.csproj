@@ -10,11 +10,11 @@
     <Title>Simplexcel .xlsx library</Title>
     <Description>A 100% managed code library to generate Excel .xlsx Workbooks. Can be safely used on a server, no COM Interop or other unsafe/unsupported operations.</Description>
     <Copyright>© 2013-2020 Michael Stum</Copyright>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/mstum/simplexcel/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/mstum/simplexcel</PackageProjectUrl>
     <RepositoryUrl>https://github.com/mstum/simplexcel.git</RepositoryUrl>
-    <PackageIconUrl>http://mstum.github.com/Simplexcel/package.png</PackageIconUrl>
+    <PackageIcon>package.png</PackageIcon>
     <RepositoryType>git</RepositoryType>
     <PackageTags>xlsx excel ooxml netcore netstandard</PackageTags>
     <PackageId>simplexcel</PackageId>
@@ -38,6 +38,11 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
     <Reference Include="System.IO.Compression" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\package.png" Pack="true" PackagePath="\"/>
+    <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
   <ItemGroup>
