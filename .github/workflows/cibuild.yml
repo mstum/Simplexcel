@@ -65,4 +65,4 @@ jobs:
           
           # Publish to Nuget.org
           Write-Host "Release build, pushing to Nuget.org: $nupkgPath"
-          dotnet nuget push "$nupkgPath" -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json --no-symbols true
+          dotnet nuget push "$nupkgPath" -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json --no-symbols
