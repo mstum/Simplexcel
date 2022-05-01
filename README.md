@@ -24,7 +24,7 @@ Instead, it is meant as a way to handle common tasks that can't be handled by ot
 See [USAGE.md](https://github.com/mstum/Simplexcel/blob/master/USAGE.md) for instructions how to use.
 
 # Changelog
-## 3.1.0 (2022-04-??)
+## 3.1.0 (2022-04-30)
 * Support for Standard built-in number formats, which localize properly (PR [#36](https://github.com/mstum/Simplexcel/pull/36) and [#37](https://github.com/mstum/Simplexcel/pull/37))
 * Support for [AutoFilter](https://support.microsoft.com/en-us/office/use-autofilter-to-filter-your-data-7d87d63e-ebd0-424b-8106-e2ab61133d92) (PR [#35](https://github.com/mstum/Simplexcel/pull/35))
 * Thanks to [0xced](https://github.com/0xced) for these!
