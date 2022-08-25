@@ -3,19 +3,20 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Simplexcel
 {
     public sealed partial class Worksheet
     {
-        private readonly static Lazy<ConcurrentDictionary<Type, Dictionary<int, PopulateCellInfo>>> PopulateCache 
+        private readonly static Lazy<ConcurrentDictionary<Type, Dictionary<int, PopulateCellInfo>>> PopulateCache
             = new Lazy<ConcurrentDictionary<Type, Dictionary<int, PopulateCellInfo>>>(
                 () => new ConcurrentDictionary<Type, Dictionary<int, PopulateCellInfo>>(),
                 System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
         /// <summary>
         /// Create Worksheet with the provided data.
-        /// 
+        ///
         /// Will use the Object Property Names as Column Headers (First Row) and then populate the cells with data.
         /// You can use <see cref="XlsxColumnAttribute"/> and <see cref="XlsxIgnoreColumnAttribute"/> to control the output.
         /// </summary>
@@ -31,7 +32,7 @@ namespace Simplexcel
 
         /// <summary>
         /// Populate Worksheet with the provided data.
-        /// 
+        ///
         /// Will use the Object Property Names as Column Headers (First Row) and then populate the cells with data.
         /// You can use <see cref="XlsxColumnAttribute"/> and <see cref="XlsxIgnoreColumnAttribute"/> to control the output.
         /// </summary>
@@ -78,7 +79,7 @@ namespace Simplexcel
         {
             var cols = new Dictionary<int, PopulateCellInfo>();
             var props = type.GetTypeInfo().GetAllProperties()
-                .Where(p => p.GetIndexParameters().Length == 0)
+                .Where(p => p.GetIndexParameters().Length == 0 && p.GetCustomAttribute<CompilerGeneratedAttribute>() == null)
                 .ToList();
 
             int tempCol = 0; // Just a counter to keep the order of Properties the same
