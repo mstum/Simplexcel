@@ -1,5 +1,11 @@
 # Simplexcel
 
+## This project is discontinued
+
+Please see https://github.com/mstum/Simplexcel/issues/43
+
+# Old README.md for 3.1.0.195 
+
 | master | release |
 | ------ | ------- |
 | [![Actions Status](https://github.com/mstum/Simplexcel/workflows/CI%20Build/badge.svg?branch=master)](https://github.com/mstum/Simplexcel/actions) | [![Actions Status](https://github.com/mstum/Simplexcel/workflows/CI%20Build/badge.svg?branch=release)](https://github.com/mstum/Simplexcel/actions) |
